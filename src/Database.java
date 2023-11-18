@@ -27,16 +27,7 @@ public class Database {
 
         return questionAndAnswersList;
     }
-    public String getAnswersForQuestion(String question) {
-        for (QuestionAndAnswers qa : questionAndAnswersList) {
-            if (qa.getQuestion().equals(question)) {
-                return qa.getAnswers();
-            }
-        }
-        return "Answers not found for the given question.";
-    }
-
-}
+   }
 
 class QuestionAndAnswers {
     private String question;

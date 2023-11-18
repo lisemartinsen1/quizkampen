@@ -18,7 +18,4 @@ public class DAO {
         return questionAndAnswersList.get(randomIndex);
     }
 
-    public String getAnswersForQuestion(QuestionAndAnswers qa) {
-        return database.getAnswersForQuestion(qa.getQuestion());
-    }
 }

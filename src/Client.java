@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.*;
+import java.util.List;
+
 
 public class Client implements ActionListener {
     Integer[] numberRounds = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -33,8 +36,6 @@ public class Client implements ActionListener {
     private JButton answerTwo = new JButton("Svar två");
     private JButton answerThree = new JButton("Svar tre");
     private JButton answerFour = new JButton("Svar fyra");
-
-
     PrintWriter out;
     BufferedReader in;
 
@@ -67,6 +68,10 @@ public class Client implements ActionListener {
 
         newGame.addActionListener(this);
         quitGame.addActionListener(this);
+        answerOne.addActionListener(this);
+        answerTwo.addActionListener(this);
+        answerThree.addActionListener(this);
+        answerFour.addActionListener(this);
     }
 
     public void questionsUI() {
@@ -80,11 +85,18 @@ public class Client implements ActionListener {
         questionsFrame.add(answerPanel, BorderLayout.SOUTH);
 
         questionPanel.add(questionText);
-        answerPanel.setLayout(new GridLayout(2,2));
-        answerPanel.add(answerOne);
-        answerPanel.add(answerTwo);
-        answerPanel.add(answerThree);
-        answerPanel.add(answerFour);
+        answerPanel.setLayout(new GridLayout(2, 2));
+
+
+        List<JButton> answerButtons = Arrays.asList(answerOne, answerTwo, answerThree, answerFour);
+
+
+        Collections.shuffle(answerButtons);
+
+        answerButtons.forEach(button -> {
+            answerPanel.add(button);
+            button.addActionListener(this);
+        });
 
         out.println("START");
     }
@@ -97,13 +109,38 @@ public class Client implements ActionListener {
             mainFrame.dispose();
             questionsUI();
 
-        }else if (e.getSource() == quitGame){
+        } else if (e.getSource() == quitGame) {
 
+        } else if (e.getSource() == answerOne) {
+            answerOne.setBackground(Color.RED);
+            answerTwo.setEnabled(false);
+            answerThree.setEnabled(false);
+            answerFour.setEnabled(false);
+
+        } else if (e.getSource() == answerTwo) {
+            answerTwo.setBackground(Color.RED);
+            answerOne.setEnabled(false);
+            answerThree.setEnabled(false);
+            answerFour.setEnabled(false);
+
+        } else if (e.getSource() == answerThree) {
+            answerThree.setBackground(Color.RED);
+            answerOne.setEnabled(false);
+            answerTwo.setEnabled(false);
+            answerFour.setEnabled(false);
+
+        } else if (e.getSource() == answerFour) {
+            answerFour.setBackground(Color.GREEN);
+            answerOne.setEnabled(false);
+            answerTwo.setEnabled(false);
+            answerThree.setEnabled(false);
 
         }
+
+
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Client client = new Client();
         client.mainUI();
     }
@@ -137,23 +174,43 @@ public class Client implements ActionListener {
                                 questionText.setText(questionTextfromServerToLabel);
                             });
                         }
-
                         String[] answersParts = answersTextfromServer.split("ANSWERS", 2);
                         if (answersParts.length > 1) {
                             String answersText = answersParts[1].trim();
-                            String[] individualAnswers = answersText.split(", ");
-                            answerOne.setText(individualAnswers[0]);
-                            answerTwo.setText(individualAnswers[1]);
-                            answerThree.setText(individualAnswers[2]);
-                            answerFour.setText(individualAnswers[3]);
 
+                            String[] individualAnswers = answersText.split(", ");
+
+                            String rightAnswer = "";
+                            int rightAnswerIndex = -1;
+
+                            for (int i = 0; i < individualAnswers.length; i++) {
+                                String answer = individualAnswers[i];
+                                if (answer.startsWith("RIGHT_ANSWER")) {
+                                    rightAnswer = answer.replace("RIGHT_ANSWER", "").trim();
+                                    rightAnswerIndex = i;
+                                    break;
+                                }
+                            }
+
+                            if (rightAnswerIndex != -1) {
+
+                                List<String> answersList = new ArrayList<>(Arrays.asList(individualAnswers));
+                                answersList.remove(rightAnswerIndex);
+
+                                String finalRightAnswer = rightAnswer;
+                                SwingUtilities.invokeLater(() -> {
+                                    answerOne.setText(answersList.get(0));
+                                    answerTwo.setText(answersList.get(1));
+                                    answerThree.setText(answersList.get(2));
+                                    answerFour.setText(finalRightAnswer);
+                                });
+                            }
                         }
                     }
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
     }
-}
+    }
