@@ -5,14 +5,18 @@ public class Protocol {
     protected int state = FIRST_QNA;
     DAO dao = new DAO();
 
-    public QuestionAndAnswers getOutput() {
+    public String getOutput() {
         if (state == FIRST_QNA) {
             state = ANSWERED_FIRST_Q;
 
-            return dao.getRandomQuestionAndAnswers();
+            QuestionAndAnswers qa = dao.getRandomQuestionAndAnswers();
+            String question = qa.getQuestion();
+            String answers = qa.getAnswers();
+
+            return question + "|" + answers;
         } else if (state == ANSWERED_FIRST_Q) {
-            return null;
+            return "";
         }
-        throw new IllegalStateException("Unexpected state error");
+        return "Unexpected state error";
     }
 }

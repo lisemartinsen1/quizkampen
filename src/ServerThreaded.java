@@ -26,16 +26,12 @@ public class ServerThreaded implements Runnable {
 
             while ((clientMessage = in.readLine()) != null) {
                 if (clientMessage.startsWith("START")) {
-                    QuestionAndAnswers qa = protocol.getOutput();
-
-                    String question = qa.getQuestion();
-                    String answers = dao.getAnswersForQuestion(qa);
-
-                    out.println(question);
-                    out.println(answers);
+                    String response = protocol.getOutput();
+                    out.println(response);
                 } else {
                     sendResponse(clientMessage);
                 }
+
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

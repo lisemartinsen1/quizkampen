@@ -15,13 +15,10 @@ public class Database {
         try (BufferedReader in = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             while ((line = in.readLine()) != null) {
-
                 String question = line;
                 String answersLine = in.readLine();
-
                 questionAndAnswersList.add(new QuestionAndAnswers(question, answersLine));
             }
-
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

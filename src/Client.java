@@ -71,7 +71,7 @@ public class Client implements ActionListener {
 
     public void questionsUI() {
         questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        questionsFrame.setSize(300, 400);
+        questionsFrame.setSize(350, 300);
         questionsFrame.setVisible(true);
         questionsFrame.setResizable(true);
         questionsFrame.setLocationRelativeTo(null);
@@ -124,17 +124,33 @@ public class Client implements ActionListener {
             try {
                 String fromServer;
                 while ((fromServer = in.readLine()) != null) {
-                    System.out.println(fromServer);
-                    if (fromServer.contains("QUESTION")) {
-                        String[] parts = fromServer.split("QUESTION", 2);
-                        if (parts.length > 1) {
-                            String questionTextfromServer = parts[1].trim();
+                    String[] parts = fromServer.split("\\|");
+                    if (parts.length == 2) {
+
+                        String questionAndAnswersText = parts[0].trim();
+                        String answersTextfromServer = parts[1].trim();
+
+                        String[] questionParts = questionAndAnswersText.split("QUESTION", 2);
+                        if (questionParts.length > 1) {
+                            String questionTextfromServerToLabel = questionParts[1].trim();
                             SwingUtilities.invokeLater(() -> {
-                                questionText.setText(questionTextfromServer);
+                                questionText.setText(questionTextfromServerToLabel);
                             });
+                        }
+
+                        String[] answersParts = answersTextfromServer.split("ANSWERS", 2);
+                        if (answersParts.length > 1) {
+                            String answersText = answersParts[1].trim();
+                            String[] individualAnswers = answersText.split(", ");
+                            answerOne.setText(individualAnswers[0]);
+                            answerTwo.setText(individualAnswers[1]);
+                            answerThree.setText(individualAnswers[2]);
+                            answerFour.setText(individualAnswers[3]);
+
                         }
                     }
                 }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

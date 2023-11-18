@@ -1,2 +1,2 @@
-QUESTION Testing
-ANSWERS Test1, Test2, Test3, Test4
+QUESTION Vem är författaren till boken "Män som hatar kvinnor"?
+ANSWERS Stieg Larsson, Henning Mankell, Jo Nesbø, Camilla Läckberg
