@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +38,19 @@ public class Client implements ActionListener {
     private JButton answerTwo = new JButton("Svar två");
     private JButton answerThree = new JButton("Svar tre");
     private JButton answerFour = new JButton("Svar fyra");
+
+    private JFrame categoryFrame = new JFrame();
+    private JPanel categoryTopPanel = new JPanel();
+    private JLabel categoryTitle = new JLabel("Välj en kategori");
+    private JPanel categoryPanel = new JPanel();
+    //private JPanel category1Panel = new JPanel();
+   // private JPanel category2Panel = new JPanel();
+    private JButton category1Button = new JButton("Kategori 1");
+    private JButton category2Button = new JButton("Kategori 2");
+    private JPanel categoryBottomPanel = new JPanel();
+    private JButton goBackButton = new JButton("Gå Tillbaka");
+
+
     PrintWriter out;
     BufferedReader in;
 
@@ -53,7 +68,6 @@ public class Client implements ActionListener {
         mainFrame.add(howManyPanel, BorderLayout.WEST);
         mainFrame.add(bottomPanel, BorderLayout.SOUTH);
         howManyPanel.setLayout(new GridLayout(2, 2));
-
 
         titlePanel.add(gameTitle);
 
@@ -101,6 +115,34 @@ public class Client implements ActionListener {
         out.println("START");
     }
 
+    public void categoryUI() {
+        categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        categoryFrame.setVisible(true);
+        categoryFrame.setSize(250, 500);
+        categoryFrame.setLayout(new BorderLayout());
+        categoryFrame.add(categoryTopPanel, BorderLayout.NORTH);
+        categoryFrame.add(categoryPanel, BorderLayout.CENTER);
+        categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
+
+        categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
+
+        categoryPanel.setLayout(new GridLayout(2, 1));
+        categoryPanel.add(category1Button);
+        categoryPanel.add(category2Button);
+
+        EmptyBorder emptyBorder = new EmptyBorder(20, 20, 20, 20);
+        categoryPanel.setBorder(emptyBorder); //FUNKAR!
+
+        categoryBottomPanel.setLayout(new GridLayout(1, 2));
+        categoryBottomPanel.add(goBackButton);
+        categoryBottomPanel.add(quitGame);
+
+        category1Button.addActionListener(this);
+        category2Button.addActionListener(this);
+        goBackButton.addActionListener(this);
+        quitGame.addActionListener(this);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == newGame) {
@@ -110,6 +152,7 @@ public class Client implements ActionListener {
             questionsUI();
 
         } else if (e.getSource() == quitGame) {
+            System.exit(0);
 
         } else if (e.getSource() == answerOne) {
             answerOne.setBackground(Color.RED);
@@ -142,7 +185,8 @@ public class Client implements ActionListener {
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.mainUI();
+        //client.mainUI();
+        client.categoryUI();
     }
 
     public void connectToServer() {
