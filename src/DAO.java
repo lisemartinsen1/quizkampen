@@ -12,12 +12,13 @@ public class DAO {
     }
 
     public QuestionAndAnswers getRandomQuestionAndAnswers() {
-        questionAndAnswersList = database.readQuestionsAndAnswersFromFile();
+        if (questionAndAnswersList == null) {
+            questionAndAnswersList = database.readQuestionsAndAnswersFromFile();
 
-        if (questionAndAnswersList == null || questionAndAnswersList.isEmpty()) {
-            return new QuestionAndAnswers("No questions available. Call readQuestionsAndAnswersFromFile() first.", "");
+            if (questionAndAnswersList == null || questionAndAnswersList.isEmpty()) {
+                return new QuestionAndAnswers("No questions available. Call readQuestionsAndAnswersFromFile() first.", "");
+            }
         }
-
 
 
         Random random = new Random();
@@ -30,6 +31,7 @@ public class DAO {
         } while (alreadyUsedQuestionsList.contains(randomQuestion));
 
         alreadyUsedQuestionsList.add(randomQuestion);
+        questionAndAnswersList.remove(randomQuestion);
 
         return randomQuestion;
     }
