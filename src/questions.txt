@@ -1,2 +1,6 @@
 QUESTION Vem är författaren till boken "Män som hatar kvinnor"?
 ANSWERS RIGHT_ANSWER Stieg Larsson, Henning Mankell, Jo Nesbø, Camilla Läckberg
+QUESTION Fråga 2?
+ANSWERS RIGHT_ANSWER Stieg Larsson2, Henning Mankell2, Jo Nesbø2, Camilla Läckberg2
+QUESTION Fråga 3?
+ANSWERS RIGHT_ANSWER Stieg Larsson3, Henning Mankell3, Jo Nesbø3, Camilla Läckberg3

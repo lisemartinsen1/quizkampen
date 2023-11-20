@@ -1,22 +1,25 @@
 public class Protocol {
     final protected int FIRST_QNA = 0;
-    final protected int ANSWERED_FIRST_Q = 1;
+    final protected int NEXT_QNA = 1;
 
     protected int state = FIRST_QNA;
     DAO dao = new DAO();
 
-    public String getOutput() {
+    public String getOutput() {   //Uppdaterat getOutput metod
+        QuestionAndAnswers qa;
         if (state == FIRST_QNA) {
-            state = ANSWERED_FIRST_Q;
+            state = NEXT_QNA;
 
-            QuestionAndAnswers qa = dao.getRandomQuestionAndAnswers();
-            String question = qa.getQuestion();
-            String answers = qa.getAnswers();
+            qa = dao.getRandomQuestionAndAnswers();
 
-            return question + "|" + answers;
-        } else if (state == ANSWERED_FIRST_Q) {
-            return "";
+        } else if (state == NEXT_QNA) {
+            qa = dao.getRandomQuestionAndAnswers();
         }
-        return "Unexpected state error";
+        else {
+            return "Unexpected state error";
+        }
+        String question = qa.getQuestion();
+        String answers = qa.getAnswers();
+        return question + "|" + answers;
     }
 }

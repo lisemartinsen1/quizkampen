@@ -25,9 +25,12 @@ public class ServerThreaded implements Runnable {
 
             while ((clientMessage = in.readLine()) != null) {
                 if (clientMessage.startsWith("START")) {
-                    String response = protocol.getOutput();
-                    out.println(response);
-                } else {
+                    sendNextQuestion();
+                }
+                    else if (clientMessage.startsWith("NEXT_QUESTION")){
+                        sendNextQuestion();
+                    }
+                 else {
                     sendResponse(clientMessage);
                 }
 
@@ -35,6 +38,11 @@ public class ServerThreaded implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void sendNextQuestion(){    //ny metod för att inte upprepa kod
+        String response = protocol.getOutput();
+        out.println(response);
     }
 
     private void sendResponse (String message){
