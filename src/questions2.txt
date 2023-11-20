@@ -1,0 +1,2 @@
+QUESTION Vilken förkortning har grundämnet kvicksilver?
+ANSWERS RIGHT_ANSWER Hg, Kv, Ks, Qr
