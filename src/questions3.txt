@@ -20,4 +20,12 @@ QUESTION Vilket lag har flest UEFA Champions League-titlar genom historien?
 ANSWERS RIGHT_ANSWER Real Madrid, AC Milan, Bayern München, Liverpool
 QUESTION Vad är "sepak takraw"?
 ANSWERS RIGHT_ANSWER En bollsport liknande volleyboll som spelas med fötterna, En form av bågskytte, En form av vattenpolo, En dansform från Brasilien
+QUESTION Vilket evenemang är känt som "The Fastest Two Minutes in Sports" och anses vara en av de mest prestigefyllda hästkapplöpningarna?
+ANSWERS RIGHT_ANSWER Kentucky Derby, Grand National, Prix de l'Arc de Triomphe, Melbourne Cup
+QUESTION Vilken stad är känd för att vara värd för den årliga "Wimbledon Championships" i tennis?
+ANSWERS RIGHT_ANSWER London, Paris, Rom, Madrid
+QUESTION Hur långt är ett maraton?
+ANSWERS RIGHT_ANSWER 42 195m, 41 967m, 42 092m, 41 890m
+QUESTION Vem är känd som "The Greatest of All Time" inom boxning?
+ANSWERS RIGHT_ANSWER Muhammad Ali, Mike Tyson, Manny Pacquiao, Floyd Mayweather Jr.
 
