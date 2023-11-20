@@ -97,7 +97,6 @@ public class Client implements ActionListener {
             answerPanel.add(button);
             button.addActionListener(this);
         });
-
         out.println("START");
     }
 
@@ -110,7 +109,7 @@ public class Client implements ActionListener {
             questionsUI();
 
         } else if (e.getSource() == quitGame) {
-
+            System.exit(0);
         } else if (e.getSource() == answerOne) {
             answerOne.setBackground(Color.RED);
             answerTwo.setEnabled(false);
@@ -146,15 +145,24 @@ public class Client implements ActionListener {
     }
 
     public void connectToServer() {
-        try {
-            Socket sock = new Socket("127.0.0.1", 12345);
-            out = new PrintWriter(sock.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        //new Thread(() -> {
+            String read;
+            try {
+                Socket sock = new Socket("127.0.0.1", 12345);
+                in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+                out = new PrintWriter(sock.getOutputStream(), true);
+                out.println("RUN");
+                while (true) {
+                    read = in.readLine();
+                    if (read.startsWith("CONNECTED")) {
+                        System.out.println(read);
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        //}).start();
     }
     public void readResponseFromServer() {
         new Thread(() -> {
@@ -163,7 +171,6 @@ public class Client implements ActionListener {
                 while ((fromServer = in.readLine()) != null) {
                     String[] parts = fromServer.split("\\|");
                     if (parts.length == 2) {
-
                         String questionAndAnswersText = parts[0].trim();
                         String answersTextfromServer = parts[1].trim();
 
@@ -213,4 +220,4 @@ public class Client implements ActionListener {
             }
         }).start();
     }
-    }
+}

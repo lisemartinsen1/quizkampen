@@ -4,25 +4,38 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ServerThreaded implements Runnable {
+public class ServerThreaded extends Thread implements Runnable {
 
     private Socket socket;
+    private BufferedReader in;
     private PrintWriter out;
     Protocol protocol = new Protocol();
     DAO dao = new DAO();
 
     public ServerThreaded(Socket socket) {
         this.socket = socket;
+        try {
+            String clientMessage;
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(socket.getOutputStream(), true);
+            // while ((clientMessage = in.readline()) != null) {
+            clientMessage = in.readLine();
+            if (clientMessage.startsWith("RUN")) {
+                out.println("WAIT");
+                /*String response = protocol.getOutput();
+                   out.println(response);*/
+            } else {
+                sendResponse(clientMessage);
+            }
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
     }
-
     @Override
     public void run() {
+        out.println("CONNECTED");
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
-
             String clientMessage;
-
             while ((clientMessage = in.readLine()) != null) {
                 if (clientMessage.startsWith("START")) {
                     String response = protocol.getOutput();
@@ -30,13 +43,11 @@ public class ServerThreaded implements Runnable {
                 } else {
                     sendResponse(clientMessage);
                 }
-
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
-
     private void sendResponse (String message){
         out.println(message);
         out.flush();

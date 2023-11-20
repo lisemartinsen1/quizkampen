@@ -6,13 +6,17 @@ import java.net.Socket;
 public class Server {
 
     public Server() {
-        try (ServerSocket serverSocket = new ServerSocket(12345);) {
+        try (ServerSocket serverSocket = new ServerSocket(12345)) {
+            System.out.println("Socket connected");
             while (true) {
-                Socket socketToClient = serverSocket.accept();
-                System.out.println("Socket connected");
-                ServerThreaded serverThreaded = new ServerThreaded(socketToClient);
-                Thread thread = new Thread(serverThreaded);
-                thread.start();
+                // Skapa två spelare
+                ServerThreaded serverThreaded = new ServerThreaded(serverSocket.accept());
+                ServerThreaded serverThreaded1 = new ServerThreaded(serverSocket.accept());
+
+                serverThreaded.start();
+                serverThreaded1.start();
+                System.out.println(serverThreaded.isAlive());
+                System.out.println(serverThreaded1.isAlive());
 
             }
         } catch (IOException e) {
