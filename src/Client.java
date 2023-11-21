@@ -52,6 +52,7 @@ public class Client implements ActionListener {
     private JButton category4Button = new JButton("Kategori 4");
     private JPanel categoryBottomPanel = new JPanel();
     private JButton goBackButton = new JButton("Gå Tillbaka");
+    private List<JButton> answerButtons;
 
 
     PrintWriter out;
@@ -110,7 +111,7 @@ public class Client implements ActionListener {
         answerPanel.setLayout(new GridLayout(2, 2));
 
 
-        List<JButton> answerButtons = Arrays.asList(answerOne, answerTwo, answerThree, answerFour);
+        answerButtons = Arrays.asList(answerOne, answerTwo, answerThree, answerFour);
 
 
         Collections.shuffle(answerButtons);
@@ -182,6 +183,15 @@ public class Client implements ActionListener {
             answerTwo.setEnabled(true);
             answerThree.setEnabled(true);
             answerFour.setEnabled(true);
+
+            //Shufflar rätt svar till random plats vid nästa fråga
+
+            Collections.shuffle(answerButtons);
+
+            answerButtons.forEach(button -> {
+                answerPanel.add(button);
+                button.addActionListener(this);
+            });
         }
 
         if (e.getSource() == answerOne) {
