@@ -16,6 +16,7 @@ import java.util.List;
 public class Client implements ActionListener {
     Integer[] numberRounds = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     Integer[] numberQuestions = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    private int howManyPointsInRound;
     DefaultComboBoxModel<Integer> numberRoundsModel = new DefaultComboBoxModel<>(numberRounds);
     DefaultComboBoxModel<Integer> numberQuestionsModel = new DefaultComboBoxModel<>(numberQuestions);
     private JFrame mainFrame = new JFrame("Quizkampen");
@@ -44,6 +45,7 @@ public class Client implements ActionListener {
     private JPanel categoryTopPanel = new JPanel();
     private JLabel categoryTitle = new JLabel("Välj en kategori");
     private JPanel categoryPanel = new JPanel();
+
     //private JPanel category1Panel = new JPanel();
    // private JPanel category2Panel = new JPanel();
     private JButton category1Button = new JButton("Kategori 1");
@@ -85,10 +87,6 @@ public class Client implements ActionListener {
 
         newGame.addActionListener(this);
         quitGame.addActionListener(this);
-        answerOne.addActionListener(this);
-        answerTwo.addActionListener(this);
-        answerThree.addActionListener(this);
-        answerFour.addActionListener(this);
     }
 
     public void questionsUI(String category) {
@@ -182,9 +180,12 @@ public class Client implements ActionListener {
             answerTwo.setEnabled(true);
             answerThree.setEnabled(true);
             answerFour.setEnabled(true);
+
+            System.out.println("Nuvarande Poäng i rundan: "+ howManyPointsInRound);
+
         }
 
-        if (e.getSource() == answerOne) {
+        else if (e.getSource() == answerOne) {
             answerOne.setBackground(Color.RED);
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
@@ -208,6 +209,7 @@ public class Client implements ActionListener {
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
 
+            howManyPointsInRound ++;
 
         } else if (e.getSource() == goBackButton) {
             categoryFrame.dispose();
