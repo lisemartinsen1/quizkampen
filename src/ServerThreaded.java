@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ServerThreaded extends Thread implements Runnable {
-
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
