@@ -4,13 +4,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Database {
-    private static final String FILE_PATH = "src/questions.txt";
+    private static final String FILE_PATH_CATEGORY1 = "src/questions.txt";
+    private static final String FILE_PATH_CATEGORY2 = "src/questions2.txt";
     private List<QuestionAndAnswers> questionAndAnswersList;
 
-    public List<QuestionAndAnswers> readQuestionsAndAnswersFromFile() {
+    public List<QuestionAndAnswers> readQuestionsAndAnswersFromFile(String category) {
         questionAndAnswersList = new ArrayList<>();
+        String FILE_PATH = "";
+        if (category.equals("category1")) {
+            FILE_PATH = FILE_PATH_CATEGORY1;
+        } else if (category.equals("category2")) {
+            FILE_PATH = FILE_PATH_CATEGORY2;
+        }
 
         try (BufferedReader in = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;

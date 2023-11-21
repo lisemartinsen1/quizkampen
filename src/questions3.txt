@@ -1,0 +1,31 @@
+QUESTION Vad är den sista stationen i en typisk triathlon?
+ANSWERS RIGHT_ANSWER Löpning, Cykling, Simning, Längdskidåkning
+QUESTION Vad heter världens mest prestigefyllda cykeltävling?
+ANSWERS RIGHT_ANSWER Tour de France, Giro d'Italia, Vuelta a España, Giro de France
+QUESTION Vem är den enda fotbollsspelaren som vunnit VM-titeln tre gånger som lagkapten?
+ANSWERS RIGHT_ANSWER Pelé, Diego Maradona, Lionel Messi, Cristiano Ronaldo
+QUESTION Hur långt är ett vasalopp?
+ANSWERS RIGHT_ANSWER 90km, 87km, 70km, 65km
+QUESTION Vem är känd som "The King of Clay" inom tennis?
+ANSWERS RIGHT_ANSWER Rafael Nadal, Novak Djokovic, Roger Federer, Andy Murray
+QUESTION Vem är känd som "The Black Mamba" inom basket?
+ANSWERS RIGHT_ANSWER Kobe Bryant, LeBron James, Stephen Curry, Kevin Durant
+QUESTION Vilket skidområde är känt för att vara ett av världens bästa och är hem till den berömda "Streif" - en av de mest utmanande utförslöporna i alpin skidåkning?
+ANSWERS RIGHT_ANSWER Kitzbühel - Österrike, Aspen - Colorado, St.Moritz - Schweiz, Kitzbühel - Österrike
+QUESTION Vilken alpin skidåkare har vunnit världscupen flest gånger?
+ANSWERS RIGHT_ANSWER Mikaela Shiffrin, Ingemar Stenmark, Lindsey Vonn, Marcel Hirscher
+QUESTION Vilket land vann FIFA World Cup 2018?
+ANSWERS RIGHT_ANSWER Frankrike, Kroatien, England, Belgien
+QUESTION Vilket lag har flest UEFA Champions League-titlar genom historien?
+ANSWERS RIGHT_ANSWER Real Madrid, AC Milan, Bayern München, Liverpool
+QUESTION Vad är "sepak takraw"?
+ANSWERS RIGHT_ANSWER En bollsport liknande volleyboll som spelas med fötterna, En form av bågskytte, En form av vattenpolo, En dansform från Brasilien
+QUESTION Vilket evenemang är känt som "The Fastest Two Minutes in Sports" och anses vara en av de mest prestigefyllda hästkapplöpningarna?
+ANSWERS RIGHT_ANSWER Kentucky Derby, Grand National, Prix de l'Arc de Triomphe, Melbourne Cup
+QUESTION Vilken stad är känd för att vara värd för den årliga "Wimbledon Championships" i tennis?
+ANSWERS RIGHT_ANSWER London, Paris, Rom, Madrid
+QUESTION Hur långt är ett maraton?
+ANSWERS RIGHT_ANSWER 42 195m, 41 967m, 42 092m, 41 890m
+QUESTION Vem är känd som "The Greatest of All Time" inom boxning?
+ANSWERS RIGHT_ANSWER Muhammad Ali, Mike Tyson, Manny Pacquiao, Floyd Mayweather Jr.
+

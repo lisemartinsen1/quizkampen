@@ -11,9 +11,9 @@ public class DAO {
         this.alreadyUsedQuestionsList = new ArrayList<>();
     }
 
-    public QuestionAndAnswers getRandomQuestionAndAnswers() {
+    public QuestionAndAnswers getRandomQuestionAndAnswers(String category) {
         if (questionAndAnswersList == null) {
-            questionAndAnswersList = database.readQuestionsAndAnswersFromFile();
+            questionAndAnswersList = database.readQuestionsAndAnswersFromFile(category);
 
             if (questionAndAnswersList == null || questionAndAnswersList.isEmpty()) {
                 return new QuestionAndAnswers("No questions available. Call readQuestionsAndAnswersFromFile() first.", "");
@@ -35,4 +35,5 @@ public class DAO {
 
         return randomQuestion;
     }
+
 }
