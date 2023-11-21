@@ -1,2 +1,6 @@
 QUESTION Vem är författaren till boken "Män som hatar kvinnor"?
 ANSWERS RIGHT_ANSWER Stieg Larsson, Henning Mankell, Jo Nesbø, Camilla Läckberg
+QUESTION Vilket element har kemiskt tecken "O"?
+ANSWERS RIGHT_ANSWER Syre, Silver, Kisel, Guld
+QUESTION Vilket år grundades OpenAI?
+ANSWERS RIGHT_ANSWER 2015, 2012, 2018, 2020

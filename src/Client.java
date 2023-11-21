@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,8 +27,10 @@ public class Client implements ActionListener {
     private JLabel howManyQuestions = new JLabel("Antal frågor: ");
     private JComboBox<Integer> howManyQuestionsBox = new JComboBox<>(numberQuestionsModel);
     private JPanel bottomPanel = new JPanel();
+    private JPanel bottomQuestionPanel = new JPanel();
     private JButton newGame = new JButton("Nytt Spel");
     private JButton quitGame = new JButton("Avsluta");
+    private JButton nextQuestionButton = new JButton("Nästa Fråga");
     private JFrame questionsFrame = new JFrame();
     private JPanel questionPanel = new JPanel();
     private JLabel questionText = new JLabel();
@@ -36,6 +39,21 @@ public class Client implements ActionListener {
     private JButton answerTwo = new JButton("Svar två");
     private JButton answerThree = new JButton("Svar tre");
     private JButton answerFour = new JButton("Svar fyra");
+
+    private JFrame categoryFrame = new JFrame();
+    private JPanel categoryTopPanel = new JPanel();
+    private JLabel categoryTitle = new JLabel("Välj en kategori");
+    private JPanel categoryPanel = new JPanel();
+    //private JPanel category1Panel = new JPanel();
+   // private JPanel category2Panel = new JPanel();
+    private JButton category1Button = new JButton("Kategori 1");
+    private JButton category2Button = new JButton("Kategori 2");
+    private JButton category3Button = new JButton("Kategori 3");
+    private JButton category4Button = new JButton("Kategori 4");
+    private JPanel categoryBottomPanel = new JPanel();
+    private JButton goBackButton = new JButton("Gå Tillbaka");
+
+
     PrintWriter out;
     BufferedReader in;
 
@@ -44,7 +62,7 @@ public class Client implements ActionListener {
 
     public void mainUI() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(240, 160);
+        mainFrame.setSize(640, 480);
         mainFrame.setVisible(true);
         mainFrame.setResizable(true);
         mainFrame.setLocationRelativeTo(null);
@@ -74,7 +92,7 @@ public class Client implements ActionListener {
         answerFour.addActionListener(this);
     }
 
-    public void questionsUI() {
+    public void questionsUI(String category) {
         questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         questionsFrame.setSize(350, 300);
         questionsFrame.setVisible(true);
@@ -82,7 +100,12 @@ public class Client implements ActionListener {
         questionsFrame.setLocationRelativeTo(null);
         questionsFrame.setLayout(new BorderLayout());
         questionsFrame.add(questionPanel, BorderLayout.NORTH);
-        questionsFrame.add(answerPanel, BorderLayout.SOUTH);
+        questionsFrame.add(answerPanel, BorderLayout.CENTER);
+
+
+        bottomQuestionPanel.add(nextQuestionButton);
+        questionsFrame.add(bottomQuestionPanel,BorderLayout.SOUTH);
+        nextQuestionButton.addActionListener(this);
 
         questionPanel.add(questionText);
         answerPanel.setLayout(new GridLayout(2, 2));
@@ -97,22 +120,73 @@ public class Client implements ActionListener {
             answerPanel.add(button);
             button.addActionListener(this);
         });
-        out.println("START");
+
+        out.println(category);
+    }
+
+    public void categoryUI() {
+        categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        categoryFrame.setVisible(true);
+        categoryFrame.setSize(640, 480);
+        categoryFrame.setLayout(new BorderLayout());
+        categoryFrame.add(categoryTopPanel, BorderLayout.NORTH);
+        categoryFrame.add(categoryPanel, BorderLayout.CENTER);
+        categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
+
+        categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
+
+        categoryPanel.setLayout(new GridLayout(2, 2, 40, 40));
+        categoryPanel.add(category1Button);
+        categoryPanel.add(category2Button);
+        categoryPanel.add(category3Button);
+        categoryPanel.add(category4Button);
+        //categoryPanel.setSize(400, 300);
+
+        EmptyBorder emptyBorder1 = new EmptyBorder(60, 60, 60, 60);
+        categoryPanel.setBorder(emptyBorder1);
+
+        categoryBottomPanel.setLayout(new GridLayout(1, 2, 30, 0));
+        categoryBottomPanel.add(goBackButton);
+        categoryBottomPanel.add(quitGame);
+        EmptyBorder emptyBorder2 = new EmptyBorder(0, 100, 0, 100);
+        categoryBottomPanel.setBorder(emptyBorder2);
+
+        category1Button.addActionListener(this);
+        category2Button.addActionListener(this);
+        category3Button.addActionListener(this);
+        category4Button.addActionListener(this);
+
+        goBackButton.addActionListener(this);
+        quitGame.addActionListener(this);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
         if (e.getSource() == newGame) {
             new Thread(() -> {
                 connectToServer();
                 readResponseFromServer();
                 mainFrame.dispose();
-                questionsUI();
+                categoryUI();
             }).start();
 
         } else if (e.getSource() == quitGame) {
             System.exit(0);
-        } else if (e.getSource() == answerOne) {
+
+        } else if (e.getSource() == nextQuestionButton) {
+            out.println("NEXT_QUESTION");
+            answerOne.setBackground(null);
+            answerTwo.setBackground(null);
+            answerThree.setBackground(null);
+            answerFour.setBackground(null);
+
+            answerOne.setEnabled(true);
+            answerTwo.setEnabled(true);
+            answerThree.setEnabled(true);
+            answerFour.setEnabled(true);
+        }
+
+        if (e.getSource() == answerOne) {
             answerOne.setBackground(Color.RED);
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
@@ -136,14 +210,29 @@ public class Client implements ActionListener {
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
 
+
+        } else if (e.getSource() == goBackButton) {
+            categoryFrame.dispose();
+            mainUI();
+
+        } else if (e.getSource() == category1Button) {
+            connectToServer();
+            readResponseFromServer();
+            categoryFrame.dispose();
+            questionsUI("category1");
+
+        } else if (e.getSource() == category2Button) {
+            connectToServer();
+            readResponseFromServer();
+            categoryFrame.dispose();
+            questionsUI("category2");
         }
-
-
     }
 
     public static void main(String[] args) {
         Client client = new Client();
         client.mainUI();
+       // client.categoryUI();
     }
 
     public void connectToServer() {
@@ -173,6 +262,7 @@ public class Client implements ActionListener {
                 while ((fromServer = in.readLine()) != null) {
                     String[] parts = fromServer.split("\\|");
                     if (parts.length == 2) {
+
                         String questionAndAnswersText = parts[0].trim();
                         String answersTextfromServer = parts[1].trim();
 

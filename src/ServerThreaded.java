@@ -30,23 +30,35 @@ public class ServerThreaded extends Thread implements Runnable {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public void run() {
         out.println("CONNECTED");
         try {
             String clientMessage;
+
             while ((clientMessage = in.readLine()) != null) {
-                if (clientMessage.startsWith("START")) {
-                    String response = protocol.getOutput();
-                    out.println(response);
-                } else {
+                if (clientMessage.startsWith("category")) {
+                    sendNextQuestion(clientMessage);
+                }
+                    else if (clientMessage.startsWith("NEXT_QUESTION")){
+                        sendNextQuestion(clientMessage);
+                    }
+                 else {
                     sendResponse(clientMessage);
                 }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    private void sendNextQuestion(String category){    //ny metod för att inte upprepa kod
+        String response = protocol.getOutput(category);
+        out.println(response);
+    }
+
     private void sendResponse (String message){
         out.println(message);
         out.flush();
