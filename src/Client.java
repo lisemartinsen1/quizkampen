@@ -103,10 +103,12 @@ public class Client implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == newGame) {
-            connectToServer();
-            readResponseFromServer();
-            mainFrame.dispose();
-            questionsUI();
+            new Thread(() -> {
+                connectToServer();
+                readResponseFromServer();
+                mainFrame.dispose();
+                questionsUI();
+            }).start();
 
         } else if (e.getSource() == quitGame) {
             System.exit(0);
