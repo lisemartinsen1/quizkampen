@@ -1,30 +1,30 @@
 QUESTION Vilken förkortning har grundämnet kvicksilver?
 ANSWERS RIGHT_ANSWER Hg, Kv, Ks, Qr
 QUESTION Vilken är formeln för kinetisk energi?
-ANSWER RIGHT_ANSWER E = 1/2mv^2, E = mc^2, E = mgh, E = Pt
+ANSWERS RIGHT_ANSWERS E = 1/2mv^2, E = mc^2, E = mgh, E = Pt
 QUESTION Vilken matematiker kom på principen att 'ett föremål nedsänkt i vatten påverkas av en uppåtriktad kraft, som är lika stor som tyngden av den undanträngda vätskan'?
-ANSWER RIGHT_ANSWER Arkimedes, Pythagoras, Isaac Newton, al-Khwarizmis
+ANSWERS RIGHT_ANSWER Arkimedes, Pythagoras, Isaac Newton, al-Khwarizmis
 QUESTION Vad kallas en elektron som befinner sig i det yttersta skalet?
-ANSWER RIGHT_ANSWER Valenselektron, Kovalent elektron, Ädelelektron, Reaktionselektron
+ANSWERS RIGHT_ANSWER Valenselektron, Kovalent elektron, Ädelelektron, Reaktionselektron
 QUESTION Vilken är den absoluta nollpunkten på celsiusskalan?
-ANSWER RIGHT_ANSWER -273.15, -100, -429,1, -174
+ANSWERS RIGHT_ANSWER -273.15, -100, -429,1, -174
 QUESTION Vilka grundämnen ingår i den process som kallas för fusion?
-ANSWER RIGHT_ANSWER Väte & Helium, Syre & Litium, Helium & Natrium, Kol & Väte
+ANSWERS RIGHT_ANSWER Väte & Helium, Syre & Litium, Helium & Natrium, Kol & Väte
 QUESTION Vad betyder ordet 'atom'?
-ANSWER RIGHT_ANSWER Odelbar, Energi, Minsta beståndsdel, Massa
+ANSWERS RIGHT_ANSWER Odelbar, Energi, Minsta beståndsdel, Massa
 QUESTION Vad är enheten för mätning av elektrisk resistans?
-ANSWER RIGHT_ANSWER Ohm, Volt, Ampere, Watt
+ANSWERS RIGHT_ANSWER Ohm, Volt, Ampere, Watt
 QUESTION Vilken process använder mikroorganismer för att bryta ned organiskt avfall och producera biogas?
-ANSWER RIGHT_ANSWER Fermentation, Fotosyntes, Pyrolys, Elektrolys
+ANSWERS RIGHT_ANSWER Fermentation, Fotosyntes, Pyrolys, Elektrolys
 QUESTION Vilken typ av ström genereras av vanliga batterier?
-ANSWER RIGHT_ANSWER Likström, Växelström, Trefasström, Övergångsström
+ANSWERS RIGHT_ANSWER Likström, Växelström, Trefasström, Övergångsström
 QUESTION Vilket element används vanligtvis för att tillverka halvledare i elektroniska komponenter?
-ANSWER RIGHT_ANSWER Kisel, Guld, Koppar, Aluminium
+ANSWERS RIGHT_ANSWER Kisel, Guld, Koppar, Aluminium
 QUESTION Vad är den genomsnittliga hastigheten för ljuset i vakuum?
-ANSWER RIGHT_ANSWER 300 000 km/s, 150 000 km/s, 130 000 km/s, 250 000 km/s
+ANSWERS RIGHT_ANSWER 300 000 km/s, 150 000 km/s, 130 000 km/s, 250 000 km/s
 QUESTION Vilken typ av bränsle används vanligtvis i kärnkraftverk för att generera elektricitet?
-ANSWER RIGHT_ANSWER Uran, Kol, Olja, Naturgas
+ANSWERS RIGHT_ANSWER Uran, Kol, Olja, Naturgas
 QUESTION Vilket element är det vanligaste i jordens atmosfär?
-ANSWER RIGHT_ANSWER Kväve, Syre, Väte, Koldioxid
+ANSWERS RIGHT_ANSWER Kväve, Syre, Väte, Koldioxid
 QUESTION Vilken typ av strålning har kortare våglängd än synligt ljus?
-ANSWER RIGHT_ANSWER Gammastrålning, Infraröd strålning, Mikrovågor, Radiofrekvens
+ANSWERS RIGHT_ANSWER Gammastrålning, Infraröd strålning, Mikrovågor, Radiofrekvens
