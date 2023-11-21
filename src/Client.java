@@ -184,31 +184,29 @@ public class Client implements ActionListener {
             answerFour.setEnabled(true);
         }
 
-                if (e.getSource() == answerOne) {
-                    answerOne.setBackground(Color.RED);
-                    answerTwo.setEnabled(false);
-                    answerThree.setEnabled(false);
-                    answerFour.setEnabled(false);
+        if (e.getSource() == answerOne) {
+            answerOne.setBackground(Color.RED);
+            answerTwo.setEnabled(false);
+            answerThree.setEnabled(false);
+            answerFour.setEnabled(false);
 
-                } else if (e.getSource() == answerTwo) {
-                    answerTwo.setBackground(Color.RED);
-                    answerOne.setEnabled(false);
-                    answerThree.setEnabled(false);
-                    answerFour.setEnabled(false);
+        } else if (e.getSource() == answerTwo) {
+            answerTwo.setBackground(Color.RED);
+            answerOne.setEnabled(false);
+            answerThree.setEnabled(false);
+            answerFour.setEnabled(false);
 
-                } else if (e.getSource() == answerThree) {
-                    answerThree.setBackground(Color.RED);
-                    answerOne.setEnabled(false);
-                    answerTwo.setEnabled(false);
-                    answerFour.setEnabled(false);
+        } else if (e.getSource() == answerThree) {
+            answerThree.setBackground(Color.RED);
+            answerOne.setEnabled(false);
+            answerTwo.setEnabled(false);
+            answerFour.setEnabled(false);
 
-                } else if (e.getSource() == answerFour) {
-                    answerFour.setBackground(Color.GREEN);
-                    answerOne.setEnabled(false);
-                    answerTwo.setEnabled(false);
-                    answerThree.setEnabled(false);
-
-                }
+        } else if (e.getSource() == answerFour) {
+            answerFour.setBackground(Color.GREEN);
+            answerOne.setEnabled(false);
+            answerTwo.setEnabled(false);
+            answerThree.setEnabled(false);
 
 
         } else if (e.getSource() == goBackButton) {
@@ -227,11 +225,12 @@ public class Client implements ActionListener {
             categoryFrame.dispose();
             questionsUI("category2");
         }
+    }
 
     public static void main(String[] args) {
         Client client = new Client();
-        //client.mainUI();
-        client.categoryUI();
+        client.mainUI();
+       // client.categoryUI();
     }
 
     public void connectToServer() {
