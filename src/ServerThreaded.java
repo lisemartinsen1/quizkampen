@@ -24,25 +24,28 @@ public class ServerThreaded implements Runnable {
             String clientMessage;
 
             while ((clientMessage = in.readLine()) != null) {
-               /*
-                if (clientMessage.startsWith("START")) {
-                    String response = protocol.getOutput();
-                    out.println(response);
-                } else {
+                if (clientMessage.startsWith("category")) {
+                    sendNextQuestion(clientMessage);
+                }
+                    else if (clientMessage.startsWith("NEXT_QUESTION")){
+                        sendNextQuestion(clientMessage);
+                    }
+                 else {
                     sendResponse(clientMessage);
-                } */
+                }
 
-
-                String response = protocol.getOutput(clientMessage); //clientMessage = den kategori som valts.
-                out.println(response);
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void sendResponse(String message) {
+    private void sendNextQuestion(String category){    //ny metod för att inte upprepa kod
+        String response = protocol.getOutput(category);
+        out.println(response);
+    }
+
+    private void sendResponse (String message){
         out.println(message);
         out.flush();
     }

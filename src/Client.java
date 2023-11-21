@@ -27,8 +27,10 @@ public class Client implements ActionListener {
     private JLabel howManyQuestions = new JLabel("Antal frågor: ");
     private JComboBox<Integer> howManyQuestionsBox = new JComboBox<>(numberQuestionsModel);
     private JPanel bottomPanel = new JPanel();
+    private JPanel bottomQuestionPanel = new JPanel();
     private JButton newGame = new JButton("Nytt Spel");
     private JButton quitGame = new JButton("Avsluta");
+    private JButton nextQuestionButton = new JButton("Nästa Fråga");
     private JFrame questionsFrame = new JFrame();
     private JPanel questionPanel = new JPanel();
     private JLabel questionText = new JLabel();
@@ -97,7 +99,12 @@ public class Client implements ActionListener {
         questionsFrame.setLocationRelativeTo(null);
         questionsFrame.setLayout(new BorderLayout());
         questionsFrame.add(questionPanel, BorderLayout.NORTH);
-        questionsFrame.add(answerPanel, BorderLayout.SOUTH);
+        questionsFrame.add(answerPanel, BorderLayout.CENTER);
+
+
+        bottomQuestionPanel.add(nextQuestionButton);
+        questionsFrame.add(bottomQuestionPanel,BorderLayout.SOUTH);
+        nextQuestionButton.addActionListener(this);
 
         questionPanel.add(questionText);
         answerPanel.setLayout(new GridLayout(2, 2));
@@ -153,7 +160,7 @@ public class Client implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
         if (e.getSource() == newGame) {
             connectToServer();
             readResponseFromServer();
@@ -164,29 +171,45 @@ public class Client implements ActionListener {
         } else if (e.getSource() == quitGame) {
             System.exit(0);
 
-        } else if (e.getSource() == answerOne) {
-            answerOne.setBackground(Color.RED);
-            answerTwo.setEnabled(false);
-            answerThree.setEnabled(false);
-            answerFour.setEnabled(false);
+        } else if (e.getSource() == nextQuestionButton) {
+            out.println("NEXT_QUESTION");
+            answerOne.setBackground(null);
+            answerTwo.setBackground(null);
+            answerThree.setBackground(null);
+            answerFour.setBackground(null);
 
-        } else if (e.getSource() == answerTwo) {
-            answerTwo.setBackground(Color.RED);
-            answerOne.setEnabled(false);
-            answerThree.setEnabled(false);
-            answerFour.setEnabled(false);
+            answerOne.setEnabled(true);
+            answerTwo.setEnabled(true);
+            answerThree.setEnabled(true);
+            answerFour.setEnabled(true);
+        }
 
-        } else if (e.getSource() == answerThree) {
-            answerThree.setBackground(Color.RED);
-            answerOne.setEnabled(false);
-            answerTwo.setEnabled(false);
-            answerFour.setEnabled(false);
+                if (e.getSource() == answerOne) {
+                    answerOne.setBackground(Color.RED);
+                    answerTwo.setEnabled(false);
+                    answerThree.setEnabled(false);
+                    answerFour.setEnabled(false);
 
-        } else if (e.getSource() == answerFour) {
-            answerFour.setBackground(Color.GREEN);
-            answerOne.setEnabled(false);
-            answerTwo.setEnabled(false);
-            answerThree.setEnabled(false);
+                } else if (e.getSource() == answerTwo) {
+                    answerTwo.setBackground(Color.RED);
+                    answerOne.setEnabled(false);
+                    answerThree.setEnabled(false);
+                    answerFour.setEnabled(false);
+
+                } else if (e.getSource() == answerThree) {
+                    answerThree.setBackground(Color.RED);
+                    answerOne.setEnabled(false);
+                    answerTwo.setEnabled(false);
+                    answerFour.setEnabled(false);
+
+                } else if (e.getSource() == answerFour) {
+                    answerFour.setBackground(Color.GREEN);
+                    answerOne.setEnabled(false);
+                    answerTwo.setEnabled(false);
+                    answerThree.setEnabled(false);
+
+                }
+
 
         } else if (e.getSource() == goBackButton) {
             categoryFrame.dispose();
@@ -204,8 +227,6 @@ public class Client implements ActionListener {
             categoryFrame.dispose();
             questionsUI("category2");
         }
-
-    }
 
     public static void main(String[] args) {
         Client client = new Client();
@@ -271,6 +292,7 @@ public class Client implements ActionListener {
                                     answerTwo.setText(answersList.get(1));
                                     answerThree.setText(answersList.get(2));
                                     answerFour.setText(finalRightAnswer);
+
                                 });
                             }
                         }
