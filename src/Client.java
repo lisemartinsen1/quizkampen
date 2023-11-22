@@ -3,10 +3,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -22,10 +19,10 @@ public class Client implements ActionListener {
     private JPanel titlePanel = new JPanel();
     private JLabel gameTitle = new JLabel("Quizkampen");
     private JPanel howManyPanel = new JPanel();
-    private JLabel howManyRounds = new JLabel("Antal ronder: ");
-    private JComboBox<Integer> howManyRoundsBox = new JComboBox<>(numberRoundsModel);
-    private JLabel howManyQuestions = new JLabel("Antal frågor: ");
-    private JComboBox<Integer> howManyQuestionsBox = new JComboBox<>(numberQuestionsModel);
+    private JLabel howManyRounds = new JLabel();
+    //private JComboBox<Integer> howManyRoundsBox = new JComboBox<>(numberRoundsModel);
+    private JLabel howManyQuestions = new JLabel();
+    //private JComboBox<Integer> howManyQuestionsBox = new JComboBox<>(numberQuestionsModel);
     private JPanel bottomPanel = new JPanel();
     private JPanel bottomQuestionPanel = new JPanel();
     private JButton newGame = new JButton("Nytt Spel");
@@ -57,6 +54,8 @@ public class Client implements ActionListener {
     PrintWriter out;
     BufferedReader in;
 
+    PropertiesClass propertiesClass = new PropertiesClass();
+
     public Client() {
     }
 
@@ -68,20 +67,25 @@ public class Client implements ActionListener {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setLayout(new BorderLayout());
         mainFrame.add(titlePanel, BorderLayout.NORTH);
-        mainFrame.add(howManyPanel, BorderLayout.WEST);
+        mainFrame.add(howManyPanel, BorderLayout.CENTER); //Varför hamnar den inte i mitten?
         mainFrame.add(bottomPanel, BorderLayout.SOUTH);
-        howManyPanel.setLayout(new GridLayout(2, 2));
+        howManyPanel.setLayout(new GridLayout(2, 1));
 
         titlePanel.add(gameTitle);
 
+        propertiesClass.loadProperties();
+        int amountOfRounds = propertiesClass.getAmountOfRounds();
+        int amountOfQuestions = propertiesClass.getAmountOfQuestions();
+        howManyRounds.setText("Antal ronder: " + amountOfRounds);
+        howManyQuestions.setText("Antal frågor/rond: " + amountOfQuestions);
+
         howManyPanel.add(howManyRounds);
-        howManyPanel.add(howManyRoundsBox);
+        //howManyPanel.add(howManyRoundsBox);
         howManyPanel.add(howManyQuestions);
-        howManyPanel.add(howManyQuestionsBox);
+        //howManyPanel.add(howManyQuestionsBox);
 
         bottomPanel.add(newGame);
         bottomPanel.add(quitGame);
-        //mainFrame.pack();
 
         newGame.addActionListener(this);
         quitGame.addActionListener(this);
@@ -93,7 +97,7 @@ public class Client implements ActionListener {
 
     public void questionsUI(String category) {
         questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        questionsFrame.setSize(350, 300);
+        questionsFrame.setSize(640, 480);
         questionsFrame.setVisible(true);
         questionsFrame.setResizable(true);
         questionsFrame.setLocationRelativeTo(null);
