@@ -11,7 +11,12 @@ public class Server {
             while (true) {
                 // Skapa två spelare
                 ServerThreaded serverThreaded = new ServerThreaded(serverSocket.accept());
+                System.out.println("User 1 is online");
                 ServerThreaded serverThreaded1 = new ServerThreaded(serverSocket.accept());
+                System.out.println("User 2 is online");
+
+                serverThreaded.setOpponent(serverThreaded1);
+                serverThreaded1.setOpponent(serverThreaded);
 
                 serverThreaded.start();
                 serverThreaded1.start();

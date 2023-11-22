@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.*;
 import java.util.List;
 
@@ -56,6 +55,7 @@ public class Client implements ActionListener {
 
     PrintWriter out;
     BufferedReader in;
+    String categories;
 
     public Client() {
     }
@@ -162,13 +162,14 @@ public class Client implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
+        new Thread(() -> {
         if (e.getSource() == newGame) {
-            new Thread(() -> {
-                connectToServer();
-                readResponseFromServer();
-                mainFrame.dispose();
-                categoryUI();
-            }).start();
+            //new Thread(() -> {
+            connectToServer();
+            //readResponseFromServer();
+            mainFrame.dispose();
+            categoryUI();
+            //}).start();
 
         } else if (e.getSource() == quitGame) {
             System.exit(0);
@@ -216,16 +217,35 @@ public class Client implements ActionListener {
             mainUI();
 
         } else if (e.getSource() == category1Button) {
+            setCategories("category 1");
+            out.println("CHOOSECATEGORY category1");
             connectToServer();
-            readResponseFromServer();
-            categoryFrame.dispose();
-            questionsUI("category1");
+            //readResponseFromServer();
+            //readCategory("category1");
+
+
 
         } else if (e.getSource() == category2Button) {
             connectToServer();
             readResponseFromServer();
             categoryFrame.dispose();
             questionsUI("category2");
+        }
+        }).start();
+    }
+    public void setCategories(String categories) {
+        this.categories = categories;
+    }
+    public String getCategories() {
+        return categories;
+    }
+    public void readCategory() throws IOException {
+        String fromServer;
+        while ((fromServer = in.readLine()) != null) {
+            if (fromServer.startsWith("ACCEPT")) {
+                categoryFrame.dispose();
+                questionsUI(getCategories());
+            }
         }
     }
 
@@ -242,11 +262,11 @@ public class Client implements ActionListener {
                 Socket sock = new Socket("127.0.0.1", 12345);
                 in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 out = new PrintWriter(sock.getOutputStream(), true);
-                out.println("RUN");
                 while (true) {
                     read = in.readLine();
                     if (read.startsWith("CONNECTED")) {
                         System.out.println(read);
+                        readResponseFromServer();
                         break;
                     }
                 }
@@ -259,6 +279,7 @@ public class Client implements ActionListener {
         new Thread(() -> {
             try {
                 String fromServer;
+                readCategory();
                 while ((fromServer = in.readLine()) != null) {
                     String[] parts = fromServer.split("\\|");
                     if (parts.length == 2) {
