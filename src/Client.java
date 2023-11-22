@@ -55,6 +55,10 @@ public class Client implements ActionListener {
     BufferedReader in;
 
     PropertiesClass propertiesClass = new PropertiesClass();
+    private int totalRounds = propertiesClass.getAmountOfRounds();
+    private int currentRound = 1;
+    private int currentQuestion = 1;
+    private int questionsPerRound = propertiesClass.getAmountOfQuestions();
 
     public Client() {
     }
@@ -80,9 +84,7 @@ public class Client implements ActionListener {
         howManyQuestions.setText("Antal frågor/rond: " + amountOfQuestions);
 
         howManyPanel.add(howManyRounds);
-        //howManyPanel.add(howManyRoundsBox);
         howManyPanel.add(howManyQuestions);
-        //howManyPanel.add(howManyQuestionsBox);
 
         bottomPanel.add(newGame);
         bottomPanel.add(quitGame);
@@ -171,6 +173,21 @@ public class Client implements ActionListener {
             System.exit(0);
 
         } else if (e.getSource() == nextQuestionButton) {
+            currentQuestion++;
+            if (currentQuestion > questionsPerRound) {
+                currentQuestion = 1;
+                currentRound++;
+                if (currentRound > totalRounds) {
+                    questionsFrame.dispose();
+                    mainUI();
+                    return;
+                }
+                //Kod för vad som händer efter varje runda, ny UI??
+                //questionsFrame.dispose();
+                //mainUI();
+
+            }
+
             out.println("NEXT_QUESTION");
             answerOne.setBackground(null);
             answerTwo.setBackground(null);
