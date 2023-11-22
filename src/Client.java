@@ -51,14 +51,12 @@ public class Client implements ActionListener {
     private List<JButton> answerButtons;
 
     private JFrame resultFrame = new JFrame();
-    private JPanel resultUpperPanel = new JPanel();
-    private JPanel resultCenterPanel = new JPanel();
+    private JPanel resultUpperPanel = new JPanel(new GridBagLayout());
+    private JPanel resultCenterPanel = new JPanel(new GridBagLayout());
     private JLabel whosTurnText = new JLabel("Din tur/Motståndarens tur");
     private JLabel resultPreviousRounds = new JLabel("1-3");
     private JLabel playerOneName = new JLabel("Spelare 1");
     private JLabel playerTwoName = new JLabel("Spelare 2");
-    private JLabel playerOnePointsinRound = new JLabel("0");
-    private JLabel playerTwoPointsinRound = new JLabel("0");
 
     PrintWriter out;
     BufferedReader in;
@@ -176,22 +174,46 @@ public class Client implements ActionListener {
         resultFrame.add(resultUpperPanel, BorderLayout.NORTH);
         resultFrame.add(resultCenterPanel, BorderLayout.WEST);
 
-        resultUpperPanel.add(whosTurnText);
-        resultUpperPanel.add(playerOneName);
-        resultUpperPanel.add(playerTwoName);
-        resultUpperPanel.add(resultPreviousRounds);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        //ändra left/right för distansen mellan spelar1/2 och vems tur texten
+        constraints.insets = new Insets(5, 50, 5, 50);
 
-        //Ta in hur många frågor/rundor och använd så många som är angett i properties
-        setResultTextOnLabels();
+        constraints.gridy = 0;
+        constraints.gridx = 1;
+        resultUpperPanel.add(playerOneName, constraints);
+
+        constraints.gridx = 2;
+        resultUpperPanel.add(whosTurnText, constraints);
+
+        constraints.gridx = 3;
+        resultUpperPanel.add(playerTwoName, constraints);
+
+        constraints.gridy++;
+        constraints.gridx = 2;
+        resultPreviousRounds.setBorder(new EmptyBorder(0, 60, 0, 0));
+        resultUpperPanel.add(resultPreviousRounds, constraints);
+
+        //generar text för så många rundor det är satt i properties filen
+        PropertiesClass propertiesClass = new PropertiesClass();
+        int numberOfRounds = propertiesClass.getAmountOfRounds();
+
+        for (int i = 1; i <= numberOfRounds; i++) {
+            JLabel roundLabel = new JLabel("Runda " + i);
+            JLabel pointsLabel = new JLabel("Poäng" + i);
+
+            constraints.gridy ++;
+            resultCenterPanel.add(roundLabel, constraints);
+            constraints.gridy ++;
+            resultCenterPanel.add(pointsLabel, constraints);
+
+        }
+
+
 
     }
 
-    public void setResultTextOnLabels(){
 
-        PropertiesClass propertiesClass1 = new PropertiesClass();
-        propertiesClass1.getAmountOfRounds();
-        propertiesClass1.getAmountOfQuestions();
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
