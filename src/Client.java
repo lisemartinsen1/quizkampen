@@ -50,6 +50,15 @@ public class Client implements ActionListener {
     private JButton goBackButton = new JButton("Gå Tillbaka");
     private List<JButton> answerButtons;
 
+    private JFrame resultFrame = new JFrame();
+    private JPanel resultUpperPanel = new JPanel();
+    private JPanel resultCenterPanel = new JPanel();
+    private JLabel whosTurnText = new JLabel("Din tur/Motståndarens tur");
+    private JLabel resultPreviousRounds = new JLabel("1-3");
+    private JLabel playerOneName = new JLabel("Spelare 1");
+    private JLabel playerTwoName = new JLabel("Spelare 2");
+    private JLabel playerOnePointsinRound = new JLabel("0");
+    private JLabel playerTwoPointsinRound = new JLabel("0");
 
     PrintWriter out;
     BufferedReader in;
@@ -158,6 +167,32 @@ public class Client implements ActionListener {
         quitGame.addActionListener(this);
     }
 
+    public void resultUI(){
+        resultFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        resultFrame.setSize(640, 480);
+        resultFrame.setVisible(true);
+        resultFrame.setLocationRelativeTo(null);
+        resultFrame.setLayout(new BorderLayout());
+        resultFrame.add(resultUpperPanel, BorderLayout.NORTH);
+        resultFrame.add(resultCenterPanel, BorderLayout.WEST);
+
+        resultUpperPanel.add(whosTurnText);
+        resultUpperPanel.add(playerOneName);
+        resultUpperPanel.add(playerTwoName);
+        resultUpperPanel.add(resultPreviousRounds);
+
+        //Ta in hur många frågor/rundor och använd så många som är angett i properties
+        setResultTextOnLabels();
+
+    }
+
+    public void setResultTextOnLabels(){
+
+        PropertiesClass propertiesClass1 = new PropertiesClass();
+        propertiesClass1.getAmountOfRounds();
+        propertiesClass1.getAmountOfQuestions();
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
         if (e.getSource() == newGame) {
@@ -240,8 +275,9 @@ public class Client implements ActionListener {
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.mainUI();
+       // client.mainUI();
        // client.categoryUI();
+        client.resultUI();
     }
 
     public void connectToServer() {
