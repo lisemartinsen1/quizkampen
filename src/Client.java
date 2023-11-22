@@ -205,9 +205,11 @@ public class Client implements ActionListener {
             resultUpperPanel.add(resultPreviousRounds, constraints);
 
             //generar text för så många rundor det är satt i properties filen
+
             PropertiesClass propertiesClass = new PropertiesClass();
             propertiesClass.loadProperties();
             int numberOfRounds = propertiesClass.getAmountOfRounds();
+            JLabel[][] labels = new JLabel[numberOfRounds][4];
             for (int i = 1; i <= numberOfRounds; i++) {
                 JLabel roundLabel1 = new JLabel("Runda " + i);
                 JLabel pointsLabel1 = new JLabel("Poäng " + i);
@@ -219,25 +221,30 @@ public class Client implements ActionListener {
                 constraints.gridy++;
                 constraints.gridx = 0;
                 resultCenterPanel.add(roundLabel1, constraints);
+                labels[i - 1][0] = roundLabel1; // Save reference to roundLabel1
                 constraints.gridx = 1;
                 resultCenterPanel.add(fillLabel1, constraints);
+
                 constraints.gridx = 2;
                 resultCenterPanel.add(roundLabel2, constraints);
+                labels[i - 1][1] = roundLabel2; // Save reference to roundLabel2
 
                 constraints.gridy++;
                 constraints.gridx = 0;
-                //spelare 1 poäng
                 resultCenterPanel.add(pointsLabel1, constraints);
+                labels[i - 1][2] = pointsLabel1; // Save reference to pointsLabel1
                 constraints.gridx = 1;
                 resultCenterPanel.add(fillLabel2, constraints);
                 constraints.gridx = 2;
-                //spelare 2 poäng
                 resultCenterPanel.add(pointsLabel2, constraints);
+                labels[i - 1][3] = pointsLabel2; // Save reference to pointsLabel2
             }
 
             resultBottomPanel.add(playButton);
             playButton.setEnabled(false);
             whosTurnText.setText("Motståndarens tur");
+            labels[0][2].setText(String.valueOf(howManyPointsInRound));
+
         });
     }
 
@@ -325,9 +332,9 @@ public class Client implements ActionListener {
 
     public static void main(String[] args) {
         Client client = new Client();
-       // client.mainUI();
+       client.mainUI();
        // client.categoryUI();
-        client.resultUI();
+
     }
 
     public void connectToServer() {
