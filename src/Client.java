@@ -191,7 +191,6 @@ public class Client implements ActionListener {
 
             answerButtons.forEach(button -> {
                 answerPanel.add(button);
-                button.addActionListener(this);
             });
         }
 
