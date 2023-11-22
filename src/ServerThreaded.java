@@ -24,11 +24,11 @@ public class ServerThreaded implements Runnable {
             String clientMessage;
 
             while ((clientMessage = in.readLine()) != null) {
-                if (clientMessage.startsWith("START")) {
-                    sendNextQuestion();
+                if (clientMessage.startsWith("category")) {
+                    sendNextQuestion(clientMessage);
                 }
                     else if (clientMessage.startsWith("NEXT_QUESTION")){
-                        sendNextQuestion();
+                        sendNextQuestion(clientMessage);
                     }
                  else {
                     sendResponse(clientMessage);
@@ -40,8 +40,8 @@ public class ServerThreaded implements Runnable {
         }
     }
 
-    private void sendNextQuestion(){    //ny metod för att inte upprepa kod
-        String response = protocol.getOutput();
+    private void sendNextQuestion(String category){    //ny metod för att inte upprepa kod
+        String response = protocol.getOutput(category);
         out.println(response);
     }
 
