@@ -5,12 +5,17 @@ import java.net.Socket;
 
 public class Server {
 
+    private int currentPlayerNumber = 1;
+    //private boolean player1CompletedRound = false;
+    //private boolean player2CompletedRound = false;
     public Server() {
         try (ServerSocket serverSocket = new ServerSocket(12345);) {
             while (true) {
                 Socket socketToClient = serverSocket.accept();
                 System.out.println("Socket connected");
-                ServerThreaded serverThreaded = new ServerThreaded(socketToClient);
+                int playerNumber = currentPlayerNumber;
+                currentPlayerNumber++;
+                ServerThreaded serverThreaded = new ServerThreaded(socketToClient, playerNumber);
                 Thread thread = new Thread(serverThreaded);
                 thread.start();
 

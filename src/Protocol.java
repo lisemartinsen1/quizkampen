@@ -7,7 +7,7 @@ public class Protocol {
     protected int state = FIRST_QNA;
     DAO dao = new DAO();
 
-    public String getOutput(String category) { //getOutput tar kategori som inparameter
+    public QuestionAndAnswers getOutput(String category) { //getOutput tar kategori som inparameter
         QuestionAndAnswers qa;
         if (state == FIRST_QNA) {
             state = NEXT_QNA;
@@ -18,10 +18,14 @@ public class Protocol {
             qa = dao.getRandomQuestionAndAnswers(category);
         }
         else {
-            return "Unexpected state error";
+            System.err.println("Unexpected state error");
+            return null;
         }
+        /*
         String question = qa.getQuestion();
         String answers = qa.getAnswers();
         return question + "|" + answers;
+         */
+        return qa;
     }
 }
