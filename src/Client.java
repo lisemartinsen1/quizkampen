@@ -14,6 +14,7 @@ import java.util.List;
 
 
 public class Client implements ActionListener {
+    private int howManyPointsInRound;
     private JFrame mainFrame = new JFrame("Quizkampen");
     private JPanel titlePanel = new JPanel();
     private JLabel gameTitle = new JLabel("Quizkampen");
@@ -38,6 +39,7 @@ public class Client implements ActionListener {
     private JPanel categoryTopPanel = new JPanel();
     private JLabel categoryTitle = new JLabel("Välj en kategori");
     private JPanel categoryPanel = new JPanel();
+
     //private JPanel category1Panel = new JPanel();
    // private JPanel category2Panel = new JPanel();
     private JButton category1Button = new JButton("Kategori 1");
@@ -87,10 +89,6 @@ public class Client implements ActionListener {
 
         newGame.addActionListener(this);
         quitGame.addActionListener(this);
-        answerOne.addActionListener(this);
-        answerTwo.addActionListener(this);
-        answerThree.addActionListener(this);
-        answerFour.addActionListener(this);
     }
 
     public void questionsUI(String category) {
@@ -184,6 +182,9 @@ public class Client implements ActionListener {
             answerThree.setEnabled(true);
             answerFour.setEnabled(true);
 
+            System.out.println("Nuvarande Poäng i rundan: "+ howManyPointsInRound);
+
+
             //Shufflar rätt svar till random plats vid nästa fråga
 
             Collections.shuffle(answerButtons);
@@ -194,7 +195,7 @@ public class Client implements ActionListener {
             });
         }
 
-        if (e.getSource() == answerOne) {
+        else if (e.getSource() == answerOne) {
             answerOne.setBackground(Color.RED);
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
@@ -218,6 +219,7 @@ public class Client implements ActionListener {
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
 
+            howManyPointsInRound ++;
 
         } else if (e.getSource() == goBackButton) {
             categoryFrame.dispose();
