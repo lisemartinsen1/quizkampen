@@ -123,7 +123,6 @@ public class Client implements ActionListener {
         } else if (e.getSource() == quitGame) {
 
         } else if (e.getSource() == nextQuestionButton) {
-            currentQuestion++;
 
             if(currentQuestion > questionsPerRound){
                 currentQuestion = 1;
