@@ -11,18 +11,12 @@ import java.util.List;
 
 
 public class Client implements ActionListener {
-    Integer[] numberRounds = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    Integer[] numberQuestions = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    DefaultComboBoxModel<Integer> numberRoundsModel = new DefaultComboBoxModel<>(numberRounds);
-    DefaultComboBoxModel<Integer> numberQuestionsModel = new DefaultComboBoxModel<>(numberQuestions);
     private JFrame mainFrame = new JFrame("Quizkampen");
     private JPanel titlePanel = new JPanel();
     private JLabel gameTitle = new JLabel("Quizkampen");
     private JPanel howManyPanel = new JPanel();
     private JLabel howManyRounds = new JLabel();
-    //private JComboBox<Integer> howManyRoundsBox = new JComboBox<>(numberRoundsModel);
     private JLabel howManyQuestions = new JLabel();
-    //private JComboBox<Integer> howManyQuestionsBox = new JComboBox<>(numberQuestionsModel);
     private JPanel bottomPanel = new JPanel();
     private JPanel bottomQuestionPanel = new JPanel();
     private JButton newGame = new JButton("Nytt Spel");
@@ -105,7 +99,6 @@ public class Client implements ActionListener {
         questionsFrame.add(questionPanel, BorderLayout.NORTH);
         questionsFrame.add(answerPanel, BorderLayout.CENTER);
 
-
         bottomQuestionPanel.add(nextQuestionButton);
         questionsFrame.add(bottomQuestionPanel,BorderLayout.SOUTH);
         nextQuestionButton.addActionListener(this);
@@ -113,9 +106,7 @@ public class Client implements ActionListener {
         questionPanel.add(questionText);
         answerPanel.setLayout(new GridLayout(2, 2));
 
-
         List<JButton> answerButtons = Arrays.asList(answerOne, answerTwo, answerThree, answerFour);
-
 
         Collections.shuffle(answerButtons);
 
