@@ -13,6 +13,10 @@ import java.util.List;
 
 
 public class Client implements ActionListener {
+    private int currentRound = 1;
+    private int currentQuestion = 2;
+    private int totalRounds = 4;
+    private int questionsPerRound;
     Integer[] numberRounds = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     Integer[] numberQuestions = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     DefaultComboBoxModel<Integer> numberRoundsModel = new DefaultComboBoxModel<>(numberRounds);
@@ -119,6 +123,17 @@ public class Client implements ActionListener {
         } else if (e.getSource() == quitGame) {
 
         } else if (e.getSource() == nextQuestionButton) {
+            currentQuestion++;
+
+            if(currentQuestion > questionsPerRound){
+                currentQuestion = 1;
+                currentRound++;
+                if(currentRound > totalRounds){
+                    questionsFrame.dispose();
+                    mainUI();
+                }
+            }
+
             out.println("NEXT_QUESTION");
             answerOne.setBackground(null);
             answerTwo.setBackground(null);
