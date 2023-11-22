@@ -141,6 +141,7 @@ public class Client implements ActionListener {
         categoryFrame.setVisible(true);
         categoryFrame.setSize(640, 480);
         categoryFrame.setLayout(new BorderLayout());
+        categoryFrame.setLocationRelativeTo(null);
         categoryFrame.add(categoryTopPanel, BorderLayout.NORTH);
         categoryFrame.add(categoryPanel, BorderLayout.CENTER);
         categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
@@ -221,23 +222,23 @@ public class Client implements ActionListener {
                 constraints.gridy++;
                 constraints.gridx = 0;
                 resultCenterPanel.add(roundLabel1, constraints);
-                labels[i - 1][0] = roundLabel1; // Save reference to roundLabel1
+                labels[i - 1][0] = roundLabel1;
                 constraints.gridx = 1;
                 resultCenterPanel.add(fillLabel1, constraints);
 
                 constraints.gridx = 2;
                 resultCenterPanel.add(roundLabel2, constraints);
-                labels[i - 1][1] = roundLabel2; // Save reference to roundLabel2
+                labels[i - 1][1] = roundLabel2;
 
                 constraints.gridy++;
                 constraints.gridx = 0;
                 resultCenterPanel.add(pointsLabel1, constraints);
-                labels[i - 1][2] = pointsLabel1; // Save reference to pointsLabel1
+                labels[i - 1][2] = pointsLabel1;
                 constraints.gridx = 1;
                 resultCenterPanel.add(fillLabel2, constraints);
                 constraints.gridx = 2;
                 resultCenterPanel.add(pointsLabel2, constraints);
-                labels[i - 1][3] = pointsLabel2; // Save reference to pointsLabel2
+                labels[i - 1][3] = pointsLabel2;
             }
 
             resultBottomPanel.add(playButton);
