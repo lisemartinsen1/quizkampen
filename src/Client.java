@@ -3,7 +3,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -43,6 +46,7 @@ public class Client implements ActionListener {
     private JButton category4Button = new JButton("Kategori 4");
     private JPanel categoryBottomPanel = new JPanel();
     private JButton goBackButton = new JButton("Gå Tillbaka");
+    private List<JButton> answerButtons;
 
 
     PrintWriter out;
@@ -106,7 +110,9 @@ public class Client implements ActionListener {
         questionPanel.add(questionText);
         answerPanel.setLayout(new GridLayout(2, 2));
 
-        List<JButton> answerButtons = Arrays.asList(answerOne, answerTwo, answerThree, answerFour);
+
+        answerButtons = Arrays.asList(answerOne, answerTwo, answerThree, answerFour);
+
 
         Collections.shuffle(answerButtons);
 
@@ -177,6 +183,15 @@ public class Client implements ActionListener {
             answerTwo.setEnabled(true);
             answerThree.setEnabled(true);
             answerFour.setEnabled(true);
+
+            //Shufflar rätt svar till random plats vid nästa fråga
+
+            Collections.shuffle(answerButtons);
+
+            answerButtons.forEach(button -> {
+                answerPanel.add(button);
+                button.addActionListener(this);
+            });
         }
 
         if (e.getSource() == answerOne) {
