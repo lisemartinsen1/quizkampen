@@ -207,7 +207,7 @@ public class Client implements ActionListener {
 
             //generar text för så många rundor det är satt i properties filen
 
-            PropertiesClass propertiesClass = new PropertiesClass();
+
             propertiesClass.loadProperties();
             int numberOfRounds = propertiesClass.getAmountOfRounds();
             JLabel[][] labels = new JLabel[numberOfRounds][4];
@@ -333,8 +333,9 @@ public class Client implements ActionListener {
 
     public static void main(String[] args) {
         Client client = new Client();
-       client.mainUI();
-       // client.categoryUI();
+      client.mainUI();
+     // client.categoryUI();
+
 
     }
 
