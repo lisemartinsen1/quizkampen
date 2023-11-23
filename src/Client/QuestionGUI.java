@@ -1,3 +1,5 @@
+package Client;
+import Server.PropertiesClass;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -131,31 +133,32 @@ public class QuestionGUI extends JFrame implements ActionListener {
                     return;
                 }
                 //Kod för vad som händer efter varje runda, ny UI??
-                questionsFrame.dispose();
+                //questionsFrame.dispose();
                 //resultUI();
+                out.println("ALL_Q_ANSWERED");
+            } else {
+
+                out.println("NEXT_QUESTION");
+                answerOne.setBackground(null);
+                answerTwo.setBackground(null);
+                answerThree.setBackground(null);
+                answerFour.setBackground(null);
+
+                answerOne.setEnabled(true);
+                answerTwo.setEnabled(true);
+                answerThree.setEnabled(true);
+                answerFour.setEnabled(true);
+
+                System.out.println("Nuvarande Poäng i rundan: " + howManyPointsInRound);
+
+                //Shufflar rätt svar till random plats vid nästa fråga
+
+                Collections.shuffle(answerButtons);
+
+                answerButtons.forEach(button -> {
+                    answerPanel.add(button);
+                });
             }
-
-            out.println("NEXT_QUESTION");
-            answerOne.setBackground(null);
-            answerTwo.setBackground(null);
-            answerThree.setBackground(null);
-            answerFour.setBackground(null);
-
-            answerOne.setEnabled(true);
-            answerTwo.setEnabled(true);
-            answerThree.setEnabled(true);
-            answerFour.setEnabled(true);
-
-            System.out.println("Nuvarande Poäng i rundan: " + howManyPointsInRound);
-
-
-            //Shufflar rätt svar till random plats vid nästa fråga
-
-            Collections.shuffle(answerButtons);
-
-            answerButtons.forEach(button -> {
-                answerPanel.add(button);
-            });
         } else if (e.getSource() == answerOne) {
             answerOne.setBackground(Color.RED);
             answerTwo.setEnabled(false);

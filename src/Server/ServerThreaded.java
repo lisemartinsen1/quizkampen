@@ -1,3 +1,5 @@
+package Server;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,8 +33,8 @@ public class ServerThreaded implements Runnable {
             in2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
             out2 = new PrintWriter(socket2.getOutputStream(), true);
 
-            out1.println("START"); //I Client anropas categoryUI.
-            out2.println("WAIT"); //I Client hamnar man i "väntrum"
+            out1.println("START"); //I Client.Client anropas categoryUI.
+            out2.println("WAIT"); //I Client.Client hamnar man i "väntrum"
 
             String player1Message;
             String player2Message;
@@ -43,8 +45,11 @@ public class ServerThreaded implements Runnable {
                 }
                     else if (player1Message.startsWith("NEXT_QUESTION")){
                         sendNextQuestion(player1Message);
-                    }
-                 else {
+
+                    } else if (player1Message.equals("ALL_Q_ANSWERED")) {
+                        out1.println("ALL_Q_ANSWERED");
+
+                } else {
                     sendResponse(player1Message);
                 }
 

@@ -1,9 +1,11 @@
+package Server;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class DAO {
-    private Database database = new Database();
+    protected Database database = new Database();
     private List<QuestionAndAnswers> questionAndAnswersList;
     private List<QuestionAndAnswers> alreadyUsedQuestionsList;
 
