@@ -64,10 +64,8 @@ public class Client implements ActionListener {
     BufferedReader in;
 
     PropertiesClass propertiesClass = new PropertiesClass();
-    private int totalRounds = propertiesClass.getAmountOfRounds();
     private int currentRound = 1;
     private int currentQuestion = 1;
-    private int questionsPerRound = propertiesClass.getAmountOfQuestions();
 
     public Client() {
     }
@@ -255,6 +253,7 @@ public class Client implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
+
         if (e.getSource() == newGame) {
             connectToServer();
             readResponseFromServer();
@@ -266,6 +265,10 @@ public class Client implements ActionListener {
             System.exit(0);
 
         } else if (e.getSource() == nextQuestionButton) {
+            propertiesClass.loadProperties();
+            int totalRounds = propertiesClass.getAmountOfRounds();
+            int questionsPerRound = propertiesClass.getAmountOfQuestions();
+
             currentQuestion++;
             if (currentQuestion > questionsPerRound) {
                 currentQuestion = 1;
@@ -276,8 +279,8 @@ public class Client implements ActionListener {
                     return;
                 }
                 //Kod för vad som händer efter varje runda, ny UI??
-                //questionsFrame.dispose();
-                //mainUI();
+                questionsFrame.dispose();
+                resultUI();
 
             }
 
@@ -329,6 +332,7 @@ public class Client implements ActionListener {
             answerThree.setEnabled(false);
 
             howManyPointsInRound ++;
+
 
         } else if (e.getSource() == goBackButton) {
             categoryFrame.dispose();
