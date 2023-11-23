@@ -341,12 +341,12 @@ public class Client implements ActionListener {
             mainUI();
 
         } else if (e.getSource() == category1Button) {
-            //setCategories("category 1");
-            //out.println("CHOOSECATEGORY category1");
+            out.println("CHOOSECATEGORY category1");
+            setCategories("category 1");
             connectToServer();
             readResponseFromServer();
-            categoryFrame.dispose();
-            questionsUI("category1");
+            //categoryFrame.dispose();
+            //questionsUI("category1");
 
         } else if (e.getSource() == category2Button) {
             connectToServer();
