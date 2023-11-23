@@ -7,10 +7,14 @@ public class Server {
 
     public Server() {
         try (ServerSocket serverSocket = new ServerSocket(12345);) {
+
             while (true) {
-                Socket socketToClient = serverSocket.accept();
-                System.out.println("Socket connected");
-                ServerThreaded serverThreaded = new ServerThreaded(socketToClient);
+                Socket player1Socket = serverSocket.accept();
+                System.out.println("Player1 connected");
+                Socket player2Socket = serverSocket.accept();
+                System.out.println("Player2 connected");
+
+                ServerThreaded serverThreaded = new ServerThreaded(player1Socket, player2Socket);
                 Thread thread = new Thread(serverThreaded);
                 thread.start();
 

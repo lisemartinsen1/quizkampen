@@ -6,32 +6,46 @@ import java.net.Socket;
 
 public class ServerThreaded implements Runnable {
 
-    private Socket socket;
-    private PrintWriter out;
+    Socket socket1;
+    Socket socket2;
+    private PrintWriter out1;
+    private PrintWriter out2;
+    private BufferedReader in1;
+    private BufferedReader in2;
     Protocol protocol = new Protocol();
     DAO dao = new DAO();
 
-    public ServerThreaded(Socket socket) {
-        this.socket = socket;
+    public ServerThreaded(Socket socket1, Socket socket2) {
+        this.socket1 = socket1;
+        this.socket2 = socket2;
+
+
     }
 
     @Override
     public void run() {
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            in1 = new BufferedReader(new InputStreamReader(socket1.getInputStream()));
+            out1 = new PrintWriter(socket1.getOutputStream(), true);
 
-            String clientMessage;
+            in2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
+            out2 = new PrintWriter(socket2.getOutputStream(), true);
 
-            while ((clientMessage = in.readLine()) != null) {
-                if (clientMessage.startsWith("category")) {
-                    sendNextQuestion(clientMessage);
+            out1.println("START"); //I Client anropas categoryUI.
+            out2.println("WAIT"); //I Client hamnar man i "väntrum"
+
+            String player1Message;
+            String player2Message;
+
+            while ((player1Message = in1.readLine()) != null) {
+                if (player1Message.startsWith("CATEGORY")) {
+                    sendNextQuestion(player1Message);
                 }
-                    else if (clientMessage.startsWith("NEXT_QUESTION")){
-                        sendNextQuestion(clientMessage);
+                    else if (player1Message.startsWith("NEXT_QUESTION")){
+                        sendNextQuestion(player1Message);
                     }
                  else {
-                    sendResponse(clientMessage);
+                    sendResponse(player1Message);
                 }
 
             }
@@ -42,11 +56,11 @@ public class ServerThreaded implements Runnable {
 
     private void sendNextQuestion(String category){    //ny metod för att inte upprepa kod
         String response = protocol.getOutput(category);
-        out.println(response);
+        out1.println(response);
     }
 
     private void sendResponse (String message){
-        out.println(message);
-        out.flush();
+        out1.println(message);
+        out1.flush();
     }
 }

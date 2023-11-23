@@ -22,34 +22,8 @@ public class Client implements ActionListener {
     private JLabel howManyRounds = new JLabel();
     private JLabel howManyQuestions = new JLabel();
     private JPanel bottomPanel = new JPanel();
-    private JPanel bottomQuestionPanel = new JPanel();
     private JButton newGame = new JButton("Nytt Spel");
     private JButton quitGame = new JButton("Avsluta");
-    private JButton nextQuestionButton = new JButton("Nästa Fråga");
-    private JFrame questionsFrame = new JFrame();
-    private JPanel questionPanel = new JPanel();
-    private JLabel questionText = new JLabel();
-    private JPanel answerPanel = new JPanel();
-    private JButton answerOne = new JButton("Svar ett");
-    private JButton answerTwo = new JButton("Svar två");
-    private JButton answerThree = new JButton("Svar tre");
-    private JButton answerFour = new JButton("Svar fyra");
-
-    private JFrame categoryFrame = new JFrame();
-    private JPanel categoryTopPanel = new JPanel();
-    private JLabel categoryTitle = new JLabel("Välj en kategori");
-    private JPanel categoryPanel = new JPanel();
-
-    //private JPanel category1Panel = new JPanel();
-   // private JPanel category2Panel = new JPanel();
-    private JButton category1Button = new JButton("Kategori 1");
-    private JButton category2Button = new JButton("Kategori 2");
-    private JButton category3Button = new JButton("Kategori 3");
-    private JButton category4Button = new JButton("Kategori 4");
-    private JPanel categoryBottomPanel = new JPanel();
-    private JButton goBackButton = new JButton("Gå Tillbaka");
-    private List<JButton> answerButtons;
-
     private JFrame resultFrame = new JFrame();
     private JPanel resultUpperPanel = new JPanel(new GridBagLayout());
     private JPanel resultCenterPanel = new JPanel(new GridBagLayout());
@@ -68,110 +42,49 @@ public class Client implements ActionListener {
     private int currentQuestion = 1;
 
     public Client() {
-    }
+    //Gamla MainUI ligger nu i konstruktorn för Client
 
-    public void mainUI() {
         SwingUtilities.invokeLater(() -> {
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(640, 480);
-        mainFrame.setVisible(true);
-        mainFrame.setResizable(true);
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setLayout(new BorderLayout());
-        mainFrame.add(titlePanel, BorderLayout.NORTH);
-        mainFrame.add(howManyPanel, BorderLayout.CENTER); //Varför hamnar den inte i mitten?
-        mainFrame.add(bottomPanel, BorderLayout.SOUTH);
-        howManyPanel.setLayout(new GridLayout(2, 1));
+            mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            mainFrame.setSize(640, 480);
+            mainFrame.setVisible(true);
+            mainFrame.setResizable(true);
+            mainFrame.setLocationRelativeTo(null);
+            mainFrame.setLayout(new BorderLayout());
+            mainFrame.add(titlePanel, BorderLayout.NORTH);
+            mainFrame.add(howManyPanel, BorderLayout.CENTER); //Varför hamnar den inte i mitten?
+            mainFrame.add(bottomPanel, BorderLayout.SOUTH);
+            howManyPanel.setLayout(new GridLayout(2, 1));
+            titlePanel.add(gameTitle);
 
-        titlePanel.add(gameTitle);
+            propertiesClass.loadProperties();
+            int amountOfRounds = propertiesClass.getAmountOfRounds();
+            int amountOfQuestions = propertiesClass.getAmountOfQuestions();
+            howManyRounds.setText("Antal ronder: " + amountOfRounds);
+            howManyQuestions.setText("Antal frågor/rond: " + amountOfQuestions);
 
-        propertiesClass.loadProperties();
-        int amountOfRounds = propertiesClass.getAmountOfRounds();
-        int amountOfQuestions = propertiesClass.getAmountOfQuestions();
-        howManyRounds.setText("Antal ronder: " + amountOfRounds);
-        howManyQuestions.setText("Antal frågor/rond: " + amountOfQuestions);
+            howManyPanel.add(howManyRounds);
+            howManyPanel.add(howManyQuestions);
 
-        howManyPanel.add(howManyRounds);
-        howManyPanel.add(howManyQuestions);
+            bottomPanel.add(newGame);
+            bottomPanel.add(quitGame);
 
-        bottomPanel.add(newGame);
-        bottomPanel.add(quitGame);
+            newGame.addActionListener(this);
+            quitGame.addActionListener(this);
 
-        newGame.addActionListener(this);
-        quitGame.addActionListener(this);
+            connectToServer();
         });
     }
-
-    public void questionsUI(String category) {
-        SwingUtilities.invokeLater(() -> {
-        questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        questionsFrame.setSize(640, 480);
-        questionsFrame.setVisible(true);
-        questionsFrame.setResizable(true);
-        questionsFrame.setLocationRelativeTo(null);
-        questionsFrame.setLayout(new BorderLayout());
-        questionsFrame.add(questionPanel, BorderLayout.NORTH);
-        questionsFrame.add(answerPanel, BorderLayout.CENTER);
-
-        bottomQuestionPanel.add(nextQuestionButton);
-        questionsFrame.add(bottomQuestionPanel,BorderLayout.SOUTH);
-        nextQuestionButton.addActionListener(this);
-
-        questionPanel.add(questionText);
-        answerPanel.setLayout(new GridLayout(2, 2));
-
-
-        answerButtons = Arrays.asList(answerOne, answerTwo, answerThree, answerFour);
-
-
-        Collections.shuffle(answerButtons);
-
-        answerButtons.forEach(button -> {
-            answerPanel.add(button);
-            button.addActionListener(this);
-        });
-
-        out.println(category);
-    });
-    }
-
-    public void categoryUI() {
-            SwingUtilities.invokeLater(() -> {
-        categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        categoryFrame.setVisible(true);
-        categoryFrame.setSize(640, 480);
-        categoryFrame.setLayout(new BorderLayout());
-        categoryFrame.setLocationRelativeTo(null);
-        categoryFrame.add(categoryTopPanel, BorderLayout.NORTH);
-        categoryFrame.add(categoryPanel, BorderLayout.CENTER);
-        categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
-
-        categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
-
-        categoryPanel.setLayout(new GridLayout(2, 2, 40, 40));
-        categoryPanel.add(category1Button);
-        categoryPanel.add(category2Button);
-        categoryPanel.add(category3Button);
-        categoryPanel.add(category4Button);
-        //categoryPanel.setSize(400, 300);
-
-        EmptyBorder emptyBorder1 = new EmptyBorder(60, 60, 60, 60);
-        categoryPanel.setBorder(emptyBorder1);
-
-        categoryBottomPanel.setLayout(new GridLayout(1, 2, 30, 0));
-        categoryBottomPanel.add(goBackButton);
-        categoryBottomPanel.add(quitGame);
-        EmptyBorder emptyBorder2 = new EmptyBorder(0, 100, 0, 100);
-        categoryBottomPanel.setBorder(emptyBorder2);
-
-        category1Button.addActionListener(this);
-        category2Button.addActionListener(this);
-        category3Button.addActionListener(this);
-        category4Button.addActionListener(this);
-
-        goBackButton.addActionListener(this);
-        quitGame.addActionListener(this);
-            });
+    public void connectToServer() {
+        try {
+            Socket sock = new Socket("127.0.0.1", 12345);
+            out = new PrintWriter(sock.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+        } catch (UnknownHostException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void resultUI(){
@@ -256,172 +169,44 @@ public class Client implements ActionListener {
 
         if (e.getSource() == newGame) {
             connectToServer();
-            readResponseFromServer();
-            mainFrame.dispose();
-            categoryUI();
+            startGame();
+            mainFrame.setTitle("Waiting for player...");
+            //mainFrame.dispose();
+            //categoryUI();
             //questionsUI();
 
         } else if (e.getSource() == quitGame) {
             System.exit(0);
 
-        } else if (e.getSource() == nextQuestionButton) {
-            propertiesClass.loadProperties();
-            int totalRounds = propertiesClass.getAmountOfRounds();
-            int questionsPerRound = propertiesClass.getAmountOfQuestions();
-
-            currentQuestion++;
-            if (currentQuestion > questionsPerRound) {
-                currentQuestion = 1;
-                currentRound++;
-                if (currentRound > totalRounds) {
-                    questionsFrame.dispose();
-                    mainUI();
-                    return;
-                }
-                //Kod för vad som händer efter varje runda, ny UI??
-                questionsFrame.dispose();
-                resultUI();
-
-            }
-
-            out.println("NEXT_QUESTION");
-            answerOne.setBackground(null);
-            answerTwo.setBackground(null);
-            answerThree.setBackground(null);
-            answerFour.setBackground(null);
-
-            answerOne.setEnabled(true);
-            answerTwo.setEnabled(true);
-            answerThree.setEnabled(true);
-            answerFour.setEnabled(true);
-
-            System.out.println("Nuvarande Poäng i rundan: "+ howManyPointsInRound);
-
-
-            //Shufflar rätt svar till random plats vid nästa fråga
-
-            Collections.shuffle(answerButtons);
-
-            answerButtons.forEach(button -> {
-                answerPanel.add(button);
-            });
-        }
-
-        else if (e.getSource() == answerOne) {
-            answerOne.setBackground(Color.RED);
-            answerTwo.setEnabled(false);
-            answerThree.setEnabled(false);
-            answerFour.setEnabled(false);
-
-        } else if (e.getSource() == answerTwo) {
-            answerTwo.setBackground(Color.RED);
-            answerOne.setEnabled(false);
-            answerThree.setEnabled(false);
-            answerFour.setEnabled(false);
-
-        } else if (e.getSource() == answerThree) {
-            answerThree.setBackground(Color.RED);
-            answerOne.setEnabled(false);
-            answerTwo.setEnabled(false);
-            answerFour.setEnabled(false);
-
-        } else if (e.getSource() == answerFour) {
-            answerFour.setBackground(Color.GREEN);
-            answerOne.setEnabled(false);
-            answerTwo.setEnabled(false);
-            answerThree.setEnabled(false);
-
-            howManyPointsInRound ++;
-
-
-        } else if (e.getSource() == goBackButton) {
-            categoryFrame.dispose();
-            mainUI();
-
-        } else if (e.getSource() == category1Button) {
-            connectToServer();
-            readResponseFromServer();
-            categoryFrame.dispose();
-            questionsUI("category1");
-
-        } else if (e.getSource() == category2Button) {
-            connectToServer();
-            readResponseFromServer();
-            categoryFrame.dispose();
-            questionsUI("category2");
         }
     }
 
     public static void main(String[] args) {
         Client client = new Client();
-      client.mainUI();
-     // client.categoryUI();
-
-
+        client.startGame();
     }
 
-    public void connectToServer() {
-        try {
-            Socket sock = new Socket("127.0.0.1", 12345);
-            out = new PrintWriter(sock.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void readResponseFromServer() {
+
+    public void startGame() {
         new Thread(() -> {
             try {
                 String fromServer;
                 while ((fromServer = in.readLine()) != null) {
-                    String[] parts = fromServer.split("\\|");
-                    if (parts.length == 2) {
 
-                        String questionAndAnswersText = parts[0].trim();
-                        String answersTextfromServer = parts[1].trim();
+                    if (fromServer.equals("START")) {
+                        mainFrame.dispose();
+                        CategoryGUI categoryGUI = new CategoryGUI(out);
+                        mainFrame.add(categoryGUI);
+                        mainFrame.revalidate();
+                        mainFrame.repaint();
 
-                        String[] questionParts = questionAndAnswersText.split("QUESTION", 2);
-                        if (questionParts.length > 1) {
-                            String questionTextfromServerToLabel = questionParts[1].trim();
-                            SwingUtilities.invokeLater(() -> {
-                                questionText.setText(questionTextfromServerToLabel);
-                            });
-                        }
-                        String[] answersParts = answersTextfromServer.split("ANSWERS", 2);
-                        if (answersParts.length > 1) {
-                            String answersText = answersParts[1].trim();
+                    } else if (fromServer.equals("WAIT")) {
+                        mainFrame.setTitle("Waiting for player to complete round...");
 
-                            String[] individualAnswers = answersText.split(", ");
+                    } else if (fromServer.startsWith("CATEGORY")) {
+                        mainFrame.dispose();
+                        QuestionGUI questionGUI = new QuestionGUI(in, out);
 
-                            String rightAnswer = "";
-                            int rightAnswerIndex = -1;
-
-                            for (int i = 0; i < individualAnswers.length; i++) {
-                                String answer = individualAnswers[i];
-                                if (answer.startsWith("RIGHT_ANSWER")) {
-                                    rightAnswer = answer.replace("RIGHT_ANSWER", "").trim();
-                                    rightAnswerIndex = i;
-                                    break;
-                                }
-                            }
-
-                            if (rightAnswerIndex != -1) {
-
-                                List<String> answersList = new ArrayList<>(Arrays.asList(individualAnswers));
-                                answersList.remove(rightAnswerIndex);
-
-                                String finalRightAnswer = rightAnswer;
-                                SwingUtilities.invokeLater(() -> {
-                                    answerOne.setText(answersList.get(0));
-                                    answerTwo.setText(answersList.get(1));
-                                    answerThree.setText(answersList.get(2));
-                                    answerFour.setText(finalRightAnswer);
-
-                                });
-                            }
-                        }
                     }
                 }
             } catch (IOException e) {
