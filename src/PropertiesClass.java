@@ -17,10 +17,10 @@ public class PropertiesClass {
         }
     }
     public int getAmountOfRounds() {
-        return Integer.parseInt(properties.getProperty("amountOfRounds", "2"));
+        return Integer.parseInt(properties.getProperty("amountOfRounds", "3"));
     }
     public int getAmountOfQuestions() {
-        return Integer.parseInt(properties.getProperty("amountOfQuestions", "2"));
+        return Integer.parseInt(properties.getProperty("amountOfQuestions", "3"));
     }
     public int setAmountOfRounds(String amountOfRounds) {
         return Integer.parseInt(properties.getProperty("amountOfRounds", amountOfRounds));

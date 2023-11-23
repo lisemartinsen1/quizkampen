@@ -223,15 +223,16 @@ public class Client implements ActionListener {
         } else if (e.getSource() == goBackButton) {
             categoryFrame.dispose();
             mainUI();
+            categoryUI();
 
         } else if (e.getSource() == category1Button) {
-            connectToServer();
+            //connectToServer();
             readResponseFromServer();
             categoryFrame.dispose();
             questionsUI("category1");
 
         } else if (e.getSource() == category2Button) {
-            connectToServer();
+            //connectToServer();
             readResponseFromServer();
             categoryFrame.dispose();
             questionsUI("category2");
@@ -260,6 +261,11 @@ public class Client implements ActionListener {
             try {
                 String fromServer;
                 while ((fromServer = in.readLine()) != null) {
+                    if (fromServer.equals("ALL_Q_ASKED")) {
+                        //Här kan man kalla på resultatUI
+                        questionsFrame.dispose();
+                        categoryUI();
+                    }
                     String[] parts = fromServer.split("\\|");
                     if (parts.length == 2) {
 
