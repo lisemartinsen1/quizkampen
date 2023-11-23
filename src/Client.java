@@ -278,6 +278,7 @@ public class Client implements ActionListener {
                 if (currentRound > totalRounds) {
                     questionsFrame.dispose();
                     mainUI();
+                    //TESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST
                     return;
                 }
                 //Kod för vad som händer efter varje runda, ny UI??
