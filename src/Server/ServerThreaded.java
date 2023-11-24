@@ -33,8 +33,8 @@ public class ServerThreaded implements Runnable {
             in2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
             out2 = new PrintWriter(socket2.getOutputStream(), true);
 
-            out1.println("START"); //I Client.Client anropas categoryUI.
-            out2.println("WAIT"); //I Client.Client hamnar man i "väntrum"
+            out1.println("START"); //I Client anropas categoryUI.
+            out2.println("WAIT"); //I Client hamnar man i "väntrum"
 
             String player1Message;
             String player2Message;
@@ -44,17 +44,19 @@ public class ServerThreaded implements Runnable {
                     out1.println("CATEGORY");
                     sendNextQuestion(player1Message, out1);
 
-                }
-                    else if (player1Message.startsWith("NEXT_QUESTION")){
-                        sendNextQuestion(player1Message, out1);
+                } else if (player1Message.startsWith("NEXT_QUESTION")) {
+                    sendNextQuestion(player1Message, out1);
 
-                    } else if (player1Message.contains("ALL_Q_ANSWERED")) {
-                        out1.println("ALL_Q_ANSWERED");
-                        out1.flush();
+                } else if (player1Message.contains("ALL_Q_ANSWERED")) {
+                    sendResponse(player1Message, out2);//Här blir det fel!!
+                   // out2.println("OPPONENT_DONE");
+                    //out1.println("ALL_Q_ANSWERED");
+                    System.out.println(player1Message + " received in ServerThreaded");
+                    out1.flush();
 
 
                 } else {
-                    sendResponse(player1Message);
+                    sendResponse(player1Message, out1);
                 }
 
             }
@@ -63,14 +65,14 @@ public class ServerThreaded implements Runnable {
         }
     }
 
-    private void sendNextQuestion(String category, PrintWriter out){    //ny metod för att inte upprepa kod
+    private void sendNextQuestion(String category, PrintWriter out) {    //ny metod för att inte upprepa kod
         String response = protocol.getOutput(category);
         out.println(response);
-        out.flush();
+        //out.flush();
     }
 
-    private void sendResponse (String message){
-        out1.println(message);
-        out1.flush();
+    private void sendResponse(String message, PrintWriter out) {
+        out.println(message);
+        out.flush();
     }
 }

@@ -18,6 +18,7 @@ public class ResultGUI extends JFrame {
 
     public ResultGUI(){
         SwingUtilities.invokeLater(() -> {
+            System.out.println("ResultGUI running...");
             resultFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             resultFrame.setSize(640, 480);
             resultFrame.setVisible(true);

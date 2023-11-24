@@ -30,7 +30,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
     private int howManyPointsInRound;
     BufferedReader in;
     PrintWriter out;
-
+    int questionsPerRound;
     public QuestionGUI(BufferedReader in, PrintWriter out) {
         this.in = in;
         this.out = out;
@@ -127,20 +127,25 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
             propertiesClass.loadProperties();
             int totalRounds = propertiesClass.getAmountOfRounds();
-            int questionsPerRound = propertiesClass.getAmountOfQuestions();
+            questionsPerRound = propertiesClass.getAmountOfQuestions();
 
             currentQuestion++;
-            if (currentQuestion > questionsPerRound) {
-                currentQuestion = 1;
-                currentRound++;
-                if (currentRound > totalRounds) {
-                    return;
-                }
-                //Kod för vad som händer efter varje runda, ny resultUI
-                out.println("ALL_Q_ANSWERED");
-                questionsFrame.dispose();
-            } else {
 
+            if (currentQuestion > questionsPerRound) {
+
+                if (currentRound > totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
+                    out.println("GAME_FINISHED");
+                    questionsFrame.dispose();
+                } else {
+                    currentQuestion = 1; //Nollställer
+                    currentRound++;
+                    out.println("ALL_Q_ANSWERED");
+                    out.flush();
+                    System.out.println("ALL_Q_ANSWERED sent from QuestionGUI"); //Vi kommer hit. Problemet ligger serverside
+                    questionsFrame.dispose();
+                }
+
+            } else {
                 out.println("NEXT_QUESTION");
                 answerOne.setBackground(null);
                 answerTwo.setBackground(null);
@@ -153,38 +158,48 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 answerFour.setEnabled(true);
 
                 System.out.println("Nuvarande Poäng i rundan: " + howManyPointsInRound);
-
-                //Shufflar rätt svar till random plats vid nästa fråga
-
                 Collections.shuffle(answerButtons);
 
                 answerButtons.forEach(button -> {
                     answerPanel.add(button);
                 });
             }
+
         } else if (e.getSource() == answerOne) {
             answerOne.setBackground(Color.RED);
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
             answerFour.setEnabled(false);
+            if (currentQuestion == questionsPerRound) {
+                nextQuestionButton.setText("Visa resultat");
+            }
 
         } else if (e.getSource() == answerTwo) {
             answerTwo.setBackground(Color.RED);
             answerOne.setEnabled(false);
             answerThree.setEnabled(false);
             answerFour.setEnabled(false);
+            if (currentQuestion == questionsPerRound) {
+                nextQuestionButton.setText("Visa resultat");
+            }
 
         } else if (e.getSource() == answerThree) {
             answerThree.setBackground(Color.RED);
             answerOne.setEnabled(false);
             answerTwo.setEnabled(false);
             answerFour.setEnabled(false);
+            if (currentQuestion == questionsPerRound) {
+                nextQuestionButton.setText("Visa resultat");
+            }
 
         } else if (e.getSource() == answerFour) {
             answerFour.setBackground(Color.GREEN);
             answerOne.setEnabled(false);
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
+            if (currentQuestion == questionsPerRound) {
+                nextQuestionButton.setText("Visa resultat");
+            }
 
             howManyPointsInRound++;
         }

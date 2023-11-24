@@ -84,9 +84,6 @@ public class Client implements ActionListener {
             connectToServer();
             startGame();
             mainFrame.setTitle("Waiting for player...");
-            //mainFrame.dispose();
-            //categoryUI();
-            //questionsUI();
 
         } else if (e.getSource() == quitGame) {
             System.exit(0);
@@ -116,12 +113,14 @@ public class Client implements ActionListener {
                     } else if (fromServer.startsWith("CATEGORY")) {
                         QuestionGUI questionGUI = new QuestionGUI(in, out);
 
-                    } else if (fromServer.contains("ALL_Q_ANSWERED")) {
+                    } else if (fromServer.equals("ALL_Q_ANSWERED")) {
+                        System.out.println(fromServer + " received in Client from ServerThr"); //Kommer aldrig hit
                         ResultGUI resultGUI = new ResultGUI();
 
-
-                        }
+                    } else if (fromServer.equals("OPPONENT_DONE")) {
+                        mainFrame.setTitle("Opponent has answered all questions...");
                     }
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
