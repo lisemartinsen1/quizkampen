@@ -358,10 +358,8 @@ public class Client implements ActionListener {
             //connectToServer();
 
         } else if (e.getSource() == category2Button) {
-            connectToServer();
-            readResponseFromServer();
-            categoryFrame.dispose();
-            questionsUI("category2");
+            out.println("CHOOSECATEGORY category2");
+            setCategories("category2");
         }
         }).start();
     }
