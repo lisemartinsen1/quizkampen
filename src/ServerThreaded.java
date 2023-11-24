@@ -75,6 +75,7 @@ public class ServerThreaded extends Thread implements Runnable {
             String clientMessage;
             while ((clientMessage = in.readLine()) != null) {
                 if (clientMessage.startsWith("CHOOSECATEGORY")) {
+                    System.out.println("step1 "+clientMessage);
                     setCategory(clientMessage.substring(14));
                     if (categoryProcess()) {
                         Thread.sleep(10);
@@ -82,10 +83,14 @@ public class ServerThreaded extends Thread implements Runnable {
                     } else {
                         break;
                     }
+
                 }
+                System.out.println("step2 "+clientMessage);
                 if (clientMessage.startsWith("category")) {
-                    sendNextQuestion(getCategory());
+                    sendNextQuestion(clientMessage);
+                    System.out.println("step3 "+clientMessage);
                 } else if (clientMessage.startsWith("NEXT_QUESTION")) {
+                    System.out.println("step4 "+clientMessage);
                     sendNextQuestion(clientMessage);
                 } else {
                     sendResponse(clientMessage);

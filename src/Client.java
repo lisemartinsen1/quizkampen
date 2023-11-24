@@ -260,8 +260,8 @@ public class Client implements ActionListener {
             // Prova med separat metod
             connectToServer();
             readResponseFromServer();
-            mainFrame.dispose();
-            categoryUI();
+            //mainFrame.dispose();
+            //categoryUI();
             // Didn't work, don't try it!
             /*try {
                 if (ConfirmConnected()) {
@@ -354,29 +354,8 @@ public class Client implements ActionListener {
 
         } else if (e.getSource() == category1Button) {
             out.println("CHOOSECATEGORY category1");
-            System.out.println("Reached step 1");
-            setCategories("category 1");
-            System.out.println("Reached step 2");
+            setCategories("category1");
             //connectToServer();
-
-            // Didn't work v
-            /*while (true) {
-                System.out.println("Cat1");
-                try {
-                    System.out.println("Cat1 in \"try\"");
-                    //Ends here
-                    if (readCategory()) {
-                        System.out.println("Cat1 in \"try\" + 1");
-                        readResponseFromServer();
-                        categoryFrame.dispose();
-                        questionsUI("category1");
-                        break;
-                    }
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }*/
-
 
         } else if (e.getSource() == category2Button) {
             connectToServer();
@@ -387,25 +366,18 @@ public class Client implements ActionListener {
         }).start();
     }
     public void setCategories(String categories) {
-        System.out.println(categories + "settled");
         this.categories = categories;
 
     }
     public String getCategories() {
-        System.out.println(categories + "returned");
         return categories;
     }
-    public void readCategory(String categories) throws IOException {
-        String fromServer;
-        while (true) {
-            fromServer = in.readLine();
-            System.out.println("From server "+fromServer);
-            if (fromServer.startsWith("ACCEPT")) {
-                categoryFrame.dispose();
-                questionsUI(categories);
-                break;
-            }
+    public boolean readCategory(String fromServer) throws IOException {
+        if (fromServer.startsWith("ACCEPT")) {
+            setCategories(fromServer.substring(7));
+            return true;
         }
+        return false;
     }
 
     public static void main(String[] args) {
@@ -441,9 +413,15 @@ public class Client implements ActionListener {
                     read = in.readLine();
                     if (read.startsWith("CONNECTED")) {
                         System.out.println(read);
+                        mainFrame.dispose();
+                        categoryUI();
+                    } else if (readCategory(read)) {
                         readResponseFromServer();
-                        break;
+                        categoryFrame.dispose();
+                        System.out.println("cat" + getCategories());
+                        questionsUI(getCategories());
                     }
+
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -454,7 +432,7 @@ public class Client implements ActionListener {
         new Thread(() -> {
             try {
                 String fromServer;
-                readCategory(getCategories());
+
                 // Problem: Readresponse:  = null;
                 // Make it Readresponse:  show category and number.
                 // Chance to be fixed 65 modulo

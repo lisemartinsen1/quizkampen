@@ -28,7 +28,7 @@ public class Database {
                 questionAndAnswersList.add(new QuestionAndAnswers(question, answersLine));
             }
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
