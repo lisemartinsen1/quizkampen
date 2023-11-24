@@ -62,7 +62,7 @@ public class Client implements ActionListener {
 
     PrintWriter out;
     BufferedReader in;
-    String categories;
+    private String categories;
 
     PropertiesClass propertiesClass = new PropertiesClass();
     private int currentRound = 1;
@@ -257,10 +257,21 @@ public class Client implements ActionListener {
     public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
         new Thread(() -> {
         if (e.getSource() == newGame) {
+            // Prova med separat metod
             connectToServer();
             readResponseFromServer();
             mainFrame.dispose();
             categoryUI();
+            // Didn't work, don't try it!
+            /*try {
+                if (ConfirmConnected()) {
+                    readResponseFromServer();
+                    mainFrame.dispose();
+                    categoryUI();
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }*/
             //questionsUI();
 
         } else if (e.getSource() == quitGame) {
@@ -343,11 +354,29 @@ public class Client implements ActionListener {
 
         } else if (e.getSource() == category1Button) {
             out.println("CHOOSECATEGORY category1");
+            System.out.println("Reached step 1");
             setCategories("category 1");
-            connectToServer();
-            readResponseFromServer();
-            //categoryFrame.dispose();
-            //questionsUI("category1");
+            System.out.println("Reached step 2");
+            //connectToServer();
+
+            // Didn't work v
+            /*while (true) {
+                System.out.println("Cat1");
+                try {
+                    System.out.println("Cat1 in \"try\"");
+                    //Ends here
+                    if (readCategory()) {
+                        System.out.println("Cat1 in \"try\" + 1");
+                        readResponseFromServer();
+                        categoryFrame.dispose();
+                        questionsUI("category1");
+                        break;
+                    }
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }*/
+
 
         } else if (e.getSource() == category2Button) {
             connectToServer();
@@ -358,17 +387,23 @@ public class Client implements ActionListener {
         }).start();
     }
     public void setCategories(String categories) {
+        System.out.println(categories + "settled");
         this.categories = categories;
+
     }
     public String getCategories() {
+        System.out.println(categories + "returned");
         return categories;
     }
-    public void readCategory() throws IOException {
+    public void readCategory(String categories) throws IOException {
         String fromServer;
-        while ((fromServer = in.readLine()) != null) {
+        while (true) {
+            fromServer = in.readLine();
+            System.out.println("From server "+fromServer);
             if (fromServer.startsWith("ACCEPT")) {
                 categoryFrame.dispose();
-                questionsUI(getCategories());
+                questionsUI(categories);
+                break;
             }
         }
     }
@@ -380,6 +415,19 @@ public class Client implements ActionListener {
 
 
     }
+    // BLeached out
+    /*public boolean ConfirmConnected() throws IOException {
+        String read;
+        while (true) {
+            read = in.readLine();
+            if (read.startsWith("CONNECTED")) {
+                System.out.println(read);
+                readResponseFromServer();
+                return true;
+            }
+            return false;
+        }
+    }*/
 
     public void connectToServer() {
         //new Thread(() -> {
@@ -388,6 +436,7 @@ public class Client implements ActionListener {
                 Socket sock = new Socket("127.0.0.1", 12345);
                 in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 out = new PrintWriter(sock.getOutputStream(), true);
+                // Tror att måste fixa något hit.
                 while (true) {
                     read = in.readLine();
                     if (read.startsWith("CONNECTED")) {
@@ -405,7 +454,11 @@ public class Client implements ActionListener {
         new Thread(() -> {
             try {
                 String fromServer;
-                readCategory();
+                readCategory(getCategories());
+                // Problem: Readresponse:  = null;
+                // Make it Readresponse:  show category and number.
+                // Chance to be fixed 65 modulo
+                System.out.println("Readresponse: "+getCategories());
                 while ((fromServer = in.readLine()) != null) {
                     String[] parts = fromServer.split("\\|");
                     if (parts.length == 2) {

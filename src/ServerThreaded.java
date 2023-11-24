@@ -77,6 +77,9 @@ public class ServerThreaded extends Thread implements Runnable {
                 if (clientMessage.startsWith("CHOOSECATEGORY")) {
                     setCategory(clientMessage.substring(14));
                     if (categoryProcess()) {
+                        Thread.sleep(10);
+                        continue;
+                    } else {
                         break;
                     }
                 }
@@ -91,14 +94,17 @@ public class ServerThreaded extends Thread implements Runnable {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
     private boolean categoryProcess() {
         int n = JOptionPane.showConfirmDialog(null, "Motståndet valde " + getCategory() +
                 ". Vill du fortsätta");
         if (n == JOptionPane.YES_OPTION) {
-            sendMessageToClient("ACCEPT " + getCategory());
-            opponent.sendMessageToClient("ACCEPT" + getCategory());
+            sendMessageToClient("ACCEPT " + getCategory().trim());
+            System.out.println("ACCEPT " + getCategory());
+            opponent.sendMessageToClient("ACCEPT " + getCategory().trim());
             return true;
         }
         return false;
