@@ -15,9 +15,9 @@ public class Database {
     public List<QuestionAndAnswers> readQuestionsAndAnswersFromFile(String category) {
         questionAndAnswersList = new ArrayList<>();
         String FILE_PATH = "";
-        if (category.equals("category1")) {
+        if (category.equals("CATEGORY1")) {
             FILE_PATH = FILE_PATH_CATEGORY1;
-        } else if (category.equals("category2")) {
+        } else if (category.equals("CATEGORY2")) {
             FILE_PATH = FILE_PATH_CATEGORY2;
         }
 

@@ -28,11 +28,10 @@ public class Client implements ActionListener {
     BufferedReader in;
 
     PropertiesClass propertiesClass = new PropertiesClass();
-    private int currentRound = 1;
-    private int currentQuestion = 1;
 
     public Client() {
     //Gamla MainUI ligger nu i konstruktorn för Client.Client
+
 
         SwingUtilities.invokeLater(() -> {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,14 +61,15 @@ public class Client implements ActionListener {
             newGame.addActionListener(this);
             quitGame.addActionListener(this);
 
-            connectToServer();
+
+
         });
     }
     public void connectToServer() {
         try {
             Socket sock = new Socket("127.0.0.1", 12345);
-            out = new PrintWriter(sock.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+             out = new PrintWriter(sock.getOutputStream(), true);
+             in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -96,7 +96,7 @@ public class Client implements ActionListener {
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.startGame();
+
     }
 
 
@@ -105,29 +105,24 @@ public class Client implements ActionListener {
             try {
                 String fromServer;
                 while ((fromServer = in.readLine()) != null) {
-
+                    System.out.println(fromServer);
                     if (fromServer.equals("START")) {
                         mainFrame.dispose();
                         CategoryGUI categoryGUI = new CategoryGUI(out);
-                        mainFrame.add(categoryGUI);
-                        mainFrame.revalidate();
-                        mainFrame.repaint();
 
                     } else if (fromServer.equals("WAIT")) {
                         mainFrame.setTitle("Waiting for player to complete round...");
 
                     } else if (fromServer.startsWith("CATEGORY")) {
-                        mainFrame.dispose();
                         QuestionGUI questionGUI = new QuestionGUI(in, out);
-                        mainFrame.add(questionGUI);
-                        mainFrame.revalidate();
-                        mainFrame.repaint();
 
-                    } else if (fromServer.equals("ALL_Q_ANSWERED")) {
-                        mainFrame.dispose();
+                    } else if (fromServer.contains("ALL_Q_ANSWERED")) {
+                        ResultGUI resultGUI = new ResultGUI();
 
+
+                        }
                     }
-                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

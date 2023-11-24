@@ -9,7 +9,7 @@ public class PropertiesClass {
 
     public void loadProperties() {
         try {
-            properties.load(new FileInputStream("src/Admin.properties"));
+            properties.load(new FileInputStream("src/Server/Admin.properties"));
         } catch (IOException e) {
             System.err.println("Failed to read from Admin.properties");
             e.printStackTrace();

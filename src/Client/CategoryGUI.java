@@ -5,6 +5,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class CategoryGUI extends JFrame implements ActionListener {
@@ -22,7 +24,9 @@ public class CategoryGUI extends JFrame implements ActionListener {
     private JButton quitGame = new JButton("Avsluta");
     PrintWriter out;
 
+
     public CategoryGUI(PrintWriter out) {
+        this.out = out;
         SwingUtilities.invokeLater(() -> {
             categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             categoryFrame.setVisible(true);
@@ -58,8 +62,11 @@ public class CategoryGUI extends JFrame implements ActionListener {
 
             goBackButton.addActionListener(this);
             quitGame.addActionListener(this);
+
         });
     }
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -71,18 +78,22 @@ public class CategoryGUI extends JFrame implements ActionListener {
             //mainUI();
 
         } else if (e.getSource() == category1Button) {
-            categoryFrame.dispose();
             out.println("CATEGORY1");
-            //questionsUI("category1");
+            categoryFrame.dispose();
+
 
         } else if (e.getSource() == category2Button) {
             out.println("CATEGORY2");
+            categoryFrame.dispose();
 
         } else if (e.getSource() == category3Button) {
             out.println("CATEGORY3");
+            categoryFrame.dispose();
 
         } else if (e.getSource() == category4Button) {
             out.println("CATEGORY4");
+            categoryFrame.dispose();
         }
+
     }
 }

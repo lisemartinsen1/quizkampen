@@ -32,6 +32,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
     PrintWriter out;
 
     public QuestionGUI(BufferedReader in, PrintWriter out) {
+        this.in = in;
+        this.out = out;
+
         SwingUtilities.invokeLater(() -> {
             questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             questionsFrame.setSize(640, 480);
@@ -59,6 +62,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
             });
 
         });
+        readFromServer();
+    }
+    public void readFromServer(){
         try {
             String fromServer;
             while ((fromServer = in.readLine()) != null) {
@@ -128,14 +134,11 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 currentQuestion = 1;
                 currentRound++;
                 if (currentRound > totalRounds) {
-                    questionsFrame.dispose();
-                    //mainUI();
                     return;
                 }
-                //Kod för vad som händer efter varje runda, ny UI??
-                //questionsFrame.dispose();
-                //resultUI();
+                //Kod för vad som händer efter varje runda, ny resultUI
                 out.println("ALL_Q_ANSWERED");
+                questionsFrame.dispose();
             } else {
 
                 out.println("NEXT_QUESTION");

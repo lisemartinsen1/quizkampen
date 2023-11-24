@@ -41,13 +41,17 @@ public class ServerThreaded implements Runnable {
 
             while ((player1Message = in1.readLine()) != null) {
                 if (player1Message.startsWith("CATEGORY")) {
-                    sendNextQuestion(player1Message);
+                    out1.println("CATEGORY");
+                    sendNextQuestion(player1Message, out1);
+
                 }
                     else if (player1Message.startsWith("NEXT_QUESTION")){
-                        sendNextQuestion(player1Message);
+                        sendNextQuestion(player1Message, out1);
 
-                    } else if (player1Message.equals("ALL_Q_ANSWERED")) {
+                    } else if (player1Message.contains("ALL_Q_ANSWERED")) {
                         out1.println("ALL_Q_ANSWERED");
+                        out1.flush();
+
 
                 } else {
                     sendResponse(player1Message);
@@ -59,9 +63,10 @@ public class ServerThreaded implements Runnable {
         }
     }
 
-    private void sendNextQuestion(String category){    //ny metod för att inte upprepa kod
+    private void sendNextQuestion(String category, PrintWriter out){    //ny metod för att inte upprepa kod
         String response = protocol.getOutput(category);
-        out1.println(response);
+        out.println(response);
+        out.flush();
     }
 
     private void sendResponse (String message){
