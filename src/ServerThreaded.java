@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerThreaded extends Thread implements Runnable {
     private Socket socket;
@@ -17,6 +19,7 @@ public class ServerThreaded extends Thread implements Runnable {
 
     String categoryMessage;
 
+    List<String> questionLists = new ArrayList<>();
     public ServerThreaded(Socket socket) {
         this.socket = socket;
         try {
@@ -87,7 +90,12 @@ public class ServerThreaded extends Thread implements Runnable {
                 }
                 System.out.println("step2 "+clientMessage);
                 if (clientMessage.startsWith("category")) {
-                    sendNextQuestion(clientMessage);
+                    String response = protocol.getOutput(clientMessage);
+                    questionLists.add(response);
+                    for (String message : questionLists) {
+                        sendNextQuestion(message);
+                        opponent.sendNextQuestion(message);
+                    }
                     System.out.println("step3 "+clientMessage);
                 } else if (clientMessage.startsWith("NEXT_QUESTION")) {
                     System.out.println("step4 "+clientMessage);
@@ -108,15 +116,15 @@ public class ServerThreaded extends Thread implements Runnable {
                 ". Vill du fortsätta");
         if (n == JOptionPane.YES_OPTION) {
             sendMessageToClient("ACCEPT " + getCategory().trim());
-            System.out.println("ACCEPT " + getCategory());
             opponent.sendMessageToClient("ACCEPT " + getCategory().trim());
             return true;
         }
         return false;
     }
 
-    private void sendNextQuestion(String category){    //ny metod för att inte upprepa kod
-        String response = protocol.getOutput(category);
+    private void sendNextQuestion(String response){    //ny metod för att inte upprepa kod
+        //String response = protocol.getOutput(category);
+        //System.out.println(response);
         out.println(response);
     }
 
