@@ -81,7 +81,7 @@ public class ServerThreaded extends Thread implements Runnable {
                         opponent.questionLists.remove(message);
                         break;
                     }
-                } else if (clientMessage.startsWith("NEXT_QUESTION") && opponent.getClientMessage().startsWith("NEXT_QUESTION")) {
+                } else if (clientMessage.startsWith("NEXT_QUESTION")) {
                     System.out.println("Next q: "+clientMessage);
                     String response = protocol.getOutput(getCategory());
                     questionLists.add(response);
@@ -102,6 +102,7 @@ public class ServerThreaded extends Thread implements Runnable {
                             }
                         }
                         if (count == usedQuestionLists.size()) {
+                            System.out.println("sorted: "+message);
                             sendNextQuestion(message);
                             opponent.sendNextQuestion(message);
                             usedQuestionLists.add(message);
