@@ -20,6 +20,7 @@ public class ServerThreaded extends Thread implements Runnable {
     String categoryMessage;
 
     List<String> questionLists = new ArrayList<>();
+    List<String> usedQuestionLists = new ArrayList<>();
     public ServerThreaded(Socket socket) {
         this.socket = socket;
         try {
@@ -28,26 +29,6 @@ public class ServerThreaded extends Thread implements Runnable {
             out = new PrintWriter(socket.getOutputStream(), true);
             // while ((clientMessage = in.readline()) != null) {
             out.println("WAIT Waiting for response");
-            //if (clientMessage.startsWith("RUN")) {
-                //out.println("WAIT");
-                /*String response = protocol.getOutput();
-                   out.println(response);*/
-                /*else if (clientMessage.startsWith("category")) {
-                    setCategory(getClientMessage());
-                } else if (opponent.getClientMessage().startsWith("category")) {
-                    setCategory(opponent.getCategory());
-                    int n = JOptionPane.showConfirmDialog(null, "Motståndet valde " + clientMessage +
-                            ". Vill du fortsätta");
-                    if (n == JOptionPane.YES_OPTION) {
-                        sendMessageToClient("ACCEPT " + getCategory());
-                        opponent.sendMessageToClient("ACCEPT" + getCategory());
-                        sendNextQuestion(getCategory());
-                        opponent.sendNextQuestion(getCategory());
-                    }*/
-            //} else {
-                //sendResponse(clientMessage);
-            //}
-
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
@@ -77,29 +58,60 @@ public class ServerThreaded extends Thread implements Runnable {
         try {
             String clientMessage;
             while ((clientMessage = in.readLine()) != null) {
+                opponent.setClientmessage(clientMessage);
                 if (clientMessage.startsWith("CHOOSECATEGORY")) {
-                    System.out.println("step1 "+clientMessage);
+                    System.out.println("step1 "+clientMessage.trim());
                     setCategory(clientMessage.substring(14));
-                    if (categoryProcess()) {
-                        Thread.sleep(10);
-                        continue;
-                    } else {
-                        break;
-                    }
-
+                    opponent.sendNextQuestion("OPPONENTCHOOSED " + getCategory().trim());
+                } else if (clientMessage.startsWith("ACCEPT")) {
+                    setCategory(clientMessage.substring(6).trim());
+                    sendNextQuestion("GO " + getCategory().trim());
+                    opponent.sendNextQuestion("GO " + getCategory().trim());
                 }
-                System.out.println("step2 "+clientMessage);
-                if (clientMessage.startsWith("category")) {
+                if (clientMessage.startsWith("category") && opponent.getClientMessage().startsWith("category")) {
                     String response = protocol.getOutput(clientMessage);
                     questionLists.add(response);
+                    opponent.questionLists.add(response);
                     for (String message : questionLists) {
                         sendNextQuestion(message);
                         opponent.sendNextQuestion(message);
+                        usedQuestionLists.add(message);
+                        opponent.usedQuestionLists.add(message);
+                        questionLists.remove(message);
+                        opponent.questionLists.remove(message);
+                        break;
                     }
-                    System.out.println("step3 "+clientMessage);
-                } else if (clientMessage.startsWith("NEXT_QUESTION")) {
-                    System.out.println("step4 "+clientMessage);
-                    sendNextQuestion(clientMessage);
+                } else if (clientMessage.startsWith("NEXT_QUESTION") && opponent.getClientMessage().startsWith("NEXT_QUESTION")) {
+                    System.out.println("Next q: "+clientMessage);
+                    String response = protocol.getOutput(getCategory());
+                    questionLists.add(response);
+                    opponent.questionLists.add(response);
+                    System.out.println("Catnext "+ getCategory().trim());
+                    for (String message : questionLists) {
+                        System.out.println(message);
+                        int count = 0;
+                        System.out.println("COUNT: " + count);
+                        for (String usedQuestion : usedQuestionLists) {
+                            if (message.equals(usedQuestion)) {
+                                questionLists.remove(message);
+                                opponent.questionLists.remove(message);
+                                count = 0;
+                                break;
+                            } else {
+                                count++;
+                            }
+                        }
+                        if (count == usedQuestionLists.size()) {
+                            sendNextQuestion(message);
+                            opponent.sendNextQuestion(message);
+                            usedQuestionLists.add(message);
+                            opponent.usedQuestionLists.add(message);
+                            questionLists.remove(message);
+                            opponent.questionLists.remove(message);
+                            break;
+                        }
+                    }
+                    //sendNextQuestion(clientMessage);
                 } else {
                     sendResponse(clientMessage);
                 }
@@ -107,11 +119,9 @@ public class ServerThreaded extends Thread implements Runnable {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
-    private boolean categoryProcess() {
+    /*private boolean categoryProcess() {
         int n = JOptionPane.showConfirmDialog(null, "Motståndet valde " + getCategory() +
                 ". Vill du fortsätta");
         if (n == JOptionPane.YES_OPTION) {
@@ -120,7 +130,7 @@ public class ServerThreaded extends Thread implements Runnable {
             return true;
         }
         return false;
-    }
+    }*/
 
     private void sendNextQuestion(String response){    //ny metod för att inte upprepa kod
         //String response = protocol.getOutput(category);

@@ -313,9 +313,8 @@ public class Client implements ActionListener {
 
 
             //Shufflar rätt svar till random plats vid nästa fråga
-
+            readResponseFromServer();
             Collections.shuffle(answerButtons);
-
             answerButtons.forEach(button -> {
                 answerPanel.add(button);
             });
@@ -370,9 +369,16 @@ public class Client implements ActionListener {
     public String getCategories() {
         return categories;
     }
+    public void CatDialog() {
+        int n = JOptionPane.showConfirmDialog(null, "Motståndet valde " + getCategories() +
+                ". Vill du fortsätta");
+        if (n == JOptionPane.YES_OPTION) {
+            out.println("ACCEPT " + getCategories().trim());
+        }
+    }
     public boolean readCategory(String fromServer) throws IOException {
-        if (fromServer.startsWith("ACCEPT")) {
-            setCategories(fromServer.substring(7));
+        if (fromServer.startsWith("GO")) {
+            setCategories(fromServer.substring(2));
             return true;
         }
         return false;
@@ -403,7 +409,7 @@ public class Client implements ActionListener {
         //new Thread(() -> {
             String read;
             try {
-                Socket sock = new Socket("127.0.0.1", 12345);
+                Socket sock = new Socket("127.0.0.1", 1234);
                 in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
                 out = new PrintWriter(sock.getOutputStream(), true);
                 // Tror att måste fixa något hit.
@@ -413,11 +419,16 @@ public class Client implements ActionListener {
                         System.out.println(read);
                         mainFrame.dispose();
                         categoryUI();
+                    } else if (read.startsWith("OPPONENTCHOOSED")) {
+                        setCategories(read.substring(15));
+                        SwingUtilities.invokeLater(() -> {
+                           CatDialog();
+                        });
                     } else if (readCategory(read)) {
                         readResponseFromServer();
                         categoryFrame.dispose();
-                        System.out.println("cat" + getCategories());
-                        questionsUI(getCategories());
+                        //System.out.println("cat" + getCategories().trim());
+                        questionsUI(getCategories().trim());
                     }
 
                 }
@@ -436,6 +447,7 @@ public class Client implements ActionListener {
                 // Chance to be fixed 65 modulo
                 System.out.println("Readresponse: "+getCategories());
                 while ((fromServer = in.readLine()) != null) {
+                    System.out.println("Readresponse2: "+ fromServer);
                     String[] parts = fromServer.split("\\|");
                     if (parts.length == 2) {
 

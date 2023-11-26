@@ -6,7 +6,7 @@ import java.net.Socket;
 public class Server {
 
     public Server() {
-        try (ServerSocket serverSocket = new ServerSocket(12345)) {
+        try (ServerSocket serverSocket = new ServerSocket(1234)) {
             System.out.println("Socket connected");
             while (true) {
                 // Skapa två spelare
