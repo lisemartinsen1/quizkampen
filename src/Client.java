@@ -299,6 +299,10 @@ public class Client implements ActionListener {
             }
 
             out.println("NEXT_QUESTION");
+            SwingUtilities.invokeLater(() -> {
+                readResponseFromServer();
+                questionsUI(getCategories());
+            });
             answerOne.setBackground(null);
             answerTwo.setBackground(null);
             answerThree.setBackground(null);
@@ -308,12 +312,9 @@ public class Client implements ActionListener {
             answerTwo.setEnabled(true);
             answerThree.setEnabled(true);
             answerFour.setEnabled(true);
-
             System.out.println("Nuvarande Poäng i rundan: "+ howManyPointsInRound);
 
-
             //Shufflar rätt svar till random plats vid nästa fråga
-            readResponseFromServer();
             Collections.shuffle(answerButtons);
             answerButtons.forEach(button -> {
                 answerPanel.add(button);
