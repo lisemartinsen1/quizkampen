@@ -419,7 +419,7 @@ public class Client implements ActionListener {
                         mainFrame.dispose();
                         categoryUI();
                     } else if (read.startsWith("OPPONENTCHOOSED")) {
-                        setCategories(read.substring(15));
+                        setCategories(read.substring(17));
                         CatDialog();
                     } else if (readCategory(read)) {
                         readResponseFromServer();

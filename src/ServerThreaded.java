@@ -8,6 +8,7 @@ import java.util.List;
 public class ServerThreaded extends Thread implements Runnable {
     private Socket socketP1;
     private Socket socketP2;
+    boolean isActive = false;
     private BufferedReader in;
     private PrintWriter out;
     private BufferedReader in2;
@@ -28,49 +29,55 @@ public class ServerThreaded extends Thread implements Runnable {
             in2 = new BufferedReader(new InputStreamReader(socketP2.getInputStream()));
             out2 = new PrintWriter(socketP2.getOutputStream(), true);
             // while ((clientMessage = in.readline()) != null) {
+
+
             if (socketP2.isConnected()) {
                 out.println("CONNECTED");
                 out2.println("CONNECTED");
             }
+            new Thread (() -> {
+                if (isActive) {
+                    System.out.println("P1 is active");
+                } else {
+                    String clientMessageP2;
+                    try {
+                        clientMessageP2 = in2.readLine();
+                        if (clientMessageP2.startsWith("CHOOSECATEGORY")) {
+                            System.out.println("P2 " + clientMessageP2);
+                            setCategory(clientMessageP2.substring(14));
+                            out.println("OPPONENTCHOOSED" + getCategory());
+                        } else if (clientMessageP2.startsWith("ACCEPT")) {
+                            System.out.println("A player accepted");
+                            //setCategory(clientMessage.substring(6).trim());
+                            out.println("GO " + getCategory().trim());
+                            out2.println("GO " + getCategory().trim());
+                            start();
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+            }).start();
             String clientMessage = in.readLine();
-            if (clientMessage.startsWith("CHOOSECATEGORY")) {
-                System.out.println("P1 " + clientMessage);
-                setCategory(clientMessage.substring(14));
-                out2.println("OPPONENTCHOOSED" + getCategory());
-            } else if (clientMessage.startsWith("ACCEPT")) {
-                System.out.println("You Accepted");
-                //setCategory(clientMessage.substring(6).trim());
-                out.println("GO " + getCategory().trim());
-                out2.println("GO " + getCategory().trim());
-                start();
+            if (!isActive) {
+                if (clientMessage.startsWith("CHOOSECATEGORY")) {
+                    System.out.println("P1 " + clientMessage);
+                    setCategory(clientMessage.substring(14));
+                    System.out.println("P1 choosed");
+                    out2.println("OPPONENTCHOOSEDP1" + getCategory());
+                } else if (clientMessage.startsWith("ACCEPT") ) {
+                    //setCategory(clientMessage.substring(6).trim());
+                    out.println("GO " + getCategory().trim());
+                    out2.println("GO " + getCategory().trim());
+                    start();
+                }
+                isActive = true;
             }
-            String clientMessageP2 = in2.readLine();
-            if (clientMessageP2.startsWith("CHOOSECATEGORY")) {
-                System.out.println("P2 " + clientMessageP2);
-                setCategory(clientMessageP2.substring(14));
-                out.println("OPPONENTCHOOSED" + getCategory());
-            } else if (clientMessageP2.startsWith("ACCEPT")) {
-                System.out.println("A player accepted");
-                //setCategory(clientMessage.substring(6).trim());
-                out.println("GO " + getCategory().trim());
-                out2.println("GO " + getCategory().trim());
-                start();
-            }
+
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
-    }
-    public void setOpponent(ServerThreaded opponent) {
-        this.opponent = opponent;
-    }
-    public void setClientmessage(String s) {
-        this.clientMessage = s;
-    }
-    public String getClientMessage() {
-        return clientMessage;
-    }
-    public void sendMessageToClient(String s) {
-        out.println(s);
     }
     public void setCategory(String s) {
         this.categoryMessage = s;
