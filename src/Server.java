@@ -10,19 +10,13 @@ public class Server {
             System.out.println("Socket connected");
             while (true) {
                 // Skapa två spelare
-                ServerThreaded serverThreaded = new ServerThreaded(serverSocket.accept());
+                Socket player1Socket = serverSocket.accept();
                 System.out.println("User 1 is online");
-                ServerThreaded serverThreaded1 = new ServerThreaded(serverSocket.accept());
+                Socket player2Socket = serverSocket.accept();
                 System.out.println("User 2 is online");
 
-                serverThreaded.setOpponent(serverThreaded1);
-                serverThreaded1.setOpponent(serverThreaded);
-
-                serverThreaded.start();
-                serverThreaded1.start();
+                ServerThreaded serverThreaded = new ServerThreaded(player1Socket, player2Socket);
                 System.out.println(serverThreaded.isAlive());
-                System.out.println(serverThreaded1.isAlive());
-
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

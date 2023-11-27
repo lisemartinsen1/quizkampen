@@ -132,11 +132,10 @@ public class Client implements ActionListener {
             answerPanel.add(button);
             button.addActionListener(this);
         });
-
+        System.out.println(category);
         out.println(category);
-    });
+        });
     }
-
     public void categoryUI() {
             SwingUtilities.invokeLater(() -> {
         categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -259,7 +258,7 @@ public class Client implements ActionListener {
         if (e.getSource() == newGame) {
             // Prova med separat metod
             connectToServer();
-            readResponseFromServer();
+            //readResponseFromServer();
             //mainFrame.dispose();
             //categoryUI();
             // Didn't work, don't try it!
@@ -299,10 +298,6 @@ public class Client implements ActionListener {
             }
 
             out.println("NEXT_QUESTION");
-            SwingUtilities.invokeLater(() -> {
-                readResponseFromServer();
-                questionsUI(getCategories());
-            });
             answerOne.setBackground(null);
             answerTwo.setBackground(null);
             answerThree.setBackground(null);
@@ -371,11 +366,13 @@ public class Client implements ActionListener {
         return categories;
     }
     public void CatDialog() {
-        int n = JOptionPane.showConfirmDialog(null, "Motståndet valde " + getCategories() +
-                ". Vill du fortsätta");
-        if (n == JOptionPane.YES_OPTION) {
-            out.println("ACCEPT " + getCategories().trim());
-        }
+        SwingUtilities.invokeLater(() -> {
+            int n = JOptionPane.showConfirmDialog(null, "Motståndet valde " + getCategories() +
+                    ". Vill du fortsätta");
+            if (n == JOptionPane.YES_OPTION) {
+                out.println("ACCEPT " + getCategories().trim());
+            }
+        });
     }
     public boolean readCategory(String fromServer) throws IOException {
         if (fromServer.startsWith("GO")) {
@@ -407,7 +404,7 @@ public class Client implements ActionListener {
     }*/
 
     public void connectToServer() {
-        //new Thread(() -> {
+        new Thread(() -> {
             String read;
             try {
                 Socket sock = new Socket("127.0.0.1", 1234);
@@ -416,33 +413,33 @@ public class Client implements ActionListener {
                 // Tror att måste fixa något hit.
                 while (true) {
                     read = in.readLine();
+                    System.out.println("Read from serv " + read);
                     if (read.startsWith("CONNECTED")) {
-                        System.out.println(read);
+                        //readResponseFromServer();
                         mainFrame.dispose();
                         categoryUI();
                     } else if (read.startsWith("OPPONENTCHOOSED")) {
                         setCategories(read.substring(15));
-                        SwingUtilities.invokeLater(() -> {
-                           CatDialog();
-                        });
+                        CatDialog();
                     } else if (readCategory(read)) {
                         readResponseFromServer();
                         categoryFrame.dispose();
-                        //System.out.println("cat" + getCategories().trim());
                         questionsUI(getCategories().trim());
+                    } else if (read.startsWith("QUESTION")) {
+                        System.out.println("q sec: "+read);
+                        readResponseFromServer();
+                        //questionsUI(getCategories().trim());
                     }
-
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        //}).start();
+        }).start();
     }
     public void readResponseFromServer() {
         new Thread(() -> {
             try {
                 String fromServer;
-
                 // Problem: Readresponse:  = null;
                 // Make it Readresponse:  show category and number.
                 // Chance to be fixed 65 modulo

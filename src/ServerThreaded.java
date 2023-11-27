@@ -1,34 +1,61 @@
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ServerThreaded extends Thread implements Runnable {
-    private Socket socket;
+    private Socket socketP1;
+    private Socket socketP2;
     private BufferedReader in;
     private PrintWriter out;
+    private BufferedReader in2;
+    private PrintWriter out2;
     Protocol protocol = new Protocol();
     DAO dao = new DAO();
     private ServerThreaded opponent;
-
     String clientMessage;
-
     String categoryMessage;
-
     List<String> questionLists = new ArrayList<>();
     List<String> usedQuestionLists = new ArrayList<>();
-    public ServerThreaded(Socket socket) {
-        this.socket = socket;
+    public ServerThreaded(Socket socketP1, Socket socketP2) {
+        this.socketP1 = socketP1;
+        this.socketP2 = socketP2;
         try {
-            String clientMessage;
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socketP1.getInputStream()));
+            out = new PrintWriter(socketP1.getOutputStream(), true);
+            in2 = new BufferedReader(new InputStreamReader(socketP2.getInputStream()));
+            out2 = new PrintWriter(socketP2.getOutputStream(), true);
             // while ((clientMessage = in.readline()) != null) {
-            out.println("WAIT Waiting for response");
+            if (socketP2.isConnected()) {
+                out.println("CONNECTED");
+                out2.println("CONNECTED");
+            }
+            String clientMessage = in.readLine();
+            if (clientMessage.startsWith("CHOOSECATEGORY")) {
+                System.out.println("P1 " + clientMessage);
+                setCategory(clientMessage.substring(14));
+                out2.println("OPPONENTCHOOSED" + getCategory());
+            } else if (clientMessage.startsWith("ACCEPT")) {
+                System.out.println("You Accepted");
+                //setCategory(clientMessage.substring(6).trim());
+                out.println("GO " + getCategory().trim());
+                out2.println("GO " + getCategory().trim());
+                start();
+            }
+            String clientMessageP2 = in2.readLine();
+            if (clientMessageP2.startsWith("CHOOSECATEGORY")) {
+                System.out.println("P2 " + clientMessageP2);
+                setCategory(clientMessageP2.substring(14));
+                out.println("OPPONENTCHOOSED" + getCategory());
+            } else if (clientMessageP2.startsWith("ACCEPT")) {
+                System.out.println("A player accepted");
+                //setCategory(clientMessage.substring(6).trim());
+                out.println("GO " + getCategory().trim());
+                out2.println("GO " + getCategory().trim());
+                start();
+            }
         } catch(IOException e) {
             throw new RuntimeException(e);
         }
@@ -54,47 +81,41 @@ public class ServerThreaded extends Thread implements Runnable {
 
     @Override
     public void run() {
-        out.println("CONNECTED");
+        //out.println("CONNECTED");
+        //out2.println("CONNECTED");
         try {
             String clientMessage;
-            while ((clientMessage = in.readLine()) != null) {
-                opponent.setClientmessage(clientMessage);
-                if (clientMessage.startsWith("CHOOSECATEGORY")) {
-                    System.out.println("step1 "+clientMessage.trim());
-                    setCategory(clientMessage.substring(14));
-                    opponent.sendNextQuestion("OPPONENTCHOOSED " + getCategory().trim());
-                } else if (clientMessage.startsWith("ACCEPT")) {
-                    setCategory(clientMessage.substring(6).trim());
-                    sendNextQuestion("GO " + getCategory().trim());
-                    opponent.sendNextQuestion("GO " + getCategory().trim());
-                }
-                if (clientMessage.startsWith("category") && opponent.getClientMessage().startsWith("category")) {
+            String clientMessageP2;
+            while (true) {
+                int q = 0;
+                clientMessage = in.readLine();
+                clientMessageP2 = in2.readLine();
+                if (clientMessage.startsWith("category") && clientMessageP2.startsWith("category")) {
+                    System.out.println("P1 cats " + clientMessage);
+                    System.out.println("P2 cats " + clientMessageP2);
                     String response = protocol.getOutput(clientMessage);
                     questionLists.add(response);
-                    opponent.questionLists.add(response);
-                    for (String message : questionLists) {
-                        sendNextQuestion(message);
-                        opponent.sendNextQuestion(message);
+                    Iterator<String> it = questionLists.iterator();
+                    while (it.hasNext()) {
+                        String message = it.next();
+                        out.println(message);
+                        out2.println(message);
                         usedQuestionLists.add(message);
-                        opponent.usedQuestionLists.add(message);
-                        questionLists.remove(message);
-                        opponent.questionLists.remove(message);
-                        break;
+                        it.remove();
+                        q++;
                     }
-                } else if (clientMessage.startsWith("NEXT_QUESTION")) {
-                    System.out.println("Next q: "+clientMessage);
+                } else if (clientMessage.startsWith("NEXT_QUESTION") && clientMessageP2.startsWith("NEXT_QUESTION")) {
+                    System.out.println("Next q: " + clientMessage);
                     String response = protocol.getOutput(getCategory());
                     questionLists.add(response);
-                    opponent.questionLists.add(response);
-                    System.out.println("Catnext "+ getCategory().trim());
                     for (String message : questionLists) {
                         System.out.println(message);
                         int count = 0;
                         System.out.println("COUNT: " + count);
                         for (String usedQuestion : usedQuestionLists) {
                             if (message.equals(usedQuestion)) {
-                                questionLists.remove(message);
-                                opponent.questionLists.remove(message);
+                                questionLists.clear();
+                                questionLists.add(response);
                                 count = 0;
                                 break;
                             } else {
@@ -102,37 +123,28 @@ public class ServerThreaded extends Thread implements Runnable {
                             }
                         }
                         if (count == usedQuestionLists.size()) {
-                            System.out.println("sorted: "+message);
-                            sendNextQuestion(message);
-                            opponent.sendNextQuestion(message);
+                            System.out.println("sorted: " + message);
+                            System.out.println("C " + count);
+                            System.out.println("S " + usedQuestionLists.size());
+                            out.println(message);
+                            out2.println(message);
                             usedQuestionLists.add(message);
-                            opponent.usedQuestionLists.add(message);
                             questionLists.remove(message);
-                            opponent.questionLists.remove(message);
+                            q++;
                             break;
                         }
                     }
                     //sendNextQuestion(clientMessage);
+                } else if (q == 3) {
+                    break;
                 } else {
                     sendResponse(clientMessage);
                 }
-
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
-    /*private boolean categoryProcess() {
-        int n = JOptionPane.showConfirmDialog(null, "Motståndet valde " + getCategory() +
-                ". Vill du fortsätta");
-        if (n == JOptionPane.YES_OPTION) {
-            sendMessageToClient("ACCEPT " + getCategory().trim());
-            opponent.sendMessageToClient("ACCEPT " + getCategory().trim());
-            return true;
-        }
-        return false;
-    }*/
-
     private void sendNextQuestion(String response){    //ny metod för att inte upprepa kod
         //String response = protocol.getOutput(category);
         //System.out.println(response);
