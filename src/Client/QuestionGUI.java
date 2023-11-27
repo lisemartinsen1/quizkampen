@@ -65,12 +65,12 @@ public class QuestionGUI extends JFrame implements ActionListener {
         readFromServer();
     }
     public void readFromServer(){
+        int questionsRead = 0;
         try {
             String fromServer;
-            while ((fromServer = in.readLine()) != null) {
+            while (questionsRead < propertiesClass.getAmountOfQuestions() && (fromServer = in.readLine()) != null) {
                 String[] parts = fromServer.split("\\|");
                 if (parts.length == 2) {
-
                     String questionAndAnswersText = parts[0].trim();
                     String answersTextfromServer = parts[1].trim();
 
@@ -81,6 +81,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                             questionText.setText(questionTextfromServerToLabel);
                         });
                     }
+
                     String[] answersParts = answersTextfromServer.split("ANSWERS", 2);
                     if (answersParts.length > 1) {
                         String answersText = answersParts[1].trim();
@@ -100,7 +101,6 @@ public class QuestionGUI extends JFrame implements ActionListener {
                         }
 
                         if (rightAnswerIndex != -1) {
-
                             List<String> answersList = new ArrayList<>(Arrays.asList(individualAnswers));
                             answersList.remove(rightAnswerIndex);
 
@@ -110,8 +110,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
                                 answerTwo.setText(answersList.get(1));
                                 answerThree.setText(answersList.get(2));
                                 answerFour.setText(finalRightAnswer);
-
                             });
+
+                            questionsRead++;
                         }
                     }
                 }
@@ -119,6 +120,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override

@@ -48,9 +48,8 @@ public class ServerThreaded implements Runnable {
                     sendNextQuestion(player1Message, out1);
 
                 } else if (player1Message.contains("ALL_Q_ANSWERED")) {
-                    sendResponse(player1Message, out2);//Här blir det fel!!
-                   // out2.println("OPPONENT_DONE");
-                    //out1.println("ALL_Q_ANSWERED");
+                    sendResponse(player1Message, out1);
+
                     System.out.println(player1Message + " received in ServerThreaded");
                     out1.flush();
 
