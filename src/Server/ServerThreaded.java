@@ -64,7 +64,7 @@ public class ServerThreaded implements Runnable {
         }
     }
 
-    private void sendNextQuestion(String category, PrintWriter out) {    //ny metod för att inte upprepa kod
+    private void sendNextQuestion(String category, PrintWriter out) {
         String response = protocol.getOutput(category);
         out.println(response);
         //out.flush();
