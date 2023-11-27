@@ -6,23 +6,35 @@ import java.util.Random;
 
 public class DAO {
     protected Database database = new Database();
-    private List<QuestionAndAnswers> questionAndAnswersList;
+    private List<QuestionAndAnswers> questionAndAnswersList = new ArrayList<>();
     private List<QuestionAndAnswers> alreadyUsedQuestionsList;
+    PropertiesClass propertiesClass = new PropertiesClass();
 
-    public DAO(){
+
+    public DAO() {
         this.alreadyUsedQuestionsList = new ArrayList<>();
     }
 
     public QuestionAndAnswers getRandomQuestionAndAnswers(String category) {
-        if (questionAndAnswersList == null) {
-            questionAndAnswersList = database.readQuestionsAndAnswersFromFile(category);
+        propertiesClass.loadProperties();
+        int amountOfQ = propertiesClass.getAmountOfQuestions();
+        int counter = 0;
 
-            if (questionAndAnswersList == null || questionAndAnswersList.isEmpty()) {
-                return new QuestionAndAnswers("No questions available. Call readQuestionsAndAnswersFromFile() first.", "");
+        if (questionAndAnswersList.isEmpty()) {
+
+            if (counter < amountOfQ) {
+                questionAndAnswersList = database.readQuestionsAndAnswersFromFile(category);
+                counter++;
+            } else {
+                // Clear the list when amountOfQ is reached
+                questionAndAnswersList.clear();
             }
+        } else {
+            // If the list is not empty, clear it
+            questionAndAnswersList.clear();
         }
 
-
+        // Continue with the rest of your code to get a random question
         Random random = new Random();
         int randomIndex;
         QuestionAndAnswers randomQuestion;
@@ -37,5 +49,4 @@ public class DAO {
 
         return randomQuestion;
     }
-
 }

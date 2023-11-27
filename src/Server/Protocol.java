@@ -10,7 +10,9 @@ public class Protocol {
     protected int state = FIRST_QNA;
     DAO dao = new DAO();
 
-    public String getOutput(String category) { //getOutput tar kategori som inparameter
+    public String getOutput(String category) {
+        //getOutput tar kategori som inparameter
+        System.out.println(category + " i Protocol");
         QuestionAndAnswers qa;
         if (state == FIRST_QNA) {
             state = NEXT_QNA;
@@ -18,6 +20,7 @@ public class Protocol {
             qa = dao.getRandomQuestionAndAnswers(category);
 
         } else if (state == NEXT_QNA) {
+
             qa = dao.getRandomQuestionAndAnswers(category);
         }
         else {

@@ -13,6 +13,7 @@ public class Database {
     private List<QuestionAndAnswers> questionAndAnswersList;
 
     public List<QuestionAndAnswers> readQuestionsAndAnswersFromFile(String category) {
+        System.out.println(category + " i Database");
         questionAndAnswersList = new ArrayList<>();
         String FILE_PATH = "";
         if (category.equals("CATEGORY1")) {

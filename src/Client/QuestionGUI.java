@@ -143,7 +143,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 } else {
                     currentQuestion = 1; //Nollställer
                     currentRound++;
-                    out.println("ALL_Q_ANSWERED");
+                    out.println("OPEN_RESULT");
                     out.flush();
                     System.out.println("ALL_Q_ANSWERED sent from QuestionGUI"); //Vi kommer hit. Problemet ligger serverside
                     questionsFrame.dispose();

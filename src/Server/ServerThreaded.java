@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 public class ServerThreaded implements Runnable {
 
@@ -48,12 +49,14 @@ public class ServerThreaded implements Runnable {
                 try {
                     while ((player1Message = in1.readLine()) != null) {
                         if (player1Message.startsWith("CATEGORY")) {
-                            out1.println("CATEGORY");
+                            out1.println("QUESTIONS");
                             sendNextQuestion(player1Message, out1);
-
 
                         } else if (player1Message.startsWith("NEXT_QUESTION")) {
                             sendNextQuestion(player1Message, out1);
+
+                        }else if (player1Message.startsWith("OPEN_RESULT")){
+                            sendResponse("ALL_QUESTIONS_ANSWERED", out1);
 
                         } else if (player1Message.contains("ALL_Q_ANSWERED")) {
                             sendResponse(player1Message, out1);
@@ -63,8 +66,6 @@ public class ServerThreaded implements Runnable {
                             sendPreviousQuestions();
                             break;
 
-                        } else {
-                            sendResponse(player1Message, out1);
                         }
 
                     }
@@ -82,14 +83,14 @@ public class ServerThreaded implements Runnable {
                             out2.println("CATEGORY");
                             sendNextQuestion(player2Message, out2);
 
-                        } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
-                            sendResponse(player2Message, out2);
+                        }else if (player2Message.startsWith("OPEN_RESULT")){
+                            sendResponse("ALL_QUESTIONS_ANSWERED", out2);
 
+                        } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
 
                             out1.println("START");
                             continue loop;
                         }
-
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -99,12 +100,12 @@ public class ServerThreaded implements Runnable {
 
 
     private void sendNextQuestion(String category, PrintWriter out) {
+        System.out.println(category + " i ServerThreaded(Sendnextq) metoden");
         String response = protocol.getOutput(category);
         out.println(response);
         addSentQuestionToList(response);
 
     }
-
     private void sendResponse(String message, PrintWriter out) {
         out.println(message);
         out.flush();
