@@ -21,7 +21,6 @@ public class ServerThreaded implements Runnable {
     private String player1Message;
     private String player2Message;
     private List<String> listOfSentQuestions = new ArrayList<>();
-    private String category;
 
     public ServerThreaded(Socket socket1, Socket socket2) {
         this.socket1 = socket1;
@@ -50,12 +49,11 @@ public class ServerThreaded implements Runnable {
                 try {
                     while ((player1Message = in1.readLine()) != null) {
                         if (player1Message.startsWith("CATEGORY")) {
-                            category = player1Message;
                             out1.println("QUESTIONS");
                             sendNextQuestion(player1Message, out1);
 
                         } else if (player1Message.startsWith("NEXT_QUESTION")) {
-                            sendNextQuestion(category, out1);
+                            sendNextQuestion(null, out1);
 
                         }else if (player1Message.startsWith("OPEN_RESULT")){
                             sendResponse("ALL_QUESTIONS_ANSWERED", out1);
