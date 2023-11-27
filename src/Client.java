@@ -422,12 +422,12 @@ public class Client implements ActionListener {
                         setCategories(read.substring(17));
                         CatDialog();
                     } else if (readCategory(read)) {
-                        readResponseFromServer();
+                        readResponseFromServer(read);
                         categoryFrame.dispose();
                         questionsUI(getCategories().trim());
                     } else if (read.startsWith("QUESTION")) {
                         System.out.println("q sec: "+read);
-                        readResponseFromServer();
+                        readResponseFromServer(read);
                         //questionsUI(getCategories().trim());
                     }
                 }
@@ -436,15 +436,15 @@ public class Client implements ActionListener {
             }
         }).start();
     }
-    public void readResponseFromServer() {
+    public void readResponseFromServer(String fromServer) {
         new Thread(() -> {
-            try {
-                String fromServer;
+            //try {
+                //String fromServer;
                 // Problem: Readresponse:  = null;
                 // Make it Readresponse:  show category and number.
                 // Chance to be fixed 65 modulo
                 System.out.println("Readresponse: "+getCategories());
-                while ((fromServer = in.readLine()) != null) {
+                //while ((fromServer = in.readLine()) != null) {
                     System.out.println("Readresponse2: "+ fromServer);
                     String[] parts = fromServer.split("\\|");
                     if (parts.length == 2) {
@@ -492,10 +492,10 @@ public class Client implements ActionListener {
                             }
                         }
                     }
-                }
-            } catch (IOException e) {
+                //}
+            /*} catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }).start();
     }
 }

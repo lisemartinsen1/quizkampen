@@ -93,8 +93,8 @@ public class ServerThreaded extends Thread implements Runnable {
         try {
             String clientMessage;
             String clientMessageP2;
+            int q = 0;
             while (true) {
-                int q = 0;
                 clientMessage = in.readLine();
                 clientMessageP2 = in2.readLine();
                 if (clientMessage.startsWith("category") && clientMessageP2.startsWith("category")) {
