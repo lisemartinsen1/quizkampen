@@ -16,9 +16,9 @@ public class CategoryGUI extends JFrame implements ActionListener {
     private JLabel categoryTitle = new JLabel("Välj en kategori");
     private JPanel categoryPanel = new JPanel();
     private JButton category1Button = new JButton("Kategori 1");
-    private JButton category2Button = new JButton("Kategori 2");
-    private JButton category3Button = new JButton("Kategori 3");
-    private JButton category4Button = new JButton("Kategori 4");
+    private JButton category2Button = new JButton("Teknik & Vetenskap");
+    private JButton category3Button = new JButton("Sport");
+    private JButton category4Button = new JButton("Historia");
     private JPanel categoryBottomPanel = new JPanel();
     private JButton goBackButton = new JButton("Gå Tillbaka");
     private JButton quitGame = new JButton("Avsluta");
