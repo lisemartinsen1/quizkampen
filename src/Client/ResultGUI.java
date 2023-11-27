@@ -3,6 +3,10 @@ package Client;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.PrintWriter;
+
 import Server.PropertiesClass;
 public class ResultGUI extends JFrame {
     private JFrame resultFrame = new JFrame();
@@ -13,10 +17,13 @@ public class ResultGUI extends JFrame {
     private JLabel resultPreviousRounds = new JLabel("1-3");
     private JLabel playerOneName = new JLabel("Spelare 1");
     private JLabel playerTwoName = new JLabel("Spelare 2");
-    private JButton playButton = new JButton("Spela");
+    private JButton playButton = new JButton("Klar");
     PropertiesClass propertiesClass = new PropertiesClass();
+    PrintWriter out;
 
-    public ResultGUI(){
+    public ResultGUI(PrintWriter out){
+        this.out = out;
+
         SwingUtilities.invokeLater(() -> {
             System.out.println("ResultGUI running...");
             resultFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,12 +91,24 @@ public class ResultGUI extends JFrame {
                 labels[i - 1][3] = pointsLabel2;
             }
 
+            playButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    out.println("ALL_Q_ANSWERED");
+                    resultFrame.dispose();
+                }
+            });
             resultBottomPanel.add(playButton);
-            playButton.setEnabled(false);
             whosTurnText.setText("Motståndarens tur");
+
+
             //labels[0][2].setText(String.valueOf(howManyPointsInRound));
             //Behöver få tag på howManyPointsInRound från Client.QuestionGUI  <---
 
         });
+    }
+
+    public void disablePlayButton() {
+        playButton.setEnabled(false);
     }
 }

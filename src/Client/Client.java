@@ -108,17 +108,21 @@ public class Client implements ActionListener {
                         mainFrame.setTitle("Waiting for player to complete round...");
 
 
-                    } else if (fromServer.startsWith("CATEGORY")) {
+                    } else if (fromServer.startsWith("QUESTIONS")) {
 
                         QuestionGUI questionGUI = new QuestionGUI(in, out);
 
-                    } else if (fromServer.equals("ALL_Q_ANSWERED")) {
+                    } else if (fromServer.equals("ALL_QUESTIONS_ANSWERED")) {
                         System.out.println(fromServer + " received in Client from ServerThr"); //Kommer aldrig hit
-                        ResultGUI resultGUI = new ResultGUI();
+                        ResultGUI resultGUI = new ResultGUI(out);
 
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
                         QuestionGUI questionGUI = new QuestionGUI(in, out);
+
+                    } else if (fromServer.startsWith("GAME_FINISHED")) {
+                        ResultGUI resultGUI = new ResultGUI(out);
+                        resultGUI.disablePlayButton();
                     }
                 }
 
