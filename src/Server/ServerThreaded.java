@@ -21,15 +21,8 @@ public class ServerThreaded implements Runnable {
     private String player1Message;
     private String player2Message;
     private List<String> listOfSentQuestions = new ArrayList<>();
-    private String[] listWithPlayer1Points;
-    private String[] listWithPlayer2Points;
-
-    /*
-    Serverside måste hålla koll på spelarnas poäng
-    - poäng för varje runda
-    - i slutet räknas poängen ihop
-     */
-
+    private String listWithPlayer1Points = "";
+    private String listWithPlayer2Points = "";
 
     public ServerThreaded(Socket socket1, Socket socket2) {
         this.socket1 = socket1;
@@ -65,8 +58,9 @@ public class ServerThreaded implements Runnable {
                             sendNextQuestion(null, out1);
 
                         } else if (player1Message.contains("OPEN_RESULT")){
-                            //Här måste resultatet adderas till listWithPlayer1Points
-                            sendResponse(player1Message + "-PLAYER1", out1);
+                            String score = getScore(player1Message);
+                            listWithPlayer1Points += score + ","; //Kommer det orsaka problem i ResultGUI att "," ligger sist?
+                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT-PLAYER1", out1);
 
                         } else if (player1Message.contains("ALL_Q_ANSWERED")) { //Skickas från ResultGUI när spelaren har kollat klart på resultatet
                             sendResponse(player1Message, out1);
@@ -92,7 +86,9 @@ public class ServerThreaded implements Runnable {
                             sendNextQuestion(player2Message, out2);
 
                         } else if (player2Message.contains("OPEN_RESULT")) {
-                            sendResponse(player2Message + "-PLAYER2", out2);
+                            String score = getScore(player2Message);
+                            listWithPlayer2Points = listWithPlayer2Points  +  score + ",";
+                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT-PLAYER1", out2);
 
                         } else if (player2Message.contains("GAME_FINISHED")) { //Här kan det bli fel.
                             out1.println(player2Message + "-PLAYER1");
@@ -109,6 +105,10 @@ public class ServerThreaded implements Runnable {
             }
         }
 
+    public String getScore(String message) {
+        String[] parts = message.split("\\#");
+        return parts[0];
+    }
 
     private void sendNextQuestion(String category, PrintWriter out) {
         System.out.println(category + " i ServerThreaded(Sendnextq) metoden");

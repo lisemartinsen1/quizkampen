@@ -10,25 +10,20 @@ import java.io.PrintWriter;
 import Server.PropertiesClass;
 
 public class ResultGUI extends JFrame {
-    private JFrame resultFrame = new JFrame();
-    private JPanel resultUpperPanel = new JPanel(new GridBagLayout());
-    private JPanel resultCenterPanel = new JPanel(new GridBagLayout());
     private JPanel resultBottomPanel = new JPanel();
-    private JLabel whosTurnText = new JLabel("Din tur/Motståndarens tur");
-    private JLabel resultPreviousRounds = new JLabel("1-3");
-    private JLabel playerOneName = new JLabel("Spelare 1");
-    private JLabel playerTwoName = new JLabel("Spelare 2");
     private JButton playButton = new JButton("Klar");
     PrintWriter out;
     String playerNr;
     String[] listWithPlayer1Points;
     String[] listWithPlayer2Points;
+    String strWithPlayer1Points;
+    String strWithPlayer2Points;
 
-    public ResultGUI(String playerNr, String[] listWithPlayer1Points, String[] listWithPlayer2Points) {
-        //this.out = out;
+    public ResultGUI(PrintWriter out, String playerNr, String strWithPlayer1Points, String strWithPlayer2Points) {
+        this.out = out;
         this.playerNr = playerNr;
-        this.listWithPlayer1Points = listWithPlayer1Points;
-        this.listWithPlayer2Points = listWithPlayer2Points;
+        this.strWithPlayer1Points = strWithPlayer1Points;
+        this.strWithPlayer2Points = strWithPlayer2Points;
 
         SwingUtilities.invokeLater(this::initializeGUI);
     }
@@ -57,6 +52,9 @@ public class ResultGUI extends JFrame {
         resultFrame.add(playerNamesPanel);
         resultFrame.add(new JLabel());
 
+        listWithPlayer1Points = getArray(strWithPlayer1Points);
+        listWithPlayer2Points = getArray(strWithPlayer2Points);
+
         // Iterera genom rundor
         for (int i = 0; i < Math.max(listWithPlayer1Points.length, listWithPlayer2Points.length); i++) {
             JPanel panel = new JPanel(new GridLayout(2, 1));
@@ -76,6 +74,16 @@ public class ResultGUI extends JFrame {
             resultFrame.add(scorePanel);
         }
         resultFrame.add(new JLabel());
+        resultFrame.add(resultBottomPanel);
+        resultBottomPanel.add(playButton);
+
+        playButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                out.println("ALL_Q_ANSWERED");
+                resultFrame.dispose();
+            }
+        });
     }
 
     private String getPointsForRound(String[] points, int index) {
@@ -85,11 +93,20 @@ public class ResultGUI extends JFrame {
         return "";
     }
 
+    private String[] getArray(String s) {
+        return s.split(",");
+    }
+    public void disablePlayButton() {
+        playButton.setEnabled(false);
+    }
+/*
     public static void main(String[] args) {
         String playerNr = "Player 1";
-        String[] player1Points = {"10", "15", "20"};
-        String[] player2Points = {"12", "18"};
+        String player1Points = "10,15,20";
+        String player2Points = "12,18";
 
         ResultGUI resultGUI = new ResultGUI(playerNr, player1Points, player2Points);
     }
+
+ */
 }
