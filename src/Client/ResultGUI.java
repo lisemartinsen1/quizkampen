@@ -21,7 +21,6 @@ public class ResultGUI extends JFrame {
     PropertiesClass propertiesClass = new PropertiesClass();
     PrintWriter out;
 
-
     public ResultGUI(PrintWriter out){
         this.out = out;
 
@@ -107,5 +106,9 @@ public class ResultGUI extends JFrame {
             //Behöver få tag på howManyPointsInRound från Client.QuestionGUI  <---
 
         });
+    }
+
+    public void disablePlayButton() {
+        playButton.setEnabled(false);
     }
 }

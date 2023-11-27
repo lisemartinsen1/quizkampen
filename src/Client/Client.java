@@ -116,9 +116,13 @@ public class Client implements ActionListener {
                         System.out.println(fromServer + " received in Client from ServerThr"); //Kommer aldrig hit
                         ResultGUI resultGUI = new ResultGUI(out);
 
-                } else if (fromServer.startsWith("OPPONENT_DONE")) {
+                    } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
                         QuestionGUI questionGUI = new QuestionGUI(in, out);
+
+                    } else if (fromServer.startsWith("GAME_FINISHED")) {
+                        ResultGUI resultGUI = new ResultGUI(out);
+                        resultGUI.disablePlayButton();
                     }
                 }
 

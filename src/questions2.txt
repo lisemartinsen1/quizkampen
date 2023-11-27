@@ -1,7 +1,7 @@
 QUESTION Vilken förkortning har grundämnet kvicksilver?
 ANSWERS RIGHT_ANSWER Hg, Kv, Ks, Qr
 QUESTION Vilken är formeln för kinetisk energi?
-ANSWERS RIGHT_ANSWERS E = 1/2mv^2, E = mc^2, E = mgh, E = Pt
+ANSWERS RIGHT_ANSWER E = 1/2mv^2, E = mc^2, E = mgh, E = Pt
 QUESTION Vilken matematiker kom på principen att 'ett föremål nedsänkt i vatten påverkas av en uppåtriktad kraft, som är lika stor som tyngden av den undanträngda vätskan'?
 ANSWERS RIGHT_ANSWER Arkimedes, Pythagoras, Isaac Newton, al-Khwarizmis
 QUESTION Vad kallas en elektron som befinner sig i det yttersta skalet?

@@ -61,11 +61,9 @@ public class ServerThreaded implements Runnable {
                         } else if (player1Message.contains("ALL_Q_ANSWERED")) {
                             sendResponse(player1Message, out1);
 
-
                             out2.println("OPPONENT_DONE");
                             sendPreviousQuestions();
                             break;
-
                         }
 
                     }
@@ -83,13 +81,17 @@ public class ServerThreaded implements Runnable {
                             out2.println("CATEGORY");
                             sendNextQuestion(player2Message, out2);
 
-                        }else if (player2Message.startsWith("OPEN_RESULT")){
+                        } else if (player2Message.startsWith("OPEN_RESULT")) {
                             sendResponse("ALL_QUESTIONS_ANSWERED", out2);
 
+                        } else if (player2Message.startsWith("GAME_FINISHED")) {
+                            out1.println("GAME_FINISHED");
+                            out2.println("GAME_FINISHED");
                         } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
 
                             out1.println("START");
                             continue loop;
+
                         }
                     }
                 } catch (IOException e) {

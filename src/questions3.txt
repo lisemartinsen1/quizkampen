@@ -28,4 +28,3 @@ QUESTION Hur långt är ett maraton?
 ANSWERS RIGHT_ANSWER 42 195m, 41 967m, 42 092m, 41 890m
 QUESTION Vem är känd som "The Greatest of All Time" inom boxning?
 ANSWERS RIGHT_ANSWER Muhammad Ali, Mike Tyson, Manny Pacquiao, Floyd Mayweather Jr.
-

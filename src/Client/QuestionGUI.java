@@ -46,6 +46,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
             questionsFrame.add(answerPanel, BorderLayout.CENTER);
 
             bottomQuestionPanel.add(nextQuestionButton);
+            nextQuestionButton.setEnabled(false);
             questionsFrame.add(bottomQuestionPanel, BorderLayout.SOUTH);
             nextQuestionButton.addActionListener(this);
 
@@ -128,7 +129,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == nextQuestionButton) {
-
+            nextQuestionButton.setEnabled(false);
             propertiesClass.loadProperties();
             int totalRounds = propertiesClass.getAmountOfRounds();
             questionsPerRound = propertiesClass.getAmountOfQuestions();
@@ -137,8 +138,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
             if (currentQuestion > questionsPerRound) {
 
-                if (currentRound > totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
+                if (currentRound == totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
                     out.println("GAME_FINISHED");
+                    out.println("OPEN_RESULT");
                     questionsFrame.dispose();
                 } else {
                     currentQuestion = 1; //Nollställer
@@ -171,9 +173,11 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
         } else if (e.getSource() == answerOne) {
             answerOne.setBackground(Color.RED);
+            answerOne.setEnabled(false);
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
             answerFour.setEnabled(false);
+            nextQuestionButton.setEnabled(true);
             if (currentQuestion == questionsPerRound) {
                 nextQuestionButton.setText("Visa resultat");
             }
@@ -181,8 +185,10 @@ public class QuestionGUI extends JFrame implements ActionListener {
         } else if (e.getSource() == answerTwo) {
             answerTwo.setBackground(Color.RED);
             answerOne.setEnabled(false);
+            answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
             answerFour.setEnabled(false);
+            nextQuestionButton.setEnabled(true);
             if (currentQuestion == questionsPerRound) {
                 nextQuestionButton.setText("Visa resultat");
             }
@@ -191,7 +197,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
             answerThree.setBackground(Color.RED);
             answerOne.setEnabled(false);
             answerTwo.setEnabled(false);
+            answerThree.setEnabled(false);
             answerFour.setEnabled(false);
+            nextQuestionButton.setEnabled(true);
             if (currentQuestion == questionsPerRound) {
                 nextQuestionButton.setText("Visa resultat");
             }
@@ -201,6 +209,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
             answerOne.setEnabled(false);
             answerTwo.setEnabled(false);
             answerThree.setEnabled(false);
+            answerFour.setEnabled(false);
+            nextQuestionButton.setEnabled(true);
             if (currentQuestion == questionsPerRound) {
                 nextQuestionButton.setText("Visa resultat");
             }

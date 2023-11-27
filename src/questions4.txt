@@ -34,6 +34,3 @@ QUESTION Vilken antik civilisation var känd för sina legendariska krigare?
 ANSWERS RIGHT_ANSWER Sparta, Thebe, Korint, Aten
 QUESTION Vem grundade Stockholm enligt Erikskrönikan på 1200-talet?
 ANSWERS RIGHT_ANSWER Birger jarl, Erik XIV, Gustav Vasa, Magnus Ladulås
-
-
-
