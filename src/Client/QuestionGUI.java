@@ -31,9 +31,11 @@ public class QuestionGUI extends JFrame implements ActionListener {
     BufferedReader in;
     PrintWriter out;
     int questionsPerRound;
-    public QuestionGUI(BufferedReader in, PrintWriter out) {
+
+    public QuestionGUI(BufferedReader in, PrintWriter out, String namn) throws IOException {
         this.in = in;
         this.out = out;
+
 
         SwingUtilities.invokeLater(() -> {
             questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,6 +46,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
             questionsFrame.setLayout(new BorderLayout());
             questionsFrame.add(questionPanel, BorderLayout.NORTH);
             questionsFrame.add(answerPanel, BorderLayout.CENTER);
+            questionsFrame.setTitle(namn);
 
             bottomQuestionPanel.add(nextQuestionButton);
             nextQuestionButton.setEnabled(false);

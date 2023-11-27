@@ -43,6 +43,8 @@ public class ServerThreaded implements Runnable {
 
         @Override
     public void run() {
+            out1.println("PLAYER 1");
+            out2.println("PLAYER 2");
 
             loop:
             while (true) {

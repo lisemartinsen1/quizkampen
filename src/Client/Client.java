@@ -23,6 +23,8 @@ public class Client implements ActionListener {
     private JButton newGame = new JButton("Nytt Spel");
     private JButton quitGame = new JButton("Avsluta");
 
+    private String namn;
+
 
     PrintWriter out;
     BufferedReader in;
@@ -110,7 +112,7 @@ public class Client implements ActionListener {
 
                     } else if (fromServer.startsWith("QUESTIONS")) {
 
-                        QuestionGUI questionGUI = new QuestionGUI(in, out);
+                        QuestionGUI questionGUI = new QuestionGUI(in, out, namn);
 
                     } else if (fromServer.equals("ALL_QUESTIONS_ANSWERED")) {
                         System.out.println(fromServer + " received in Client from ServerThr"); //Kommer aldrig hit
@@ -118,11 +120,13 @@ public class Client implements ActionListener {
 
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
-                        QuestionGUI questionGUI = new QuestionGUI(in, out);
+                        QuestionGUI questionGUI = new QuestionGUI(in, out, namn);
 
                     } else if (fromServer.startsWith("GAME_FINISHED")) {
                         ResultGUI resultGUI = new ResultGUI(out);
                         resultGUI.disablePlayButton();
+                    } else if (fromServer.startsWith("PLAYER")) {
+                        namn = fromServer;
                     }
                 }
 
