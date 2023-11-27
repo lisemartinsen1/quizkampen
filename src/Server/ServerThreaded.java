@@ -47,6 +47,7 @@ public class ServerThreaded implements Runnable {
             while (true) {
                 try {
                     while ((player1Message = in1.readLine()) != null) {
+                        System.out.println(player1Message);
                         if (player1Message.startsWith("CATEGORY")) {
                             out1.println("CATEGORY");
                             sendNextQuestion(player1Message, out1);
