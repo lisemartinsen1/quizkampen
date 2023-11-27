@@ -21,6 +21,15 @@ public class ServerThreaded implements Runnable {
     private String player1Message;
     private String player2Message;
     private List<String> listOfSentQuestions = new ArrayList<>();
+    private String[] listWithPlayer1Points;
+    private String[] listWithPlayer2Points;
+
+    /*
+    Serverside måste hålla koll på spelarnas poäng
+    - poäng för varje runda
+    - i slutet räknas poängen ihop
+     */
+
 
     public ServerThreaded(Socket socket1, Socket socket2) {
         this.socket1 = socket1;
@@ -55,8 +64,9 @@ public class ServerThreaded implements Runnable {
                         } else if (player1Message.startsWith("NEXT_QUESTION")) {
                             sendNextQuestion(null, out1);
 
-                        } else if (player1Message.startsWith("OPEN_RESULT")){
-                            sendResponse("ALL_QUESTIONS_ANSWERED-PLAYER1", out1);
+                        } else if (player1Message.contains("OPEN_RESULT")){
+                            //Här måste resultatet adderas till listWithPlayer1Points
+                            sendResponse(player1Message + "-PLAYER1", out1);
 
                         } else if (player1Message.contains("ALL_Q_ANSWERED")) { //Skickas från ResultGUI när spelaren har kollat klart på resultatet
                             sendResponse(player1Message, out1);
@@ -81,11 +91,11 @@ public class ServerThreaded implements Runnable {
                             out2.println("CATEGORY");
                             sendNextQuestion(player2Message, out2);
 
-                        } else if (player2Message.startsWith("OPEN_RESULT")) {
-                            sendResponse("ALL_QUESTIONS_ANSWERED-PLAYER2", out2);
+                        } else if (player2Message.contains("OPEN_RESULT")) {
+                            sendResponse(player2Message + "-PLAYER2", out2);
 
-                        } else if (player2Message.startsWith("GAME_FINISHED")) {
-                            out1.println("GAME_FINISHED-PLAYER1");
+                        } else if (player2Message.contains("GAME_FINISHED")) { //Här kan det bli fel.
+                            out1.println(player2Message + "-PLAYER1");
                             out2.println("GAME_FINISHED-PLAYER2");
                         } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
                             out1.println("START-PLAYER1");

@@ -27,7 +27,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
     PropertiesClass propertiesClass = new PropertiesClass();
     private int currentRound = 1;
     private int currentQuestion = 1;
-    private int howManyPointsInRound;
+    private int scoreTracker;
     BufferedReader in;
     PrintWriter out;
     int questionsPerRound;
@@ -141,13 +141,13 @@ public class QuestionGUI extends JFrame implements ActionListener {
             if (currentQuestion > questionsPerRound) {
 
                 if (currentRound == totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
-                    out.println("GAME_FINISHED");
+                    out.println(scoreTracker + "#GAME_FINISHED");
                     System.out.println("GAME_FIN");
                     questionsFrame.dispose();
                 } else {
                     currentQuestion = 1; //Nollställer
                     currentRound++;
-                    out.println("OPEN_RESULT");
+                    out.println(scoreTracker + "#OPEN_RESULT");
                     out.flush();
                     questionsFrame.dispose();
                 }
@@ -164,7 +164,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 answerThree.setEnabled(true);
                 answerFour.setEnabled(true);
 
-                System.out.println("Nuvarande Poäng i rundan: " + howManyPointsInRound);
+                System.out.println("Nuvarande Poäng i rundan: " + scoreTracker);
                 Collections.shuffle(answerButtons);
 
                 answerButtons.forEach(button -> {
@@ -216,7 +216,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setText("Visa resultat");
             }
 
-            howManyPointsInRound++;
+            scoreTracker++;
         }
     }
 }

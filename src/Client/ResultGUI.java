@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 
 import Server.PropertiesClass;
+
 public class ResultGUI extends JFrame {
     private JFrame resultFrame = new JFrame();
     private JPanel resultUpperPanel = new JPanel(new GridBagLayout());
@@ -18,100 +19,77 @@ public class ResultGUI extends JFrame {
     private JLabel playerOneName = new JLabel("Spelare 1");
     private JLabel playerTwoName = new JLabel("Spelare 2");
     private JButton playButton = new JButton("Klar");
-    PropertiesClass propertiesClass = new PropertiesClass();
     PrintWriter out;
     String playerNr;
+    String[] listWithPlayer1Points;
+    String[] listWithPlayer2Points;
 
-    public ResultGUI(PrintWriter out, String playerNr){
-        this.out = out;
+    public ResultGUI(String playerNr, String[] listWithPlayer1Points, String[] listWithPlayer2Points) {
+        //this.out = out;
         this.playerNr = playerNr;
+        this.listWithPlayer1Points = listWithPlayer1Points;
+        this.listWithPlayer2Points = listWithPlayer2Points;
 
-        SwingUtilities.invokeLater(() -> {
-            System.out.println("ResultGUI running...");
-            resultFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            resultFrame.setSize(640, 480);
-            resultFrame.setVisible(true);
-            resultFrame.setLocationRelativeTo(null);
-            resultFrame.setLayout(new BorderLayout());
-            resultFrame.add(resultUpperPanel, BorderLayout.NORTH);
-            resultFrame.add(resultCenterPanel, BorderLayout.CENTER);
-            resultFrame.add(resultBottomPanel, BorderLayout.SOUTH);
-            resultFrame.setTitle(playerNr);
-
-            GridBagConstraints constraints = new GridBagConstraints();
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            //ändra left/right för distansen mellan spelar1/2 och vems tur texten
-            constraints.insets = new Insets(5, 50, 5, 50);
-
-            constraints.gridy = 0;
-            constraints.gridx = 1;
-            resultUpperPanel.add(playerOneName, constraints);
-
-            constraints.gridx = 2;
-            resultUpperPanel.add(whosTurnText, constraints);
-
-            constraints.gridx = 3;
-            resultUpperPanel.add(playerTwoName, constraints);
-
-            constraints.gridy++;
-            constraints.gridx = 2;
-            resultPreviousRounds.setBorder(new EmptyBorder(0, 60, 0, 0));
-            resultUpperPanel.add(resultPreviousRounds, constraints);
-
-            //generar text för så många rundor det är satt i properties filen
-
-
-            propertiesClass.loadProperties();
-            int numberOfRounds = propertiesClass.getAmountOfRounds();
-            JLabel[][] labels = new JLabel[numberOfRounds][4];
-            for (int i = 1; i <= numberOfRounds; i++) {
-                JLabel roundLabel1 = new JLabel("Runda " + i);
-                JLabel pointsLabel1 = new JLabel("Poäng " + i);
-                JLabel roundLabel2 = new JLabel("Runda " + i);
-                JLabel pointsLabel2 = new JLabel("Poäng " + i);
-                JLabel fillLabel1 = new JLabel("-");
-                JLabel fillLabel2 = new JLabel("-");
-
-                constraints.gridy++;
-                constraints.gridx = 0;
-                resultCenterPanel.add(roundLabel1, constraints);
-                labels[i - 1][0] = roundLabel1;
-                constraints.gridx = 1;
-                resultCenterPanel.add(fillLabel1, constraints);
-
-                constraints.gridx = 2;
-                resultCenterPanel.add(roundLabel2, constraints);
-                labels[i - 1][1] = roundLabel2;
-
-                constraints.gridy++;
-                constraints.gridx = 0;
-                resultCenterPanel.add(pointsLabel1, constraints);
-                labels[i - 1][2] = pointsLabel1;
-                constraints.gridx = 1;
-                resultCenterPanel.add(fillLabel2, constraints);
-                constraints.gridx = 2;
-                resultCenterPanel.add(pointsLabel2, constraints);
-                labels[i - 1][3] = pointsLabel2;
-            }
-
-            playButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    out.println("ALL_Q_ANSWERED");
-                    resultFrame.dispose();
-                }
-            });
-            resultBottomPanel.add(playButton);
-            whosTurnText.setText("Motståndarens tur");
-
-
-            //labels[0][2].setText(String.valueOf(howManyPointsInRound));
-            //Behöver få tag på howManyPointsInRound från Client.QuestionGUI  <---
-
-        });
+        SwingUtilities.invokeLater(this::initializeGUI);
     }
 
-    public void disablePlayButton() {
-        playButton.setEnabled(false);
+    private void initializeGUI() {
+        JFrame resultFrame = new JFrame();
+        resultFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        resultFrame.setSize(640, 480);
+        resultFrame.setVisible(true);
+        resultFrame.setLocationRelativeTo(null);
+        resultFrame.setLayout(new GridLayout(0, 1));
+        resultFrame.setTitle(playerNr);
+
+        JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
+        resultLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        resultFrame.add(resultLabel, BorderLayout.CENTER);
+
+        // För att skapa lite mer space mellan komponenter
+        resultFrame.add(new JLabel());
+
+        JPanel playerNamesPanel = new JPanel(new GridLayout(1, 2));
+        JLabel player1Label = new JLabel("Player 1", SwingConstants.CENTER);
+        playerNamesPanel.add(player1Label);
+        JLabel player2Label = new JLabel("Player 2", SwingConstants.CENTER);
+        playerNamesPanel.add(player2Label);
+        resultFrame.add(playerNamesPanel);
+        resultFrame.add(new JLabel());
+
+        // Iterera genom rundor
+        for (int i = 0; i < Math.max(listWithPlayer1Points.length, listWithPlayer2Points.length); i++) {
+            JPanel panel = new JPanel(new GridLayout(2, 1));
+            JLabel roundLabel = new JLabel("Round " + (i + 1), SwingConstants.CENTER);
+            panel.add(roundLabel);
+
+            JPanel scorePanel = new JPanel(new GridLayout(1, 3));
+            JLabel player1ScoreLabel = new JLabel(getPointsForRound(listWithPlayer1Points, i), SwingConstants.CENTER);
+            JLabel player2ScoreLabel = new JLabel(getPointsForRound(listWithPlayer2Points, i), SwingConstants.CENTER);
+
+            scorePanel.add(player1ScoreLabel);
+            scorePanel.add(new JLabel("-", SwingConstants.CENTER));
+            scorePanel.add(player2ScoreLabel);
+            panel.add(scorePanel);
+
+            resultFrame.add(panel);
+            resultFrame.add(scorePanel);
+        }
+        resultFrame.add(new JLabel());
+    }
+
+    private String getPointsForRound(String[] points, int index) {
+        if (index >= 0 && index < points.length) {
+            return points[index];
+        }
+        return "";
+    }
+
+    public static void main(String[] args) {
+        String playerNr = "Player 1";
+        String[] player1Points = {"10", "15", "20"};
+        String[] player2Points = {"12", "18"};
+
+        ResultGUI resultGUI = new ResultGUI(playerNr, player1Points, player2Points);
     }
 }

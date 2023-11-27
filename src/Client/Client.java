@@ -96,12 +96,17 @@ public class Client implements ActionListener {
         String[] parts = message.split("\\-");
         return parts[1];
     }
+    public int getScore(String message) {
+        String[] parts = message.split("\\#");
+        return Integer.parseInt(parts[0]);
+    }
 
     public void startGame() {
         new Thread(() -> {
             try {
                 String fromServer;
                 String player;
+                int score;
 
                 while ((fromServer = in.readLine()) != null) {
                     System.out.println(fromServer);
@@ -118,20 +123,26 @@ public class Client implements ActionListener {
                         player = getPlayerNr(fromServer);
                         QuestionGUI questionGUI = new QuestionGUI(in, out, player);
 
-                    } else if (fromServer.startsWith("ALL_QUESTIONS_ANSWERED")) {
+                    } else if (fromServer.contains("OPEN_RESULT")) {
                         System.out.println(fromServer + " received in Client from ServerThr");
+                        score = getScore(fromServer);
                         player = getPlayerNr(fromServer);
-                        ResultGUI resultGUI = new ResultGUI(out, player);
+
+                        //esultGUI resultGUI = new ResultGUI(out, player, score);
 
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
                         player = getPlayerNr(fromServer);
                         QuestionGUI questionGUI = new QuestionGUI(in, out, player);
 
+
+                        //När spelare 1 är klar m sista rundan vore det bättre att personen hamnar i ett
+                        //väntrum, då behöver resultatet inte uppdateras när spelare 2 är klar.
                     } else if (fromServer.startsWith("GAME_FINISHED")) {
                         player = getPlayerNr(fromServer);
-                        ResultGUI resultGUI = new ResultGUI(out, player);
-                        resultGUI.disablePlayButton();
+                        score = getScore(fromServer);
+                       // esultGUI resultGUI = new ResultGUI(out, player, score);
+                        //resultGUI.disablePlayButton();
                     }
                 }
 
