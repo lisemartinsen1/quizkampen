@@ -33,8 +33,8 @@ public class ServerThreaded implements Runnable {
             in2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
             out2 = new PrintWriter(socket2.getOutputStream(), true);
 
-            out1.println("START"); //I Client anropas categoryUI.
-            out2.println("WAIT"); //I Client hamnar man i "väntrum"
+            out1.println("START-PLAYER1"); //I Client anropas categoryUI.
+            out2.println("WAIT-PLAYER2"); //I Client hamnar man i "väntrum"
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -49,19 +49,19 @@ public class ServerThreaded implements Runnable {
                 try {
                     while ((player1Message = in1.readLine()) != null) {
                         if (player1Message.startsWith("CATEGORY")) {
-                            out1.println("QUESTIONS");
+                            out1.println("QUESTIONS-PLAYER1");
                             sendNextQuestion(player1Message, out1);
 
                         } else if (player1Message.startsWith("NEXT_QUESTION")) {
                             sendNextQuestion(null, out1);
 
-                        }else if (player1Message.startsWith("OPEN_RESULT")){
-                            sendResponse("ALL_QUESTIONS_ANSWERED", out1);
+                        } else if (player1Message.startsWith("OPEN_RESULT")){
+                            sendResponse("ALL_QUESTIONS_ANSWERED-PLAYER1", out1);
 
-                        } else if (player1Message.contains("ALL_Q_ANSWERED")) {
+                        } else if (player1Message.contains("ALL_Q_ANSWERED")) { //Skickas från ResultGUI när spelaren har kollat klart på resultatet
                             sendResponse(player1Message, out1);
 
-                            out2.println("OPPONENT_DONE");
+                            out2.println("OPPONENT_DONE-PLAYER2");
                             sendPreviousQuestions();
                             break;
                         }
@@ -82,14 +82,13 @@ public class ServerThreaded implements Runnable {
                             sendNextQuestion(player2Message, out2);
 
                         } else if (player2Message.startsWith("OPEN_RESULT")) {
-                            sendResponse("ALL_QUESTIONS_ANSWERED", out2);
+                            sendResponse("ALL_QUESTIONS_ANSWERED-PLAYER2", out2);
 
                         } else if (player2Message.startsWith("GAME_FINISHED")) {
-                            out1.println("GAME_FINISHED");
-                            out2.println("GAME_FINISHED");
+                            out1.println("GAME_FINISHED-PLAYER1");
+                            out2.println("GAME_FINISHED-PLAYER2");
                         } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
-
-                            out1.println("START");
+                            out1.println("START-PLAYER1");
                             continue loop;
 
                         }

@@ -23,7 +23,6 @@ public class Client implements ActionListener {
     private JButton newGame = new JButton("Nytt Spel");
     private JButton quitGame = new JButton("Avsluta");
 
-
     PrintWriter out;
     BufferedReader in;
 
@@ -93,35 +92,45 @@ public class Client implements ActionListener {
 
     }
 
+    public String getPlayerNr(String message) {
+        String[] parts = message.split("\\-");
+        return parts[1];
+    }
 
     public void startGame() {
         new Thread(() -> {
             try {
                 String fromServer;
+                String player;
+
                 while ((fromServer = in.readLine()) != null) {
                     System.out.println(fromServer);
-                    if (fromServer.equals("START")) {
+
+                    if (fromServer.startsWith("START")) {
+                        player = getPlayerNr(fromServer);
                         mainFrame.dispose();
-                        CategoryGUI categoryGUI = new CategoryGUI(out);
+                        CategoryGUI categoryGUI = new CategoryGUI(out, player);
 
-                    } else if (fromServer.equals("WAIT")) {
-                        mainFrame.setTitle("Waiting for player to complete round...");
-
+                    } else if (fromServer.startsWith("WAIT")) {
+                        mainFrame.setTitle("PLAYER 2\tWaiting for player to complete round...");
 
                     } else if (fromServer.startsWith("QUESTIONS")) {
+                        player = getPlayerNr(fromServer);
+                        QuestionGUI questionGUI = new QuestionGUI(in, out, player);
 
-                        QuestionGUI questionGUI = new QuestionGUI(in, out);
-
-                    } else if (fromServer.equals("ALL_QUESTIONS_ANSWERED")) {
-                        System.out.println(fromServer + " received in Client from ServerThr"); //Kommer aldrig hit
-                        ResultGUI resultGUI = new ResultGUI(out);
+                    } else if (fromServer.startsWith("ALL_QUESTIONS_ANSWERED")) {
+                        System.out.println(fromServer + " received in Client from ServerThr");
+                        player = getPlayerNr(fromServer);
+                        ResultGUI resultGUI = new ResultGUI(out, player);
 
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
-                        QuestionGUI questionGUI = new QuestionGUI(in, out);
+                        player = getPlayerNr(fromServer);
+                        QuestionGUI questionGUI = new QuestionGUI(in, out, player);
 
                     } else if (fromServer.startsWith("GAME_FINISHED")) {
-                        ResultGUI resultGUI = new ResultGUI(out);
+                        player = getPlayerNr(fromServer);
+                        ResultGUI resultGUI = new ResultGUI(out, player);
                         resultGUI.disablePlayButton();
                     }
                 }

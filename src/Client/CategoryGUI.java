@@ -25,7 +25,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
     PrintWriter out;
 
 
-    public CategoryGUI(PrintWriter out) {
+    public CategoryGUI(PrintWriter out, String playerNr) {
         this.out = out;
         SwingUtilities.invokeLater(() -> {
             categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,7 +36,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryFrame.add(categoryTopPanel, BorderLayout.NORTH);
             categoryFrame.add(categoryPanel, BorderLayout.CENTER);
             categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
-
+            categoryFrame.setTitle(playerNr);
             categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
 
             categoryPanel.setLayout(new GridLayout(2, 2, 40, 40));

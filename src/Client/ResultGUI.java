@@ -20,9 +20,11 @@ public class ResultGUI extends JFrame {
     private JButton playButton = new JButton("Klar");
     PropertiesClass propertiesClass = new PropertiesClass();
     PrintWriter out;
+    String playerNr;
 
-    public ResultGUI(PrintWriter out){
+    public ResultGUI(PrintWriter out, String playerNr){
         this.out = out;
+        this.playerNr = playerNr;
 
         SwingUtilities.invokeLater(() -> {
             System.out.println("ResultGUI running...");
@@ -34,6 +36,7 @@ public class ResultGUI extends JFrame {
             resultFrame.add(resultUpperPanel, BorderLayout.NORTH);
             resultFrame.add(resultCenterPanel, BorderLayout.CENTER);
             resultFrame.add(resultBottomPanel, BorderLayout.SOUTH);
+            resultFrame.setTitle(playerNr);
 
             GridBagConstraints constraints = new GridBagConstraints();
             constraints.fill = GridBagConstraints.HORIZONTAL;

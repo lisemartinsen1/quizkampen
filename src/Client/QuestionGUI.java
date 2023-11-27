@@ -31,9 +31,11 @@ public class QuestionGUI extends JFrame implements ActionListener {
     BufferedReader in;
     PrintWriter out;
     int questionsPerRound;
-    public QuestionGUI(BufferedReader in, PrintWriter out) {
+    String playerNr;
+    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr) {
         this.in = in;
         this.out = out;
+        this.playerNr = playerNr;
 
         SwingUtilities.invokeLater(() -> {
             questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,7 +46,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
             questionsFrame.setLayout(new BorderLayout());
             questionsFrame.add(questionPanel, BorderLayout.NORTH);
             questionsFrame.add(answerPanel, BorderLayout.CENTER);
-
+            questionsFrame.setTitle(playerNr);
             bottomQuestionPanel.add(nextQuestionButton);
             nextQuestionButton.setEnabled(false);
             questionsFrame.add(bottomQuestionPanel, BorderLayout.SOUTH);
@@ -140,14 +142,13 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
                 if (currentRound == totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
                     out.println("GAME_FINISHED");
-                    out.println("OPEN_RESULT");
+                    System.out.println("GAME_FIN");
                     questionsFrame.dispose();
                 } else {
                     currentQuestion = 1; //Nollställer
                     currentRound++;
                     out.println("OPEN_RESULT");
                     out.flush();
-                    System.out.println("ALL_Q_ANSWERED sent from QuestionGUI"); //Vi kommer hit. Problemet ligger serverside
                     questionsFrame.dispose();
                 }
 
