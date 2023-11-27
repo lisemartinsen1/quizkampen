@@ -64,12 +64,10 @@ public class Client implements ActionListener {
 
 
         });
-    }
-    public void connectToServer() {
         try {
             Socket sock = new Socket("127.0.0.1", 12345);
-             out = new PrintWriter(sock.getOutputStream(), true);
-             in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+            out = new PrintWriter(sock.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -81,8 +79,6 @@ public class Client implements ActionListener {
     public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
 
         if (e.getSource() == newGame) {
-            connectToServer();
-            startGame();
             mainFrame.setTitle("Waiting for player...");
 
         } else if (e.getSource() == quitGame) {
@@ -93,6 +89,7 @@ public class Client implements ActionListener {
 
     public static void main(String[] args) {
         Client client = new Client();
+        client.startGame();
 
     }
 
@@ -110,15 +107,18 @@ public class Client implements ActionListener {
                     } else if (fromServer.equals("WAIT")) {
                         mainFrame.setTitle("Waiting for player to complete round...");
 
+
                     } else if (fromServer.startsWith("CATEGORY")) {
+
                         QuestionGUI questionGUI = new QuestionGUI(in, out);
 
                     } else if (fromServer.equals("ALL_Q_ANSWERED")) {
                         System.out.println(fromServer + " received in Client from ServerThr"); //Kommer aldrig hit
                         ResultGUI resultGUI = new ResultGUI();
 
-                    } else if (fromServer.equals("OPPONENT_DONE")) {
-                        mainFrame.setTitle("Opponent has answered all questions...");
+                    } else if (fromServer.startsWith("OPPONENT_DONE")) {
+                        mainFrame.dispose();
+                        QuestionGUI questionGUI = new QuestionGUI(in, out);
                     }
                 }
 

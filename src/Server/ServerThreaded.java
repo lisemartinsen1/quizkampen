@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServerThreaded implements Runnable {
 
@@ -15,17 +17,14 @@ public class ServerThreaded implements Runnable {
     private BufferedReader in1;
     private BufferedReader in2;
     Protocol protocol = new Protocol();
-    DAO dao = new DAO();
+    private String player1Message;
+    private String player2Message;
+    private List<String> listOfSentQuestions = new ArrayList<>();
 
     public ServerThreaded(Socket socket1, Socket socket2) {
         this.socket1 = socket1;
         this.socket2 = socket2;
 
-
-    }
-
-    @Override
-    public void run() {
         try {
             in1 = new BufferedReader(new InputStreamReader(socket1.getInputStream()));
             out1 = new PrintWriter(socket1.getOutputStream(), true);
@@ -36,42 +35,87 @@ public class ServerThreaded implements Runnable {
             out1.println("START"); //I Client anropas categoryUI.
             out2.println("WAIT"); //I Client hamnar man i "väntrum"
 
-            String player1Message;
-            String player2Message;
-
-            while ((player1Message = in1.readLine()) != null) {
-                if (player1Message.startsWith("CATEGORY")) {
-                    out1.println("CATEGORY");
-                    sendNextQuestion(player1Message, out1);
-
-                } else if (player1Message.startsWith("NEXT_QUESTION")) {
-                    sendNextQuestion(player1Message, out1);
-
-                } else if (player1Message.contains("ALL_Q_ANSWERED")) {
-                    sendResponse(player1Message, out1);
-
-                    System.out.println(player1Message + " received in ServerThreaded");
-                    out1.flush();
-
-
-                } else {
-                    sendResponse(player1Message, out1);
-                }
-
-            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+        @Override
+    public void run() {
+
+            loop:
+            while (true) {
+                try {
+                    while ((player1Message = in1.readLine()) != null) {
+                        if (player1Message.startsWith("CATEGORY")) {
+                            out1.println("CATEGORY");
+                            sendNextQuestion(player1Message, out1);
+
+
+                        } else if (player1Message.startsWith("NEXT_QUESTION")) {
+                            sendNextQuestion(player1Message, out1);
+
+                        } else if (player1Message.contains("ALL_Q_ANSWERED")) {
+                            sendResponse(player1Message, out1);
+
+
+                            out2.println("OPPONENT_DONE");
+                            sendPreviousQuestions();
+                            break;
+
+                        } else {
+                            sendResponse(player1Message, out1);
+                        }
+
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                try {
+                    while ((player2Message = in2.readLine()) != null) {
+
+                        if (player2Message.startsWith("NEXT_QUESTION")) {
+                            sendPreviousQuestions();
+
+                        } else if (player2Message.startsWith("CATEGORY")) {
+                            out2.println("CATEGORY");
+                            sendNextQuestion(player2Message, out2);
+
+                        } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
+                            sendResponse(player2Message, out2);
+
+
+                            out1.println("START");
+                            continue loop;
+                        }
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
     private void sendNextQuestion(String category, PrintWriter out) {
         String response = protocol.getOutput(category);
         out.println(response);
-        //out.flush();
+        addSentQuestionToList(response);
+
     }
 
     private void sendResponse(String message, PrintWriter out) {
         out.println(message);
         out.flush();
+    }
+    private void addSentQuestionToList(String message){
+        listOfSentQuestions.add(message);
+
+    }
+    private void sendPreviousQuestions(){
+        out2.println(listOfSentQuestions.get(0));
+        listOfSentQuestions.remove(0);
+
     }
 }

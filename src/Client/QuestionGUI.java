@@ -68,7 +68,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
         int questionsRead = 0;
         try {
             String fromServer;
+
             while (questionsRead < propertiesClass.getAmountOfQuestions() && (fromServer = in.readLine()) != null) {
+                System.out.println(fromServer);
                 String[] parts = fromServer.split("\\|");
                 if (parts.length == 2) {
                     String questionAndAnswersText = parts[0].trim();
