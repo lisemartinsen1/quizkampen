@@ -38,6 +38,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
             categoryFrame.setTitle(playerNr);
             categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
+            categoryFrame.requestFocus();
 
             categoryPanel.setLayout(new GridLayout(2, 2, 40, 40));
             categoryPanel.add(category1Button);

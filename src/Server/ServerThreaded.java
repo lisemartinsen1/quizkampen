@@ -53,15 +53,17 @@ public class ServerThreaded implements Runnable {
             while (true) {
                 try {
                     while ((player1Message = in1.readLine()) != null) {
-                        if (player1Message.startsWith("CATEGORY")) {
+                        if (player1Message.contains("CATEGORY")) {
                             out1.println("QUESTIONS");
                             sendNextQuestion(player1Message, out1);
 
-                        } else if (player1Message.startsWith("NEXT_QUESTION")) {
+                        } else if (player1Message.contains("NEXT_QUESTION")) {
                             sendNextQuestion(null, out1);
 
-                        }else if (player1Message.startsWith("OPEN_RESULT")){
-                            sendResponse("ALL_QUESTIONS_ANSWERED", out1);
+                        }else if (player1Message.contains("OPEN_RESULT")){
+                            String score = getScore(player1Message);
+                            listWithPlayer1Points = listWithPlayer1Points  +  score + ",";
+                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT", out1);
 
                         } else if (player1Message.contains("ALL_Q_ANSWERED")) { //Skickas från ResultGUI när spelaren har kollat klart på resultatet
                             sendResponse(player1Message, out1);
@@ -79,10 +81,10 @@ public class ServerThreaded implements Runnable {
                 try {
                     while ((player2Message = in2.readLine()) != null) {
 
-                        if (player2Message.startsWith("NEXT_QUESTION")) {
+                        if (player2Message.contains("NEXT_QUESTION")) {
                             sendPreviousQuestions();
 
-                        } else if (player2Message.startsWith("CATEGORY")) {
+                        } else if (player2Message.contains("CATEGORY")) {
                             out2.println("CATEGORY");
                             sendNextQuestion(player2Message, out2);
 
@@ -94,7 +96,7 @@ public class ServerThreaded implements Runnable {
                         } else if (player2Message.contains("GAME_FINISHED")) { //Här kan det bli fel.
                             out1.println(player2Message);
                             out2.println("GAME_FINISHED");
-                        } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
+                        } else if (player2Message.contains("ALL_Q_ANSWERED")) {
 
                             out1.println("START");
                             continue loop;

@@ -33,13 +33,12 @@ public class QuestionGUI extends JFrame implements ActionListener {
     PrintWriter out;
     int questionsPerRound;
     String playerNr;
-    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr) {
     private final int defaultTime = 15;
     int time;
     private JLabel timer = new JLabel("Timer");
     Thread timerThread;
 
-    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr) throws IOException {
+    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr) {
         this.in = in;
         this.out = out;
         this.playerNr = playerNr;
@@ -160,7 +159,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 timerThread.interrupt();
                 currentQuestion = 1; //Nollställer
                 currentRound++;
-                out.println("OPEN_RESULT");
+                out.println(scoreTracker + "#OPEN_RESULT");
                 out.flush();
                 System.out.println("ALL_Q_ANSWERED sent from QuestionGUI"); //Vi kommer hit. Problemet ligger serverside
                 questionsFrame.dispose();
