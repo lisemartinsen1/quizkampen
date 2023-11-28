@@ -35,8 +35,11 @@ public class ServerThreaded implements Runnable {
             in2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
             out2 = new PrintWriter(socket2.getOutputStream(), true);
 
-            out1.println("START-PLAYER1"); //I Client anropas categoryUI.
-            out2.println("WAIT-PLAYER2"); //I Client hamnar man i "väntrum"
+            out1.println("PLAYER1");
+            out2.println("PLAYER2");
+
+            out1.println("START"); //I Client anropas categoryUI.
+            out2.println("WAIT"); //I Client hamnar man i "väntrum"
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -51,7 +54,7 @@ public class ServerThreaded implements Runnable {
                 try {
                     while ((player1Message = in1.readLine()) != null) {
                         if (player1Message.startsWith("CATEGORY")) {
-                            out1.println("QUESTIONS-PLAYER1");
+                            out1.println("QUESTIONS");
                             sendNextQuestion(player1Message, out1);
 
                         } else if (player1Message.startsWith("NEXT_QUESTION")) {
@@ -60,12 +63,12 @@ public class ServerThreaded implements Runnable {
                         } else if (player1Message.contains("OPEN_RESULT")){
                             String score = getScore(player1Message);
                             listWithPlayer1Points += score + ","; //Kommer det orsaka problem i ResultGUI att "," ligger sist?
-                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT-PLAYER1", out1);
+                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT", out1);
 
                         } else if (player1Message.contains("ALL_Q_ANSWERED")) { //Skickas från ResultGUI när spelaren har kollat klart på resultatet
                             sendResponse(player1Message, out1);
 
-                            out2.println("OPPONENT_DONE-PLAYER2");
+                            out2.println("OPPONENT_DONE");
                             sendPreviousQuestions();
                             break;
                         }
@@ -88,13 +91,13 @@ public class ServerThreaded implements Runnable {
                         } else if (player2Message.contains("OPEN_RESULT")) {
                             String score = getScore(player2Message);
                             listWithPlayer2Points = listWithPlayer2Points  +  score + ",";
-                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT-PLAYER1", out2);
+                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT", out2);
 
                         } else if (player2Message.contains("GAME_FINISHED")) { //Här kan det bli fel.
-                            out1.println(player2Message + "-PLAYER1");
-                            out2.println("GAME_FINISHED-PLAYER2");
+                            out1.println(player2Message);
+                            out2.println("GAME_FINISHED");
                         } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
-                            out1.println("START-PLAYER1");
+                            out1.println("START");
                             continue loop;
 
                         }

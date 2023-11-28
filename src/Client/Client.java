@@ -25,12 +25,12 @@ public class Client implements ActionListener {
 
     PrintWriter out;
     BufferedReader in;
+    String player;
 
     PropertiesClass propertiesClass = new PropertiesClass();
 
     public Client() {
     //Gamla MainUI ligger nu i konstruktorn för Client.Client
-
 
         SwingUtilities.invokeLater(() -> {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,11 +92,6 @@ public class Client implements ActionListener {
 
     }
 
-    public String getPlayerNr(String message) {
-        String[] parts = message.split("\\-");
-        return parts[1];
-    }
-
     public String getScoreStr1(String message) {
         String[] parts = message.split("\\|");
         System.out.println(parts[0]);
@@ -113,7 +108,6 @@ public class Client implements ActionListener {
         new Thread(() -> {
             try {
                 String fromServer;
-                String player;
                 String scoreStr1;
                 String scoreStr2;
 
@@ -121,20 +115,20 @@ public class Client implements ActionListener {
                     System.out.println(fromServer);
 
                     if (fromServer.startsWith("START")) {
-                        player = getPlayerNr(fromServer);
                         mainFrame.dispose();
                         CategoryGUI categoryGUI = new CategoryGUI(out, player);
 
                     } else if (fromServer.startsWith("WAIT")) {
                         mainFrame.setTitle("PLAYER 2\tWaiting for player to complete round...");
 
+                    } else if (fromServer.startsWith("PLAYER")) {
+                        player = fromServer;
+
                     } else if (fromServer.startsWith("QUESTIONS")) {
-                        player = getPlayerNr(fromServer);
                         QuestionGUI questionGUI = new QuestionGUI(in, out, player);
 
                     } else if (fromServer.contains("OPEN_RESULT")) {
                         System.out.println(fromServer + " received in Client from ServerThr");
-                        player = getPlayerNr(fromServer);
 
                         scoreStr1 = getScoreStr1(fromServer);
                         scoreStr2 = getScoreStr2(fromServer);
@@ -143,14 +137,11 @@ public class Client implements ActionListener {
 
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
-                        player = getPlayerNr(fromServer);
                         QuestionGUI questionGUI = new QuestionGUI(in, out, player);
-
 
                         //När spelare 1 är klar m sista rundan vore det bättre att personen hamnar i ett
                         //väntrum, då behöver resultatet inte uppdateras när spelare 2 är klar.
                     } else if (fromServer.startsWith("GAME_FINISHED")) {
-                        player = getPlayerNr(fromServer);
 
                         ///score = getScore(fromServer);
                        // esultGUI resultGUI = new ResultGUI(out, player, score);
