@@ -15,13 +15,14 @@ import Server.PropertiesClass;
 public class ResultGUI extends JFrame {
     private JPanel resultBottomPanel = new JPanel();
     private JButton playButton = new JButton("Klar");
-    PrintWriter out;
-    String playerNr;
-    String[] listWithPlayer1Points;
-    String[] listWithPlayer2Points;
-    String strWithPlayer1Points;
-    String strWithPlayer2Points;
-    JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
+    private PrintWriter out;
+    private String playerNr;
+    private String[] listWithPlayer1Points;
+    private String[] listWithPlayer2Points;
+    private String strWithPlayer1Points;
+    private String strWithPlayer2Points;
+    private JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
+    private JButton close = new JButton("Stäng");
 
 
 
@@ -42,6 +43,7 @@ public class ResultGUI extends JFrame {
         resultFrame.setVisible(true);
         resultFrame.setLocationRelativeTo(null);
         resultFrame.setLayout(new GridLayout(0, 1));
+        resultFrame.setAlwaysOnTop(true);
         resultFrame.setTitle(playerNr);
         resultFrame.getContentPane().setBackground(new Color(255, 182, 193));
 
@@ -97,6 +99,13 @@ public class ResultGUI extends JFrame {
 
             }
         });
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            resultFrame.dispose();
+            }
+        });
+
     }
 
     private String getPointsForRound(String[] points, int index) {
@@ -151,4 +160,10 @@ public class ResultGUI extends JFrame {
             resultLabel.setText("DRAW");
         }
     }
+
+    public void disablePlayButton() {
+        playButton.setEnabled(false);
+        resultBottomPanel.add(close);
+    }
+
 }

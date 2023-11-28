@@ -79,8 +79,11 @@ public class ServerThreaded implements Runnable {
                             sendPreviousQuestions();
                             break;
                         } else if (player1Message.contains("GAME_FINISHED")) {
+
                             String score = getScore(player1Message);
                             listWithPlayer1Points = listWithPlayer1Points + score + ",";
+                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_LAST_RESULT", out1);
+
                             sendResponse("GAME_PLAYERONE_FINISHED" +"|" + currentRound, out2);
                             sendPreviousQuestions();
                             break;

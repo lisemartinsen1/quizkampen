@@ -188,8 +188,13 @@ public class Client implements ActionListener {
                         scoreStr2 = getScoreStr2(fromServer);
 
                         ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
+                    } else if (fromServer.contains("OPEN_LAST_RESULT")) {
+                        scoreStr1 = getScoreStr1(fromServer);
+                        scoreStr2 = getScoreStr2(fromServer);
 
-                    }if (fromServer.startsWith("OPPONENT_GAVE_UP")) {
+                        ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
+                        resultGUI.disablePlayButton();
+                }else if (fromServer.startsWith("OPPONENT_GAVE_UP")) {
                         SwingUtilities.invokeLater(() -> {
                             mainFrame.dispose();
                             JOptionPane.showMessageDialog(mainFrame, "Your opponent gave up. You win!");
@@ -215,6 +220,7 @@ public class Client implements ActionListener {
 
                      ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
                      resultGUI.showFinalResult();
+                     resultGUI.disablePlayButton();
                     }
                 }
 

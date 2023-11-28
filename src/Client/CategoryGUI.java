@@ -34,6 +34,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryFrame.setSize(640, 480);
             categoryFrame.setLayout(new BorderLayout());
             categoryFrame.setLocationRelativeTo(null);
+            categoryFrame.setAlwaysOnTop(true);
             categoryFrame.add(categoryTopPanel, BorderLayout.NORTH);
             categoryFrame.add(categoryPanel, BorderLayout.CENTER);
             categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
