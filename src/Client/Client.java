@@ -1,5 +1,4 @@
 package Client;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
 import Server.PropertiesClass;
 
 public class Client implements ActionListener {
@@ -33,7 +31,7 @@ public class Client implements ActionListener {
     PropertiesClass propertiesClass = new PropertiesClass();
 
     public Client() {
-        //Gamla MainUI ligger nu i konstruktorn för Client.Client
+    //Gamla MainUI ligger nu i konstruktorn för Client.Client
 
 
         SwingUtilities.invokeLater(() -> {
@@ -65,6 +63,7 @@ public class Client implements ActionListener {
             quitGame.addActionListener(this);
 
 
+
         });
         try {
             Socket sock = new Socket("127.0.0.1", 12345);
@@ -93,6 +92,38 @@ public class Client implements ActionListener {
         Client client = new Client();
         client.startGame();
 
+    }
+
+    private void resetMainFrame(){
+        mainFrame.getContentPane().removeAll();
+        mainFrame.repaint();
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setSize(640, 480);
+        mainFrame.setVisible(true);
+        mainFrame.setResizable(true);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setLayout(new BorderLayout());
+        mainFrame.add(titlePanel, BorderLayout.NORTH);
+        mainFrame.add(howManyPanel, BorderLayout.CENTER); //Varför hamnar den inte i mitten?
+        mainFrame.add(bottomPanel, BorderLayout.SOUTH);
+        howManyPanel.setLayout(new GridLayout(2, 1));
+        titlePanel.add(gameTitle);
+
+        propertiesClass.loadProperties();
+        int amountOfRounds = propertiesClass.getAmountOfRounds();
+        int amountOfQuestions = propertiesClass.getAmountOfQuestions();
+        howManyRounds.setText("Antal ronder: " + amountOfRounds);
+        howManyQuestions.setText("Antal frågor/rond: " + amountOfQuestions);
+
+        howManyPanel.add(howManyRounds);
+        howManyPanel.add(howManyQuestions);
+
+        bottomPanel.add(newGame);
+        bottomPanel.add(quitGame);
+
+        newGame.addActionListener(this);
+        quitGame.addActionListener(this);
+        mainFrame.revalidate();
     }
 
     public String getScoreStr1(String message) {
@@ -148,6 +179,14 @@ public class Client implements ActionListener {
 
                         ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
 
+                    }if (fromServer.startsWith("OPPONENT_GAVE_UP")) {
+                        SwingUtilities.invokeLater(() -> {
+                            mainFrame.dispose();
+                            JOptionPane.showMessageDialog(mainFrame, "Your opponent gave up. You win!");
+                            resetMainFrame();
+                            mainFrame.setVisible(true);
+                        });
+                        break;
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
                         QuestionGUI questionGUI = new QuestionGUI(in, out, player);
@@ -157,7 +196,7 @@ public class Client implements ActionListener {
                     } else if (fromServer.startsWith("GAME_FINISHED")) {
 
                         ///score = getScore(fromServer);
-                        // esultGUI resultGUI = new ResultGUI(out, player, score);
+                       // esultGUI resultGUI = new ResultGUI(out, player, score);
                         //resultGUI.disablePlayButton();
                     }
                 }
@@ -167,4 +206,4 @@ public class Client implements ActionListener {
             }
         }).start();
     }
-}
+    }
