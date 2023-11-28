@@ -24,6 +24,7 @@ public class Client implements ActionListener {
     private JButton quitGame = new JButton("Avsluta");
 
     private String namn;
+    private String time;
 
 
     PrintWriter out;
@@ -95,7 +96,6 @@ public class Client implements ActionListener {
 
     }
 
-
     public void startGame() {
         new Thread(() -> {
             try {
@@ -111,7 +111,6 @@ public class Client implements ActionListener {
 
 
                     } else if (fromServer.startsWith("QUESTIONS")) {
-
                         QuestionGUI questionGUI = new QuestionGUI(in, out, namn);
 
                     } else if (fromServer.equals("ALL_QUESTIONS_ANSWERED")) {

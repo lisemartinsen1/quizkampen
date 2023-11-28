@@ -54,10 +54,8 @@ public class ServerThreaded implements Runnable {
                         if (player1Message.startsWith("CATEGORY")) {
                             out1.println("QUESTIONS");
                             sendNextQuestion(player1Message, out1);
-
                         } else if (player1Message.startsWith("NEXT_QUESTION")) {
                             sendNextQuestion(null, out1);
-
                         }else if (player1Message.startsWith("OPEN_RESULT")){
                             sendResponse("ALL_QUESTIONS_ANSWERED", out1);
 
@@ -79,11 +77,9 @@ public class ServerThreaded implements Runnable {
 
                         if (player2Message.startsWith("NEXT_QUESTION")) {
                             sendPreviousQuestions();
-
                         } else if (player2Message.startsWith("CATEGORY")) {
                             out2.println("CATEGORY");
                             sendNextQuestion(player2Message, out2);
-
                         } else if (player2Message.startsWith("OPEN_RESULT")) {
                             sendResponse("ALL_QUESTIONS_ANSWERED", out2);
 
