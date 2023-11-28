@@ -24,10 +24,5 @@ public class PropertiesClass {
     public int getAmountOfQuestions() {
         return Integer.parseInt(properties.getProperty("amountOfQuestions", "2"));
     }
-    public int setAmountOfRounds(String amountOfRounds) {
-        return Integer.parseInt(properties.getProperty("amountOfRounds", amountOfRounds));
-    }
-    public int setAmountOfQuestions(String amountOfQuestions) {
-        return Integer.parseInt(properties.getProperty("amountOfQuestions", amountOfQuestions));
-    }
+
 }

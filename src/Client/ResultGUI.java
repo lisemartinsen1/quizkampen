@@ -19,11 +19,16 @@ public class ResultGUI extends JFrame {
     String strWithPlayer1Points;
     String strWithPlayer2Points;
 
+    Font font = new Font("Arial", Font.PLAIN, 16);
+    PropertiesClass propertiesClass = new PropertiesClass();
+
     public ResultGUI(PrintWriter out, String playerNr, String strWithPlayer1Points, String strWithPlayer2Points) {
         this.out = out;
         this.playerNr = playerNr;
         this.strWithPlayer1Points = strWithPlayer1Points;
         this.strWithPlayer2Points = strWithPlayer2Points;
+
+        propertiesClass.getAmountOfRounds();
 
         SwingUtilities.invokeLater(this::initializeGUI);
     }
@@ -37,7 +42,7 @@ public class ResultGUI extends JFrame {
         resultFrame.setLayout(new GridLayout(0, 1));
         resultFrame.setTitle(playerNr);
 
-        JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
+        JLabel resultLabel = new JLabel("RESULTAT", SwingConstants.CENTER);
         resultLabel.setFont(new Font("Arial", Font.BOLD, 24));
         resultFrame.add(resultLabel, BorderLayout.CENTER);
 
@@ -58,12 +63,15 @@ public class ResultGUI extends JFrame {
         // Iterera genom rundor
         for (int i = 0; i < Math.max(listWithPlayer1Points.length, listWithPlayer2Points.length); i++) {
             JPanel panel = new JPanel(new GridLayout(2, 1));
-            JLabel roundLabel = new JLabel("Round " + (i + 1), SwingConstants.CENTER);
+            JLabel roundLabel = new JLabel("Runda " + (i + 1), SwingConstants.CENTER);
+            roundLabel.setFont(new Font("Arial", Font.PLAIN, 18));
             panel.add(roundLabel);
 
             JPanel scorePanel = new JPanel(new GridLayout(1, 3));
             JLabel player1ScoreLabel = new JLabel(getPointsForRound(listWithPlayer1Points, i), SwingConstants.CENTER);
             JLabel player2ScoreLabel = new JLabel(getPointsForRound(listWithPlayer2Points, i), SwingConstants.CENTER);
+            player1ScoreLabel.setFont(font);
+            player2ScoreLabel.setFont(font);
 
             scorePanel.add(player1ScoreLabel);
             scorePanel.add(new JLabel("-", SwingConstants.CENTER));

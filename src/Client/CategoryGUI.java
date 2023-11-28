@@ -5,6 +5,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,8 +15,9 @@ public class CategoryGUI extends JFrame implements ActionListener {
 
     private JFrame categoryFrame = new JFrame();
     private JPanel categoryTopPanel = new JPanel();
-    private JLabel categoryTitle = new JLabel("Välj en kategori", SwingConstants.CENTER);
+    private JLabel categoryTitle = new JLabel("Välj Kategori :)", SwingConstants.CENTER);
     private JPanel categoryPanel = new JPanel();
+    private Font font = new Font("Arial", Font.BOLD, 16);
     private JButton category1Button = new JButton("Kategori 1");
     private JButton category2Button = new JButton("Teknik & Vetenskap");
     private JButton category3Button = new JButton("Sport");
@@ -24,7 +27,6 @@ public class CategoryGUI extends JFrame implements ActionListener {
     private JButton quitGame = new JButton("Avsluta");
     PrintWriter out;
     private JPanel scorePanel = new JPanel();
-
 
     public CategoryGUI(PrintWriter out, String playerNr, String scorePlayer1, String scorePlayer2) {
         this.out = out;
@@ -39,14 +41,23 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
             categoryFrame.setTitle(playerNr);
 
+            categoryTitle.setFont(new Font("Arial", Font.BOLD, 24));
+            category1Button.setFont(font);
+            category2Button.setFont(font);
+            category3Button.setFont(font);
+            category4Button.setFont(font);
+
             if (!scorePlayer1.isEmpty() || !scorePlayer2.isEmpty()) {
 
                 categoryTopPanel.setLayout(new GridLayout(0, 1));
                 categoryTopPanel.add(new JLabel());
                 categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
                 categoryTopPanel.add(new JLabel());
-                categoryTopPanel.add(new JLabel("Poäng Förra Rundan", SwingConstants.CENTER));
+                JLabel lastRound = new JLabel("Poäng Förra Rundan", SwingConstants.CENTER);
+                lastRound.setFont(new Font("Arial", Font.ITALIC, 14));
+                categoryTopPanel.add(lastRound);
                 categoryTopPanel.add(new JLabel());
+
                 JPanel player1player2 = new JPanel(new GridLayout(1, 3));
                 player1player2.add(new JLabel("Player 1", SwingConstants.CENTER));
                 player1player2.add(new JLabel(" "));
@@ -59,6 +70,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
                 scorePanel.add(new JLabel(scorePlayer2, SwingConstants.CENTER));
                 categoryTopPanel.add(scorePanel);
             } else {
+                categoryTopPanel.add(new JLabel());
                 categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
             }
             categoryPanel.setLayout(new GridLayout(2, 2, 40, 40));
@@ -83,9 +95,9 @@ public class CategoryGUI extends JFrame implements ActionListener {
 
             goBackButton.addActionListener(this);
             quitGame.addActionListener(this);
-
         });
     }
+
 
 
     @Override

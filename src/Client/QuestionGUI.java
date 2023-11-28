@@ -99,7 +99,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                     if (questionParts.length > 1) {
                         String questionTextfromServerToLabel = questionParts[1].trim();
                         SwingUtilities.invokeLater(() -> {
-                            questionText.setText(questionTextfromServerToLabel);
+                            questionText.setText("<html>" + questionTextfromServerToLabel + "<html>");
+                            questionText.setFont(new Font("Arial", Font.PLAIN, 16));
                         });
                     }
 

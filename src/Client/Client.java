@@ -1,5 +1,6 @@
 package Client;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,8 +23,8 @@ public class Client implements ActionListener {
     private JPanel bottomPanel = new JPanel();
     private JButton newGame = new JButton("Nytt Spel");
     private JButton quitGame = new JButton("Avsluta");
-
-
+    private Font font = new Font("Arial", Font.BOLD, 16);
+    EmptyBorder emptyBorder1 = new EmptyBorder(60, 60, 60, 60);
     PrintWriter out;
     BufferedReader in;
     String player;
@@ -32,7 +33,6 @@ public class Client implements ActionListener {
 
     public Client() {
     //Gamla MainUI ligger nu i konstruktorn för Client.Client
-
 
         SwingUtilities.invokeLater(() -> {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,25 +44,29 @@ public class Client implements ActionListener {
             mainFrame.add(titlePanel, BorderLayout.NORTH);
             mainFrame.add(howManyPanel, BorderLayout.CENTER); //Varför hamnar den inte i mitten?
             mainFrame.add(bottomPanel, BorderLayout.SOUTH);
-            howManyPanel.setLayout(new GridLayout(2, 1));
+
+            gameTitle.setFont(new Font("Arial", Font.BOLD, 28));
+            titlePanel.add(new JLabel());
             titlePanel.add(gameTitle);
 
+            howManyPanel.setLayout(new GridLayout(0, 1));
+            howManyPanel.setBorder(emptyBorder1);
             propertiesClass.loadProperties();
             int amountOfRounds = propertiesClass.getAmountOfRounds();
             int amountOfQuestions = propertiesClass.getAmountOfQuestions();
-            howManyRounds.setText("Antal ronder: " + amountOfRounds);
-            howManyQuestions.setText("Antal frågor/rond: " + amountOfQuestions);
-
-            howManyPanel.add(howManyRounds);
-            howManyPanel.add(howManyQuestions);
+            howManyRounds.setText("Ronder: " + amountOfRounds);
+            howManyQuestions.setText("Frågor / Rond: " + amountOfQuestions);
+            howManyRounds.setFont(font);
+            howManyQuestions.setFont(font);
+            howManyPanel.add(howManyRounds, SwingConstants.CENTER);
+            howManyPanel.add(howManyQuestions, SwingConstants.CENTER);
 
             bottomPanel.add(newGame);
             bottomPanel.add(quitGame);
+            bottomPanel.add(new JLabel(), BorderLayout.SOUTH);
 
             newGame.addActionListener(this);
             quitGame.addActionListener(this);
-
-
 
         });
         try {
@@ -94,6 +98,9 @@ public class Client implements ActionListener {
 
     }
 
+    /*
+    Istället för resetMainFram() kan ramen i Client() göras om till en metod som anropas
+     */
     private void resetMainFrame(){
         mainFrame.getContentPane().removeAll();
         mainFrame.repaint();
