@@ -5,7 +5,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.TextAttribute;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import Server.PropertiesClass;
 
@@ -40,6 +43,7 @@ public class ResultGUI extends JFrame {
         resultFrame.setLocationRelativeTo(null);
         resultFrame.setLayout(new GridLayout(0, 1));
         resultFrame.setTitle(playerNr);
+        resultFrame.getContentPane().setBackground(new Color(255, 182, 193));
 
         resultLabel.setFont(new Font("Arial", Font.BOLD, 24));
         resultFrame.add(resultLabel, BorderLayout.CENTER);
@@ -54,6 +58,7 @@ public class ResultGUI extends JFrame {
         playerNamesPanel.add(player2Label);
         resultFrame.add(playerNamesPanel);
         resultFrame.add(new JLabel());
+        playerNamesPanel.setBackground(new Color(255, 182, 193));
 
         listWithPlayer1Points = getArray(strWithPlayer1Points);
         listWithPlayer2Points = getArray(strWithPlayer2Points);
@@ -75,9 +80,12 @@ public class ResultGUI extends JFrame {
 
             resultFrame.add(panel);
             resultFrame.add(scorePanel);
+            panel.setBackground(new Color(255, 182, 193));
+            scorePanel.setBackground(new Color(255, 182, 193));
         }
         resultFrame.add(new JLabel());
         resultFrame.add(resultBottomPanel);
+        resultBottomPanel.setBackground(new Color(255, 182, 193));
         resultBottomPanel.add(playButton);
 
         playButton.addActionListener(new ActionListener() {
@@ -122,27 +130,25 @@ public class ResultGUI extends JFrame {
         if (sumPlayer1 > sumPlayer2) {
             if (playerNr.equals("PLAYER1")) {
                 resultLabel.setText("YOU WIN");
+                resultLabel.setForeground(new Color(0, 128, 0));
+
             } else {
                 resultLabel.setText("YOU LOSE");
+                resultLabel.setForeground(new Color(128, 0, 0));
+
             }
-            System.out.println("Player 1 has a higher score: " + sumPlayer1);
         } else if (sumPlayer1 < sumPlayer2) {
             if (playerNr.equals("PLAYER2")) {
                 resultLabel.setText("YOU WIN");
+                resultLabel.setForeground(new Color(0, 128, 0));
+
             } else {
                 resultLabel.setText("YOU LOSE");
+                resultLabel.setForeground(new Color(128, 0, 0));
+
             }
-            System.out.println("Player 2 has a higher score: " + sumPlayer2);
         } else {
             resultLabel.setText("DRAW");
-            System.out.println("Both players have the same score: " + sumPlayer1);
         }
-
-
-
-        System.out.println("Spelare 1 poäng: " +strWithPlayer1Points);
-        System.out.println("Spelare 2 poäng: " +strWithPlayer2Points);
-
-
     }
 }
