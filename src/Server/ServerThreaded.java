@@ -107,8 +107,11 @@ public class ServerThreaded implements Runnable {
                             out1.println(player2Message);
                             out2.println("GAME_FINISHED");
                         } else if (player2Message.contains("ALL_Q_ANSWERED")) {
+                            pointsThisRoundPlayer1 = getScoreForCurrentRound(listWithPlayer1Points);
+                            pointsThisRoundPlayer2 = getScoreForCurrentRound(listWithPlayer2Points);
 
-                            out1.println("START");
+                            out1.println(pointsThisRoundPlayer1 +"|"+ pointsThisRoundPlayer2 +"|" + "START");
+                            System.out.println(pointsThisRoundPlayer2 + pointsThisRoundPlayer1);
                             continue loop;
 
                         }
@@ -130,6 +133,7 @@ public class ServerThreaded implements Runnable {
 
     public String getScore(String message) {
         String[] parts = message.split("\\#");
+        System.out.println(parts[0]);
         return parts[0];
     }
 
