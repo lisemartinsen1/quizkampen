@@ -32,6 +32,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
     BufferedReader in;
     PrintWriter out;
     int questionsPerRound;
+    private final int defaultTime = 15;
     int time;
     private JLabel timer = new JLabel("Timer");
 
@@ -69,7 +70,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 button.addActionListener(this);
             });
         });
-        time = 5;
+        time = defaultTime;
         new Thread(this::Timer).start();
         readFromServer();
     }
@@ -157,7 +158,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
         } else {
             out.println("NEXT_QUESTION");
-            time = 5;
+            time = defaultTime;
             answerOne.setBackground(null);
             answerTwo.setBackground(null);
             answerThree.setBackground(null);
@@ -175,13 +176,12 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 answerPanel.add(button);
             });
         }
-
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-
             if (e.getSource() == nextQuestionButton) {
-                nextQuestionButton.setEnabled(false);
+                ToNextQuestion();
+                /*nextQuestionButton.setEnabled(false);
                 propertiesClass.loadProperties();
                 int totalRounds = propertiesClass.getAmountOfRounds();
                 questionsPerRound = propertiesClass.getAmountOfQuestions();
@@ -205,7 +205,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
                 } else {
                     out.println("NEXT_QUESTION");
-                    time = 5;
+                    time = defaultTime;
                     answerOne.setBackground(null);
                     answerTwo.setBackground(null);
                     answerThree.setBackground(null);
@@ -222,7 +222,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                     answerButtons.forEach(button -> {
                         answerPanel.add(button);
                     });
-                }
+                }*/
 
             } else if (e.getSource() == answerOne) {
                 answerOne.setBackground(Color.RED);
