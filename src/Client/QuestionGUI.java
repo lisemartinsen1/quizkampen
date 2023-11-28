@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
 
 public class QuestionGUI extends JFrame implements ActionListener {
     private JFrame questionsFrame = new JFrame();
@@ -33,6 +34,12 @@ public class QuestionGUI extends JFrame implements ActionListener {
     int questionsPerRound;
     String playerNr;
     public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr) {
+    private final int defaultTime = 15;
+    int time;
+    private JLabel timer = new JLabel("Timer");
+    Thread timerThread;
+
+    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr) throws IOException {
         this.in = in;
         this.out = out;
         this.playerNr = playerNr;
@@ -47,6 +54,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
             questionsFrame.add(questionPanel, BorderLayout.NORTH);
             questionsFrame.add(answerPanel, BorderLayout.CENTER);
             questionsFrame.setTitle(playerNr);
+
+            bottomQuestionPanel.add(timer);
             bottomQuestionPanel.add(nextQuestionButton);
             nextQuestionButton.setEnabled(false);
             questionsFrame.add(bottomQuestionPanel, BorderLayout.SOUTH);
@@ -65,6 +74,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
             });
 
         });
+        time = defaultTime;
+        timerThread = new Thread(this::Timer);
+        timerThread.start();
         readFromServer();
     }
     public void readFromServer(){
@@ -74,6 +86,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
             while (questionsRead < propertiesClass.getAmountOfQuestions() && (fromServer = in.readLine()) != null) {
                 System.out.println(fromServer);
+
                 String[] parts = fromServer.split("\\|");
                 if (parts.length == 2) {
                     String questionAndAnswersText = parts[0].trim();
@@ -122,101 +135,123 @@ public class QuestionGUI extends JFrame implements ActionListener {
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
     }
+    private void ToNextQuestion() {
 
+        nextQuestionButton.setEnabled(false);
+        propertiesClass.loadProperties();
+        int totalRounds = propertiesClass.getAmountOfRounds();
+        questionsPerRound = propertiesClass.getAmountOfQuestions();
+
+        currentQuestion++;
+
+        if (currentQuestion > questionsPerRound) {
+
+            if (currentRound == totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
+                timerThread.interrupt();
+                out.println("GAME_FINISHED");
+                out.println("OPEN_RESULT");
+                questionsFrame.dispose();
+            } else {
+                timerThread.interrupt();
+                currentQuestion = 1; //Nollställer
+                currentRound++;
+                out.println("OPEN_RESULT");
+                out.flush();
+                System.out.println("ALL_Q_ANSWERED sent from QuestionGUI"); //Vi kommer hit. Problemet ligger serverside
+                questionsFrame.dispose();
+            }
+
+        } else {
+            out.println("NEXT_QUESTION");
+            time = defaultTime;
+            answerOne.setBackground(null);
+            answerTwo.setBackground(null);
+            answerThree.setBackground(null);
+            answerFour.setBackground(null);
+
+            answerOne.setEnabled(true);
+            answerTwo.setEnabled(true);
+            answerThree.setEnabled(true);
+            answerFour.setEnabled(true);
+
+            Collections.shuffle(answerButtons);
+
+            answerButtons.forEach(button -> {
+                answerPanel.add(button);
+            });
+        }
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == nextQuestionButton) {
-            nextQuestionButton.setEnabled(false);
-            propertiesClass.loadProperties();
-            int totalRounds = propertiesClass.getAmountOfRounds();
-            questionsPerRound = propertiesClass.getAmountOfQuestions();
+            if (e.getSource() == nextQuestionButton) {
+                ToNextQuestion();
 
-            currentQuestion++;
-
-            if (currentQuestion > questionsPerRound) {
-
-                if (currentRound == totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
-                    out.println(scoreTracker + "#GAME_FINISHED");
-                    System.out.println("GAME_FIN");
-                    questionsFrame.dispose();
-                } else {
-                    currentQuestion = 1; //Nollställer
-                    currentRound++;
-                    out.println(scoreTracker + "#OPEN_RESULT");
-                    out.flush();
-                    questionsFrame.dispose();
+            } else if (e.getSource() == answerOne) {
+                answerOne.setBackground(Color.RED);
+                answerOne.setEnabled(false);
+                answerTwo.setEnabled(false);
+                answerThree.setEnabled(false);
+                answerFour.setEnabled(false);
+                nextQuestionButton.setEnabled(true);
+                if (currentQuestion == questionsPerRound) {
+                    nextQuestionButton.setText("Visa resultat");
                 }
 
-            } else {
-                out.println("NEXT_QUESTION");
-                answerOne.setBackground(null);
-                answerTwo.setBackground(null);
-                answerThree.setBackground(null);
-                answerFour.setBackground(null);
+            } else if (e.getSource() == answerTwo) {
+                answerTwo.setBackground(Color.RED);
+                answerOne.setEnabled(false);
+                answerTwo.setEnabled(false);
+                answerThree.setEnabled(false);
+                answerFour.setEnabled(false);
+                nextQuestionButton.setEnabled(true);
+                if (currentQuestion == questionsPerRound) {
+                    nextQuestionButton.setText("Visa resultat");
+                }
 
-                answerOne.setEnabled(true);
-                answerTwo.setEnabled(true);
-                answerThree.setEnabled(true);
-                answerFour.setEnabled(true);
+            } else if (e.getSource() == answerThree) {
+                answerThree.setBackground(Color.RED);
+                answerOne.setEnabled(false);
+                answerTwo.setEnabled(false);
+                answerThree.setEnabled(false);
+                answerFour.setEnabled(false);
+                nextQuestionButton.setEnabled(true);
+                if (currentQuestion == questionsPerRound) {
+                    nextQuestionButton.setText("Visa resultat");
+                }
 
-                System.out.println("Nuvarande Poäng i rundan: " + scoreTracker);
-                Collections.shuffle(answerButtons);
+            } else if (e.getSource() == answerFour) {
+                answerFour.setBackground(Color.GREEN);
+                answerOne.setEnabled(false);
+                answerTwo.setEnabled(false);
+                answerThree.setEnabled(false);
+                answerFour.setEnabled(false);
+                nextQuestionButton.setEnabled(true);
+                if (currentQuestion == questionsPerRound) {
+                    nextQuestionButton.setText("Visa resultat");
+                }
 
-                answerButtons.forEach(button -> {
-                    answerPanel.add(button);
-                });
+                scoreTracker++;
             }
-
-        } else if (e.getSource() == answerOne) {
-            answerOne.setBackground(Color.RED);
-            answerOne.setEnabled(false);
-            answerTwo.setEnabled(false);
-            answerThree.setEnabled(false);
-            answerFour.setEnabled(false);
-            nextQuestionButton.setEnabled(true);
-            if (currentQuestion == questionsPerRound) {
-                nextQuestionButton.setText("Visa resultat");
+    }
+    private void Timer() {
+        try {
+            while (time >= -1) {
+                SwingUtilities.invokeLater(() -> {
+                            timer.setText("Timer: " + time);
+                        });
+                Thread.sleep(1000);
+                time--;
+                if (time == -1) {
+                    ToNextQuestion();
+                }
             }
-
-        } else if (e.getSource() == answerTwo) {
-            answerTwo.setBackground(Color.RED);
-            answerOne.setEnabled(false);
-            answerTwo.setEnabled(false);
-            answerThree.setEnabled(false);
-            answerFour.setEnabled(false);
-            nextQuestionButton.setEnabled(true);
-            if (currentQuestion == questionsPerRound) {
-                nextQuestionButton.setText("Visa resultat");
-            }
-
-        } else if (e.getSource() == answerThree) {
-            answerThree.setBackground(Color.RED);
-            answerOne.setEnabled(false);
-            answerTwo.setEnabled(false);
-            answerThree.setEnabled(false);
-            answerFour.setEnabled(false);
-            nextQuestionButton.setEnabled(true);
-            if (currentQuestion == questionsPerRound) {
-                nextQuestionButton.setText("Visa resultat");
-            }
-
-        } else if (e.getSource() == answerFour) {
-            answerFour.setBackground(Color.GREEN);
-            answerOne.setEnabled(false);
-            answerTwo.setEnabled(false);
-            answerThree.setEnabled(false);
-            answerFour.setEnabled(false);
-            nextQuestionButton.setEnabled(true);
-            if (currentQuestion == questionsPerRound) {
-                nextQuestionButton.setText("Visa resultat");
-            }
-
-            scoreTracker++;
+        } catch (InterruptedException e) {
+            System.out.println("Timed out!");
         }
     }
 }

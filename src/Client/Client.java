@@ -23,6 +23,7 @@ public class Client implements ActionListener {
     private JButton newGame = new JButton("Nytt Spel");
     private JButton quitGame = new JButton("Avsluta");
 
+
     PrintWriter out;
     BufferedReader in;
     String player;
@@ -31,6 +32,7 @@ public class Client implements ActionListener {
 
     public Client() {
     //Gamla MainUI ligger nu i konstruktorn för Client.Client
+
 
         SwingUtilities.invokeLater(() -> {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

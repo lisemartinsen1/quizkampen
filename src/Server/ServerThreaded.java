@@ -60,10 +60,8 @@ public class ServerThreaded implements Runnable {
                         } else if (player1Message.startsWith("NEXT_QUESTION")) {
                             sendNextQuestion(null, out1);
 
-                        } else if (player1Message.contains("OPEN_RESULT")){
-                            String score = getScore(player1Message);
-                            listWithPlayer1Points += score + ","; //Kommer det orsaka problem i ResultGUI att "," ligger sist?
-                            sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT", out1);
+                        }else if (player1Message.startsWith("OPEN_RESULT")){
+                            sendResponse("ALL_QUESTIONS_ANSWERED", out1);
 
                         } else if (player1Message.contains("ALL_Q_ANSWERED")) { //Skickas från ResultGUI när spelaren har kollat klart på resultatet
                             sendResponse(player1Message, out1);
@@ -97,6 +95,7 @@ public class ServerThreaded implements Runnable {
                             out1.println(player2Message);
                             out2.println("GAME_FINISHED");
                         } else if (player2Message.startsWith("ALL_Q_ANSWERED")) {
+
                             out1.println("START");
                             continue loop;
 
