@@ -94,6 +94,38 @@ public class Client implements ActionListener {
 
     }
 
+    private void resetMainFrame(){
+        mainFrame.getContentPane().removeAll();
+        mainFrame.repaint();
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setSize(640, 480);
+        mainFrame.setVisible(true);
+        mainFrame.setResizable(true);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setLayout(new BorderLayout());
+        mainFrame.add(titlePanel, BorderLayout.NORTH);
+        mainFrame.add(howManyPanel, BorderLayout.CENTER); //Varför hamnar den inte i mitten?
+        mainFrame.add(bottomPanel, BorderLayout.SOUTH);
+        howManyPanel.setLayout(new GridLayout(2, 1));
+        titlePanel.add(gameTitle);
+
+        propertiesClass.loadProperties();
+        int amountOfRounds = propertiesClass.getAmountOfRounds();
+        int amountOfQuestions = propertiesClass.getAmountOfQuestions();
+        howManyRounds.setText("Antal ronder: " + amountOfRounds);
+        howManyQuestions.setText("Antal frågor/rond: " + amountOfQuestions);
+
+        howManyPanel.add(howManyRounds);
+        howManyPanel.add(howManyQuestions);
+
+        bottomPanel.add(newGame);
+        bottomPanel.add(quitGame);
+
+        newGame.addActionListener(this);
+        quitGame.addActionListener(this);
+        mainFrame.revalidate();
+    }
+
     public String getScoreStr1(String message) {
         String[] parts = message.split("\\|");
         System.out.println(parts[0]);
@@ -115,7 +147,6 @@ public class Client implements ActionListener {
 
                 while ((fromServer = in.readLine()) != null) {
                     System.out.println(fromServer);
-
                     if (fromServer.startsWith("START")) {
                         mainFrame.dispose();
                         CategoryGUI categoryGUI = new CategoryGUI(out, player);
@@ -137,6 +168,14 @@ public class Client implements ActionListener {
 
                         ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
 
+                    }if (fromServer.startsWith("OPPONENT_GAVE_UP")) {
+                        SwingUtilities.invokeLater(() -> {
+                            mainFrame.dispose();
+                            JOptionPane.showMessageDialog(mainFrame, "Your opponent gave up. You win!");
+                            resetMainFrame();
+                            mainFrame.setVisible(true);
+                        });
+                        break;
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
                         QuestionGUI questionGUI = new QuestionGUI(in, out, player);

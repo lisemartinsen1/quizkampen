@@ -24,6 +24,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
     private JButton answerThree = new JButton("Svar tre");
     private JButton answerFour = new JButton("Svar fyra");
     private JButton nextQuestionButton = new JButton("Nästa Fråga");
+    private JButton giveUpButton = new JButton("Give Up");
     private List<JButton> answerButtons;
     PropertiesClass propertiesClass = new PropertiesClass();
     private int currentRound = 1;
@@ -53,6 +54,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
             questionsFrame.add(questionPanel, BorderLayout.NORTH);
             questionsFrame.add(answerPanel, BorderLayout.CENTER);
             questionsFrame.setTitle(playerNr);
+            giveUpButton.addActionListener(this);
+            bottomQuestionPanel.add(giveUpButton);
+
 
             bottomQuestionPanel.add(timer);
             bottomQuestionPanel.add(nextQuestionButton);
@@ -236,6 +240,15 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
                 scoreTracker++;
             }
+        if (e.getSource() == giveUpButton) {
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "Are you sure you want to give up?",
+                    "Confirm Give Up", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                out.println("GIVE_UP-" + playerNr);
+                questionsFrame.dispose();
+            }
+        }
     }
     private void Timer() {
         try {

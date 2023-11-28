@@ -57,7 +57,11 @@ public class ServerThreaded implements Runnable {
                             out1.println("QUESTIONS");
                             sendNextQuestion(player1Message, out1);
 
-                        } else if (player1Message.contains("NEXT_QUESTION")) {
+                        } else if (player1Message.startsWith("GIVE_UP"))  {
+                            handleGiveUp(player1Message, out1, out2);
+                            break;
+                            
+                        }  else if (player1Message.contains("NEXT_QUESTION")) {
                             sendNextQuestion(null, out1);
 
                         }else if (player1Message.contains("OPEN_RESULT")){
@@ -88,7 +92,11 @@ public class ServerThreaded implements Runnable {
                             out2.println("CATEGORY");
                             sendNextQuestion(player2Message, out2);
 
-                        } else if (player2Message.contains("OPEN_RESULT")) {
+                        } else if (player2Message.startsWith("GIVE_UP")) {
+                            handleGiveUp(player2Message, out2, out1);
+                            break;
+
+                        }else if (player2Message.contains("OPEN_RESULT")) {
                             String score = getScore(player2Message);
                             listWithPlayer2Points = listWithPlayer2Points  +  score + ",";
                             sendResponse( listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "OPEN_RESULT", out2);
@@ -133,5 +141,8 @@ public class ServerThreaded implements Runnable {
         out2.println(listOfSentQuestions.get(0));
         listOfSentQuestions.remove(0);
 
+    }
+    private void handleGiveUp(String message, PrintWriter playerOut, PrintWriter opponentOut) {
+        opponentOut.println("OPPONENT_GAVE_UP");
     }
 }
