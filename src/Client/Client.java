@@ -1,4 +1,5 @@
 package Client;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import Server.PropertiesClass;
 
 public class Client implements ActionListener {
@@ -31,7 +33,7 @@ public class Client implements ActionListener {
     PropertiesClass propertiesClass = new PropertiesClass();
 
     public Client() {
-    //Gamla MainUI ligger nu i konstruktorn för Client.Client
+        //Gamla MainUI ligger nu i konstruktorn för Client.Client
 
 
         SwingUtilities.invokeLater(() -> {
@@ -61,7 +63,6 @@ public class Client implements ActionListener {
 
             newGame.addActionListener(this);
             quitGame.addActionListener(this);
-
 
 
         });
@@ -112,13 +113,23 @@ public class Client implements ActionListener {
                 String fromServer;
                 String scoreStr1;
                 String scoreStr2;
+                String scoreLastRound = "";
+                String scoreLastRound2 = "";
 
                 while ((fromServer = in.readLine()) != null) {
                     System.out.println(fromServer);
 
-                    if (fromServer.startsWith("START")) {
-                        mainFrame.dispose();
-                        CategoryGUI categoryGUI = new CategoryGUI(out, player);
+                    if (fromServer.contains("START")) {
+
+                        if (fromServer.equals("START")) {
+                            mainFrame.dispose();
+                            CategoryGUI categoryGUI = new CategoryGUI(out, player, "", "");
+                        } else {
+                            scoreStr1 = getScoreStr1(fromServer);
+                            scoreStr2 = getScoreStr2(fromServer);
+                            mainFrame.dispose();
+                            CategoryGUI categoryGUI = new CategoryGUI(out, player, scoreStr1, scoreStr2);
+                        }
 
                     } else if (fromServer.startsWith("WAIT")) {
                         mainFrame.setTitle("PLAYER 2\tWaiting for player to complete round...");
@@ -146,7 +157,7 @@ public class Client implements ActionListener {
                     } else if (fromServer.startsWith("GAME_FINISHED")) {
 
                         ///score = getScore(fromServer);
-                       // esultGUI resultGUI = new ResultGUI(out, player, score);
+                        // esultGUI resultGUI = new ResultGUI(out, player, score);
                         //resultGUI.disablePlayButton();
                     }
                 }
@@ -156,4 +167,4 @@ public class Client implements ActionListener {
             }
         }).start();
     }
-    }
+}

@@ -13,7 +13,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
 
     private JFrame categoryFrame = new JFrame();
     private JPanel categoryTopPanel = new JPanel();
-    private JLabel categoryTitle = new JLabel("Välj en kategori");
+    private JLabel categoryTitle = new JLabel("Välj en kategori", SwingConstants.CENTER);
     private JPanel categoryPanel = new JPanel();
     private JButton category1Button = new JButton("Kategori 1");
     private JButton category2Button = new JButton("Teknik & Vetenskap");
@@ -23,9 +23,10 @@ public class CategoryGUI extends JFrame implements ActionListener {
     private JButton goBackButton = new JButton("Gå Tillbaka");
     private JButton quitGame = new JButton("Avsluta");
     PrintWriter out;
+    private JPanel scorePanel = new JPanel();
 
 
-    public CategoryGUI(PrintWriter out, String playerNr) {
+    public CategoryGUI(PrintWriter out, String playerNr, String scorePlayer1, String scorePlayer2) {
         this.out = out;
         SwingUtilities.invokeLater(() -> {
             categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,15 +38,34 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryFrame.add(categoryPanel, BorderLayout.CENTER);
             categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
             categoryFrame.setTitle(playerNr);
-            categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
-            categoryFrame.requestFocus();
 
+            if (!scorePlayer1.isEmpty() || !scorePlayer2.isEmpty()) {
+
+                categoryTopPanel.setLayout(new GridLayout(0, 1));
+                categoryTopPanel.add(new JLabel());
+                categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
+                categoryTopPanel.add(new JLabel());
+                categoryTopPanel.add(new JLabel("Poäng Förra Rundan", SwingConstants.CENTER));
+                categoryTopPanel.add(new JLabel());
+                JPanel player1player2 = new JPanel(new GridLayout(1, 3));
+                player1player2.add(new JLabel("Player 1", SwingConstants.CENTER));
+                player1player2.add(new JLabel(" "));
+                player1player2.add(new JLabel("Player 2", SwingConstants.CENTER));
+
+                categoryTopPanel.add(player1player2);
+                scorePanel.setLayout(new GridLayout(1, 3));
+                scorePanel.add(new JLabel(scorePlayer1, SwingConstants.CENTER));
+                scorePanel.add(new JLabel("-", SwingConstants.CENTER));
+                scorePanel.add(new JLabel(scorePlayer2, SwingConstants.CENTER));
+                categoryTopPanel.add(scorePanel);
+            } else {
+                categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
+            }
             categoryPanel.setLayout(new GridLayout(2, 2, 40, 40));
             categoryPanel.add(category1Button);
             categoryPanel.add(category2Button);
             categoryPanel.add(category3Button);
             categoryPanel.add(category4Button);
-            //categoryPanel.setSize(400, 300);
 
             EmptyBorder emptyBorder1 = new EmptyBorder(60, 60, 60, 60);
             categoryPanel.setBorder(emptyBorder1);
