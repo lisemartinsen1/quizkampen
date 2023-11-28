@@ -35,6 +35,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
     private final int defaultTime = 15;
     int time;
     private JLabel timer = new JLabel("Timer");
+    Thread timerThread;
 
     public QuestionGUI(BufferedReader in, PrintWriter out, String namn) throws IOException {
         this.in = in;
@@ -71,7 +72,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
             });
         });
         time = defaultTime;
-        new Thread(this::Timer).start();
+        timerThread = new Thread(this::Timer);
+        timerThread.start();
         readFromServer();
     }
     public void readFromServer(){
@@ -144,10 +146,12 @@ public class QuestionGUI extends JFrame implements ActionListener {
         if (currentQuestion > questionsPerRound) {
 
             if (currentRound == totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
+                timerThread.interrupt();
                 out.println("GAME_FINISHED");
                 out.println("OPEN_RESULT");
                 questionsFrame.dispose();
             } else {
+                timerThread.interrupt();
                 currentQuestion = 1; //Nollställer
                 currentRound++;
                 out.println("OPEN_RESULT");
@@ -284,7 +288,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 }
             }
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Timed out!");
         }
     }
 }
