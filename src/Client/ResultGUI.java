@@ -18,12 +18,16 @@ public class ResultGUI extends JFrame {
     String[] listWithPlayer2Points;
     String strWithPlayer1Points;
     String strWithPlayer2Points;
+    JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
+
+
 
     public ResultGUI(PrintWriter out, String playerNr, String strWithPlayer1Points, String strWithPlayer2Points) {
         this.out = out;
         this.playerNr = playerNr;
         this.strWithPlayer1Points = strWithPlayer1Points;
         this.strWithPlayer2Points = strWithPlayer2Points;
+
 
         SwingUtilities.invokeLater(this::initializeGUI);
     }
@@ -37,7 +41,6 @@ public class ResultGUI extends JFrame {
         resultFrame.setLayout(new GridLayout(0, 1));
         resultFrame.setTitle(playerNr);
 
-        JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
         resultLabel.setFont(new Font("Arial", Font.BOLD, 24));
         resultFrame.add(resultLabel, BorderLayout.CENTER);
 
@@ -99,6 +102,47 @@ public class ResultGUI extends JFrame {
         return s.split(",");
     }
     public void showFinalResult() {
-        playButton.setVisible(false);
+        playButton.setEnabled(false);
+        String[] listWithPlayer1 = getArray(strWithPlayer1Points);
+        String[] listWithPlayer2 = getArray(strWithPlayer2Points);
+
+        int sumPlayer1 = 0;
+        int sumPlayer2 = 0;
+
+        for (int i = 0; i < listWithPlayer1.length; i++) {
+            int intValue = Integer.parseInt(listWithPlayer1[i]);
+
+            sumPlayer1 += intValue;
+        }
+        for (int i = 0; i < listWithPlayer2.length; i++) {
+            int intValue = Integer.parseInt(listWithPlayer2[i]);
+
+            sumPlayer2 += intValue;
+        }
+        if (sumPlayer1 > sumPlayer2) {
+            if (playerNr.equals("PLAYER1")) {
+                resultLabel.setText("YOU WIN");
+            } else {
+                resultLabel.setText("YOU LOSE");
+            }
+            System.out.println("Player 1 has a higher score: " + sumPlayer1);
+        } else if (sumPlayer1 < sumPlayer2) {
+            if (playerNr.equals("PLAYER2")) {
+                resultLabel.setText("YOU WIN");
+            } else {
+                resultLabel.setText("YOU LOSE");
+            }
+            System.out.println("Player 2 has a higher score: " + sumPlayer2);
+        } else {
+            resultLabel.setText("DRAW");
+            System.out.println("Both players have the same score: " + sumPlayer1);
+        }
+
+
+
+        System.out.println("Spelare 1 poäng: " +strWithPlayer1Points);
+        System.out.println("Spelare 2 poäng: " +strWithPlayer2Points);
+
+
     }
 }
