@@ -80,8 +80,10 @@ public class ResultGUI extends JFrame {
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 out.println("ALL_Q_ANSWERED");
                 resultFrame.dispose();
+
             }
         });
     }
@@ -96,17 +98,7 @@ public class ResultGUI extends JFrame {
     private String[] getArray(String s) {
         return s.split(",");
     }
-    public void disablePlayButton() {
-        playButton.setEnabled(false);
+    public void showFinalResult() {
+        playButton.setVisible(false);
     }
-/*
-    public static void main(String[] args) {
-        String playerNr = "Player 1";
-        String player1Points = "10,15,20";
-        String player2Points = "12,18";
-
-        ResultGUI resultGUI = new ResultGUI(playerNr, player1Points, player2Points);
-    }
-
- */
 }

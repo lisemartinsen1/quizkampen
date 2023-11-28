@@ -39,10 +39,11 @@ public class QuestionGUI extends JFrame implements ActionListener {
     private JLabel timer = new JLabel("Timer");
     Thread timerThread;
 
-    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr) {
+    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr, String currentRound) {
         this.in = in;
         this.out = out;
         this.playerNr = playerNr;
+        this.currentRound = Integer.parseInt(currentRound);
 
         SwingUtilities.invokeLater(() -> {
             questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -156,8 +157,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
             if (currentRound == totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
                 timerThread.interrupt();
-                out.println("GAME_FINISHED");
-                out.println("OPEN_RESULT");
+                out.println(scoreTracker +"#GAME_FINISHED");
                 questionsFrame.dispose();
             } else {
                 timerThread.interrupt();
@@ -203,6 +203,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setEnabled(true);
                 if (currentQuestion == questionsPerRound) {
                     nextQuestionButton.setText("Visa resultat");
+                    System.out.println(currentRound);
+
                 }
 
             } else if (e.getSource() == answerTwo) {
@@ -214,6 +216,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setEnabled(true);
                 if (currentQuestion == questionsPerRound) {
                     nextQuestionButton.setText("Visa resultat");
+                    System.out.println(currentRound);
+
                 }
 
             } else if (e.getSource() == answerThree) {
@@ -225,6 +229,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setEnabled(true);
                 if (currentQuestion == questionsPerRound) {
                     nextQuestionButton.setText("Visa resultat");
+                    System.out.println(currentRound);
+
                 }
 
             } else if (e.getSource() == answerFour) {
@@ -236,6 +242,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setEnabled(true);
                 if (currentQuestion == questionsPerRound) {
                     nextQuestionButton.setText("Visa resultat");
+                    System.out.println(currentRound);
+
                 }
 
                 scoreTracker++;
