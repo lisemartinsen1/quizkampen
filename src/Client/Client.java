@@ -61,10 +61,10 @@ public class Client implements ActionListener {
 
             newGame.addActionListener(this);
             quitGame.addActionListener(this);
-
-
-
         });
+
+    }
+    public void connectToServer() {
         try {
             Socket sock = new Socket("127.0.0.1", 12345);
             out = new PrintWriter(sock.getOutputStream(), true);
@@ -80,7 +80,10 @@ public class Client implements ActionListener {
     public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
 
         if (e.getSource() == newGame) {
+            connectToServer();
+            startGame();
             mainFrame.setTitle("Waiting for player...");
+            newGame.setEnabled(false);
 
         } else if (e.getSource() == quitGame) {
             System.exit(0);
@@ -90,7 +93,6 @@ public class Client implements ActionListener {
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.startGame();
 
     }
 
