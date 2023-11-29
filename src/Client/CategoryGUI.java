@@ -22,6 +22,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
     private final JPanel categoryBottomPanel = new JPanel();
     private final JButton goBackButton = new JButton("Gå Tillbaka");
     private final JButton quitGame = new JButton("Avsluta");
+    private final JLabel lastRound = new JLabel("Poäng Förra Rundan", SwingConstants.CENTER);
     private final Font font = new Font("Arial", Font.BOLD, 16);
     PrintWriter out;
     private final JPanel scorePanel = new JPanel();
@@ -32,7 +33,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(() -> {
             categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             categoryFrame.setVisible(true);
-            categoryFrame.setSize(640, 480);
+            categoryFrame.setSize(640, 600);
             categoryFrame.setLayout(new BorderLayout());
             categoryFrame.setLocationRelativeTo(null);
             categoryFrame.setAlwaysOnTop(true);
@@ -53,7 +54,8 @@ public class CategoryGUI extends JFrame implements ActionListener {
                 categoryTopPanel.add(new JLabel());
                 categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
                 categoryTopPanel.add(new JLabel());
-                categoryTopPanel.add(new JLabel("Poäng Förra Rundan", SwingConstants.CENTER));
+                lastRound.setFont(new Font("Arial", Font.ITALIC, 14));
+                categoryTopPanel.add(lastRound, BorderLayout.CENTER);
                 categoryTopPanel.add(new JLabel());
                 JPanel player1player2 = new JPanel(new GridLayout(1, 3));
                 player1player2.add(new JLabel("Player 1", SwingConstants.CENTER));
@@ -74,7 +76,6 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryPanel.add(category2Button);
             categoryPanel.add(category3Button);
             categoryPanel.add(category4Button);
-            //categoryPanel.setSize(400, 300);
 
             EmptyBorder emptyBorder1 = new EmptyBorder(60, 60, 60, 60);
             categoryPanel.setBorder(emptyBorder1);

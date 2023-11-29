@@ -21,8 +21,8 @@ public class ResultGUI extends JFrame {
     private final String strWithPlayer2Points;
     private final JLabel resultLabel = new JLabel("RESULTAT", SwingConstants.CENTER);
     private final JButton close = new JButton("Stäng");
-    private final Font font = new Font("Arial", Font.PLAIN, 16);
-
+    private final Font font = new Font("Arial", Font.BOLD, 16);
+    private final Font font2 = new Font("Arial", Font.PLAIN, 16);
 
 
     public ResultGUI(PrintWriter out, String playerNr, String strWithPlayer1Points, String strWithPlayer2Points) {
@@ -52,8 +52,10 @@ public class ResultGUI extends JFrame {
 
         JPanel playerNamesPanel = new JPanel(new GridLayout(1, 2));
         JLabel player1Label = new JLabel("Player 1", SwingConstants.CENTER);
-        playerNamesPanel.add(player1Label);
         JLabel player2Label = new JLabel("Player 2", SwingConstants.CENTER);
+        player1Label.setFont(font);
+        player2Label.setFont(font);
+        playerNamesPanel.add(player1Label);
         playerNamesPanel.add(player2Label);
         resultFrame.add(playerNamesPanel);
         resultFrame.add(new JLabel());
@@ -65,14 +67,18 @@ public class ResultGUI extends JFrame {
         for (int i = 0; i < Math.max(listWithPlayer1Points.length, listWithPlayer2Points.length); i++) {
             JPanel panel = new JPanel(new GridLayout(2, 1));
             JLabel roundLabel = new JLabel("Runda " + (i + 1), SwingConstants.CENTER);
+            roundLabel.setFont(font2);
             panel.add(roundLabel);
 
             JPanel scorePanel = new JPanel(new GridLayout(1, 3));
             JLabel player1ScoreLabel = new JLabel(getPointsForRound(listWithPlayer1Points, i), SwingConstants.CENTER);
             JLabel player2ScoreLabel = new JLabel(getPointsForRound(listWithPlayer2Points, i), SwingConstants.CENTER);
-
+            player1ScoreLabel.setFont(font);
+            player2ScoreLabel.setFont(font);
+            JLabel sign = new JLabel("-", SwingConstants.CENTER);
+            sign.setFont(font);
             scorePanel.add(player1ScoreLabel);
-            scorePanel.add(new JLabel("-", SwingConstants.CENTER));
+            scorePanel.add(sign);
             scorePanel.add(player2ScoreLabel);
             panel.add(scorePanel);
 
