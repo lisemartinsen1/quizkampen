@@ -22,11 +22,15 @@ public class CategoryGUI extends JFrame implements ActionListener {
     private JPanel categoryBottomPanel = new JPanel();
     private JButton goBackButton = new JButton("Gå Tillbaka");
     private JButton quitGame = new JButton("Avsluta");
+
     PrintWriter out;
 
+    String namn;
 
-    public CategoryGUI(PrintWriter out) {
+
+    public CategoryGUI(PrintWriter out, String namn) {
         this.out = out;
+        this.namn = namn;
         SwingUtilities.invokeLater(() -> {
             categoryFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             categoryFrame.setVisible(true);
@@ -36,6 +40,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryFrame.add(categoryTopPanel, BorderLayout.NORTH);
             categoryFrame.add(categoryPanel, BorderLayout.CENTER);
             categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
+            categoryFrame.setTitle(namn);
 
             categoryTopPanel.add(categoryTitle, BorderLayout.CENTER);
 

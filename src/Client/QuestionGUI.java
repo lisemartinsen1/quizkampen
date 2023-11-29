@@ -36,10 +36,16 @@ public class QuestionGUI extends JFrame implements ActionListener {
     int time;
     private JLabel timer = new JLabel("Timer");
     Thread timerThread;
+    Color background;
+    Color font;
 
-    public QuestionGUI(BufferedReader in, PrintWriter out, String namn) throws IOException {
+    Font fontOp = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+
+    public QuestionGUI(BufferedReader in, PrintWriter out, String namn, Color background, Color font) throws IOException {
         this.in = in;
         this.out = out;
+        this.background = background;
+        this.font = font;
 
 
         SwingUtilities.invokeLater(() -> {
@@ -60,6 +66,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
             nextQuestionButton.addActionListener(this);
 
             questionPanel.add(questionText);
+            questionPanel.setBackground(Color.WHITE);
+            questionPanel.setPreferredSize(new Dimension(640, 200));
             answerPanel.setLayout(new GridLayout(2, 2));
 
             answerButtons = Arrays.asList(answerOne, answerTwo, answerThree, answerFour);
@@ -68,6 +76,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
             answerButtons.forEach(button -> {
                 answerPanel.add(button);
+                button.setBackground(background);
+                button.setForeground(font);
+                button.setFont(fontOp);
                 button.addActionListener(this);
             });
         });
@@ -90,7 +101,9 @@ public class QuestionGUI extends JFrame implements ActionListener {
                     if (questionParts.length > 1) {
                         String questionTextfromServerToLabel = questionParts[1].trim();
                         SwingUtilities.invokeLater(() -> {
-                            questionText.setText(questionTextfromServerToLabel);
+                            questionText.setText("<html>"+questionTextfromServerToLabel+"</html>");
+                            pack();
+                            questionText.setFont(fontOp);
                         });
                     }
 
@@ -163,10 +176,14 @@ public class QuestionGUI extends JFrame implements ActionListener {
         } else {
             out.println("NEXT_QUESTION");
             time = defaultTime;
-            answerOne.setBackground(null);
-            answerTwo.setBackground(null);
-            answerThree.setBackground(null);
-            answerFour.setBackground(null);
+            answerOne.setBackground(background);
+            answerTwo.setBackground(background);
+            answerThree.setBackground(background);
+            answerFour.setBackground(background);
+            answerOne.setForeground(font);
+            answerTwo.setForeground(font);
+            answerThree.setForeground(font);
+            answerFour.setForeground(font);
 
             answerOne.setEnabled(true);
             answerTwo.setEnabled(true);
