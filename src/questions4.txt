@@ -1,5 +1,5 @@
 QUESTION Vem var USA:s första president?
-ANSWERS RIGHT_ANSWER George Washington
+ANSWERS RIGHT_ANSWER George Washington, Adam Sandler, Barack Obama, Nils Eriksson
 QUESTION Vilken romersk kejsare gav kristendomen status som en tillåten religion i Romarriket?
 ANSWERS RIGHT_ANSWER Konstantin den store, Julius Caesar, Augustus, Nero
 QUESTION Vilket år slutade första världskriget?

@@ -5,25 +5,33 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.TextAttribute;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import Server.PropertiesClass;
 
 public class ResultGUI extends JFrame {
     private JPanel resultBottomPanel = new JPanel();
     private JButton playButton = new JButton("Klar");
-    PrintWriter out;
-    String playerNr;
-    String[] listWithPlayer1Points;
-    String[] listWithPlayer2Points;
-    String strWithPlayer1Points;
-    String strWithPlayer2Points;
+    private PrintWriter out;
+    private String playerNr;
+    private String[] listWithPlayer1Points;
+    private String[] listWithPlayer2Points;
+    private String strWithPlayer1Points;
+    private String strWithPlayer2Points;
+    private JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
+    private JButton close = new JButton("Stäng");
+
+
 
     public ResultGUI(PrintWriter out, String playerNr, String strWithPlayer1Points, String strWithPlayer2Points) {
         this.out = out;
         this.playerNr = playerNr;
         this.strWithPlayer1Points = strWithPlayer1Points;
         this.strWithPlayer2Points = strWithPlayer2Points;
+
 
         SwingUtilities.invokeLater(this::initializeGUI);
     }
@@ -35,9 +43,10 @@ public class ResultGUI extends JFrame {
         resultFrame.setVisible(true);
         resultFrame.setLocationRelativeTo(null);
         resultFrame.setLayout(new GridLayout(0, 1));
+        resultFrame.setAlwaysOnTop(true);
         resultFrame.setTitle(playerNr);
+        resultFrame.getContentPane().setBackground(new Color(255, 182, 193));
 
-        JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
         resultLabel.setFont(new Font("Arial", Font.BOLD, 24));
         resultFrame.add(resultLabel, BorderLayout.CENTER);
 
@@ -51,6 +60,7 @@ public class ResultGUI extends JFrame {
         playerNamesPanel.add(player2Label);
         resultFrame.add(playerNamesPanel);
         resultFrame.add(new JLabel());
+        playerNamesPanel.setBackground(new Color(255, 182, 193));
 
         listWithPlayer1Points = getArray(strWithPlayer1Points);
         listWithPlayer2Points = getArray(strWithPlayer2Points);
@@ -72,18 +82,30 @@ public class ResultGUI extends JFrame {
 
             resultFrame.add(panel);
             resultFrame.add(scorePanel);
+            panel.setBackground(new Color(255, 182, 193));
+            scorePanel.setBackground(new Color(255, 182, 193));
         }
         resultFrame.add(new JLabel());
         resultFrame.add(resultBottomPanel);
+        resultBottomPanel.setBackground(new Color(255, 182, 193));
         resultBottomPanel.add(playButton);
 
         playButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 out.println("ALL_Q_ANSWERED");
                 resultFrame.dispose();
+
             }
         });
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            resultFrame.dispose();
+            }
+        });
+
     }
 
     private String getPointsForRound(String[] points, int index) {
@@ -96,17 +118,52 @@ public class ResultGUI extends JFrame {
     private String[] getArray(String s) {
         return s.split(",");
     }
+    public void showFinalResult() {
+        playButton.setEnabled(false);
+        String[] listWithPlayer1 = getArray(strWithPlayer1Points);
+        String[] listWithPlayer2 = getArray(strWithPlayer2Points);
+
+        int sumPlayer1 = 0;
+        int sumPlayer2 = 0;
+
+        for (int i = 0; i < listWithPlayer1.length; i++) {
+            int intValue = Integer.parseInt(listWithPlayer1[i]);
+
+            sumPlayer1 += intValue;
+        }
+        for (int i = 0; i < listWithPlayer2.length; i++) {
+            int intValue = Integer.parseInt(listWithPlayer2[i]);
+
+            sumPlayer2 += intValue;
+        }
+        if (sumPlayer1 > sumPlayer2) {
+            if (playerNr.equals("PLAYER1")) {
+                resultLabel.setText("YOU WIN");
+                resultLabel.setForeground(new Color(0, 128, 0));
+
+            } else {
+                resultLabel.setText("YOU LOSE");
+                resultLabel.setForeground(new Color(128, 0, 0));
+
+            }
+        } else if (sumPlayer1 < sumPlayer2) {
+            if (playerNr.equals("PLAYER2")) {
+                resultLabel.setText("YOU WIN");
+                resultLabel.setForeground(new Color(0, 128, 0));
+
+            } else {
+                resultLabel.setText("YOU LOSE");
+                resultLabel.setForeground(new Color(128, 0, 0));
+
+            }
+        } else {
+            resultLabel.setText("DRAW");
+        }
+    }
+
     public void disablePlayButton() {
         playButton.setEnabled(false);
-    }
-/*
-    public static void main(String[] args) {
-        String playerNr = "Player 1";
-        String player1Points = "10,15,20";
-        String player2Points = "12,18";
-
-        ResultGUI resultGUI = new ResultGUI(playerNr, player1Points, player2Points);
+        resultBottomPanel.add(close);
     }
 
- */
 }

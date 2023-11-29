@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
 
 public class QuestionGUI extends JFrame implements ActionListener {
     private JFrame questionsFrame = new JFrame();
@@ -27,7 +26,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
     private JButton giveUpButton = new JButton("Give Up");
     private List<JButton> answerButtons;
     PropertiesClass propertiesClass = new PropertiesClass();
-    private int currentRound = 1;
+    private int currentRound;
     private int currentQuestion = 1;
     private int scoreTracker;
     BufferedReader in;
@@ -37,12 +36,14 @@ public class QuestionGUI extends JFrame implements ActionListener {
     private final int defaultTime = 15;
     int time;
     private JLabel timer = new JLabel("Timer");
-    Thread timerThread;
+    private Thread timerThread;
+    private int totalRounds;
 
-    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr) {
+    public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr, String currentRound) {
         this.in = in;
         this.out = out;
         this.playerNr = playerNr;
+        this.currentRound = Integer.parseInt(currentRound);
 
         SwingUtilities.invokeLater(() -> {
             questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,6 +82,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
         timerThread = new Thread(this::Timer);
         timerThread.start();
         readFromServer();
+
     }
     public void readFromServer(){
         int questionsRead = 0;
@@ -147,7 +149,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
         nextQuestionButton.setEnabled(false);
         propertiesClass.loadProperties();
-        int totalRounds = propertiesClass.getAmountOfRounds();
+        totalRounds = propertiesClass.getAmountOfRounds();
         questionsPerRound = propertiesClass.getAmountOfQuestions();
 
         currentQuestion++;
@@ -155,18 +157,18 @@ public class QuestionGUI extends JFrame implements ActionListener {
         if (currentQuestion > questionsPerRound) {
 
             if (currentRound == totalRounds) { //Kommer currentRound någonsin bli större än totalRounds?
-                timerThread.interrupt();
-                out.println("GAME_FINISHED");
-                out.println("OPEN_RESULT");
+
+                out.println(scoreTracker +"#GAME_FINISHED");
                 questionsFrame.dispose();
-            } else {
                 timerThread.interrupt();
+            } else {
+
                 currentQuestion = 1; //Nollställer
-                currentRound++;
                 out.println(scoreTracker + "#OPEN_RESULT");
                 out.flush();
                 System.out.println("ALL_Q_ANSWERED sent from QuestionGUI"); //Vi kommer hit. Problemet ligger serverside
                 questionsFrame.dispose();
+                timerThread.interrupt();
             }
 
         } else {
@@ -204,6 +206,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setEnabled(true);
                 if (currentQuestion == questionsPerRound) {
                     nextQuestionButton.setText("Visa resultat");
+                    System.out.println(currentRound);
+
                 }
 
             } else if (e.getSource() == answerTwo) {
@@ -216,6 +220,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setEnabled(true);
                 if (currentQuestion == questionsPerRound) {
                     nextQuestionButton.setText("Visa resultat");
+                    System.out.println(currentRound);
+
                 }
 
             } else if (e.getSource() == answerThree) {
@@ -228,6 +234,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setEnabled(true);
                 if (currentQuestion == questionsPerRound) {
                     nextQuestionButton.setText("Visa resultat");
+                    System.out.println(currentRound);
+
                 }
 
             } else if (e.getSource() == answerFour) {
@@ -239,6 +247,8 @@ public class QuestionGUI extends JFrame implements ActionListener {
                 nextQuestionButton.setEnabled(true);
                 if (currentQuestion == questionsPerRound) {
                     nextQuestionButton.setText("Visa resultat");
+                    System.out.println(currentRound);
+
                 }
 
                 scoreTracker++;
@@ -269,4 +279,5 @@ public class QuestionGUI extends JFrame implements ActionListener {
             System.out.println("Timed out!");
         }
     }
+
 }

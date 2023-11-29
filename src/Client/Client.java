@@ -22,7 +22,7 @@ public class Client implements ActionListener {
     private JPanel bottomPanel = new JPanel();
     private JButton newGame = new JButton("Nytt Spel");
     private JButton quitGame = new JButton("Avsluta");
-
+    private String currentRound;
 
     PrintWriter out;
     BufferedReader in;
@@ -61,10 +61,10 @@ public class Client implements ActionListener {
 
             newGame.addActionListener(this);
             quitGame.addActionListener(this);
-
-
-
         });
+
+    }
+    public void connectToServer() {
         try {
             Socket sock = new Socket("127.0.0.1", 12345);
             out = new PrintWriter(sock.getOutputStream(), true);
@@ -80,7 +80,10 @@ public class Client implements ActionListener {
     public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
 
         if (e.getSource() == newGame) {
+            connectToServer();
+            startGame();
             mainFrame.setTitle("Waiting for player...");
+            newGame.setEnabled(false);
 
         } else if (e.getSource() == quitGame) {
             System.exit(0);
@@ -90,7 +93,6 @@ public class Client implements ActionListener {
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.startGame();
 
     }
 
@@ -138,14 +140,19 @@ public class Client implements ActionListener {
         return parts[1];
     }
 
+    public String getCurrentRound(String message){
+        String[] parts = message.split("\\|");
+        System.out.println(parts[1]);
+        return parts[1];
+
+    }
     public void startGame() {
         new Thread(() -> {
             try {
                 String fromServer;
                 String scoreStr1;
                 String scoreStr2;
-                String scoreLastRound = "";
-                String scoreLastRound2 = "";
+
 
                 while ((fromServer = in.readLine()) != null) {
                     System.out.println(fromServer);
@@ -169,7 +176,10 @@ public class Client implements ActionListener {
                         player = fromServer;
 
                     } else if (fromServer.startsWith("QUESTIONS")) {
-                        QuestionGUI questionGUI = new QuestionGUI(in, out, player);
+                        currentRound = getCurrentRound(fromServer);
+
+                        QuestionGUI questionGUI = new QuestionGUI(in, out, player, currentRound);
+
 
                     } else if (fromServer.contains("OPEN_RESULT")) {
                         System.out.println(fromServer + " received in Client from ServerThr");
@@ -178,8 +188,13 @@ public class Client implements ActionListener {
                         scoreStr2 = getScoreStr2(fromServer);
 
                         ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
+                    } else if (fromServer.contains("OPEN_LAST_RESULT")) {
+                        scoreStr1 = getScoreStr1(fromServer);
+                        scoreStr2 = getScoreStr2(fromServer);
 
-                    }if (fromServer.startsWith("OPPONENT_GAVE_UP")) {
+                        ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
+                        resultGUI.disablePlayButton();
+                }else if (fromServer.startsWith("OPPONENT_GAVE_UP")) {
                         SwingUtilities.invokeLater(() -> {
                             mainFrame.dispose();
                             JOptionPane.showMessageDialog(mainFrame, "Your opponent gave up. You win!");
@@ -189,15 +204,23 @@ public class Client implements ActionListener {
                         break;
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
                         mainFrame.dispose();
-                        QuestionGUI questionGUI = new QuestionGUI(in, out, player);
+                        currentRound = getCurrentRound(fromServer);
+                        QuestionGUI questionGUI = new QuestionGUI(in, out, player, currentRound);
 
                         //När spelare 1 är klar m sista rundan vore det bättre att personen hamnar i ett
                         //väntrum, då behöver resultatet inte uppdateras när spelare 2 är klar.
-                    } else if (fromServer.startsWith("GAME_FINISHED")) {
+                    } else if (fromServer.startsWith("GAME_PLAYERONE_FINISHED")) {
+                        mainFrame.dispose();
+                        currentRound = getCurrentRound(fromServer);
+                        QuestionGUI questionGUI = new QuestionGUI(in, out, player, currentRound);
 
-                        ///score = getScore(fromServer);
-                       // esultGUI resultGUI = new ResultGUI(out, player, score);
-                        //resultGUI.disablePlayButton();
+                } else if (fromServer.contains("GAME_FINISHED")) {
+                        scoreStr1 = getScoreStr1(fromServer);
+                        scoreStr2 = getScoreStr2(fromServer);
+
+                     ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
+                     resultGUI.showFinalResult();
+                     resultGUI.disablePlayButton();
                     }
                 }
 
