@@ -196,6 +196,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == answerOne) {
                 answerOne.setBackground(Color.RED);
+                answerFour.setBackground(Color.GREEN);
                 answerOne.setEnabled(false);
                 answerTwo.setEnabled(false);
                 answerThree.setEnabled(false);
@@ -207,6 +208,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == answerTwo) {
                 answerTwo.setBackground(Color.RED);
+                answerFour.setBackground(Color.GREEN);
                 answerOne.setEnabled(false);
                 answerTwo.setEnabled(false);
                 answerThree.setEnabled(false);
@@ -218,6 +220,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == answerThree) {
                 answerThree.setBackground(Color.RED);
+                answerFour.setBackground(Color.GREEN);
                 answerOne.setEnabled(false);
                 answerTwo.setEnabled(false);
                 answerThree.setEnabled(false);
