@@ -1,4 +1,5 @@
 package Client;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,47 +10,41 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import Server.PropertiesClass;
 
 public class Client implements ActionListener {
-    private int howManyPointsInRound;
-    private JFrame mainFrame = new JFrame("Quizkampen");
-
+    private final JFrame mainFrame = new JFrame("Quizkampen");
     ImageIcon imgIcon = new ImageIcon("src/Pics/Banner.jpg");
-    private Font mainFrameFont = new Font("Ariel", Font.ITALIC, 45);
-
-    private JPanel titlePanel = new JPanel();
-    private JLabel gameTitle = new JLabel("Quizkampen");
-    private JPanel howManyPanel = new JPanel();
-    private JPanel amountOfRoundPanel = new JPanel();
-    private JPanel colorPanel = new JPanel();
-    private JPanel colorInsideColorPanel = new JPanel();
-    private JLabel bgColor = new JLabel("Välj bakgrundsfärg:");
-    private JLabel fColor = new JLabel("Välj font färg:");
+    private final JPanel titlePanel = new JPanel();
+    private final JLabel gameTitle = new JLabel();
+    private final JPanel howManyPanel = new JPanel();
+    private final JPanel amountOfRoundPanel = new JPanel();
+    private final JPanel colorPanel = new JPanel();
+    private final JPanel colorInsideColorPanel = new JPanel();
+    private final JLabel bgColor = new JLabel("Välj bakgrundsfärg:");
+    private final JLabel fColor = new JLabel("Välj font färg:");
     private Color backgroundColor = Color.white;
     private Color fontColor = Color.BLACK;
-    private JPanel examplePanel = new JPanel();
-    private JLabel exampleText = new JLabel("Example");
+    private final JPanel examplePanel = new JPanel();
+    private final JLabel exampleText = new JLabel("Exempel");
 
-    private JLabel howManyRounds = new JLabel();
-    private JLabel howManyQuestions = new JLabel();
-    private JPanel bottomPanel = new JPanel();
-    private JButton newGame = new JButton("Nytt Spel");
-    private JButton quitGame = new JButton("Avsluta");
+    private final JLabel howManyRounds = new JLabel();
+    private final JLabel howManyQuestions = new JLabel();
+    private final JPanel bottomPanel = new JPanel();
+    private final JButton newGame = new JButton("Nytt Spel");
+    private final JButton quitGame = new JButton("Avsluta");
 
-    private JComboBox<String> colorChoose = new JComboBox<>();
-    private JComboBox<String> fontColorChoose = new JComboBox<>();
+    private final JComboBox<String> colorChoose = new JComboBox<>();
+    private final JComboBox<String> fontColorChoose = new JComboBox<>();
     private String currentRound;
-    PrintWriter out;
-    BufferedReader in;
-    String player;
+    private PrintWriter out;
+    private BufferedReader in;
+    private String player;
 
-    PropertiesClass propertiesClass = new PropertiesClass();
+    private final PropertiesClass propertiesClass = new PropertiesClass();
 
     public Client() {
-    //Gamla MainUI ligger nu i konstruktorn för Client.Client
-
-
         SwingUtilities.invokeLater(() -> {
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             mainFrame.setSize(640, 480);
@@ -58,12 +53,11 @@ public class Client implements ActionListener {
             mainFrame.setLocationRelativeTo(null);
             mainFrame.setLayout(new BorderLayout());
             mainFrame.add(titlePanel, BorderLayout.NORTH);
-            mainFrame.add(howManyPanel, BorderLayout.CENTER); //Varför hamnar den inte i mitten?
+            mainFrame.add(howManyPanel, BorderLayout.CENTER);
             mainFrame.add(bottomPanel, BorderLayout.SOUTH);
             howManyPanel.setLayout(new GridLayout(1, 2));
             titlePanel.add(gameTitle);
             gameTitle.setIcon(imgIcon);
-            //gameTitle.setFont(mainFrameFont);
             titlePanel.setBackground(Color.BLACK);
 
             propertiesClass.loadProperties();
@@ -77,6 +71,7 @@ public class Client implements ActionListener {
             amountOfRoundPanel.setLayout(new GridLayout(2, 1));
             amountOfRoundPanel.add(howManyRounds);
             amountOfRoundPanel.add(howManyQuestions);
+
             colorPanel.setLayout(new GridLayout(2, 1));
             colorPanel.add(colorInsideColorPanel);
             colorPanel.add(examplePanel);
@@ -85,6 +80,7 @@ public class Client implements ActionListener {
             ColorBox(colorChoose);
             colorInsideColorPanel.add(fColor);
             FontColorBox(fontColorChoose);
+
             examplePanel.setLayout(new FlowLayout());
             examplePanel.setBackground(Color.WHITE);
             examplePanel.add(exampleText);
@@ -97,10 +93,10 @@ public class Client implements ActionListener {
             quitGame.addActionListener(this);
 
 
-
         });
 
     }
+
     public void connectToServer() {
         try {
             Socket sock = new Socket("127.0.0.1", 12345);
@@ -120,20 +116,18 @@ public class Client implements ActionListener {
     private void setFontColor(Color color) {
         fontColor = color;
     }
+
     @Override
-    public void actionPerformed(ActionEvent e) {    //Uppdaterat actionPerformed lite
+    public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == newGame) {
             connectToServer();
             startGame();
-            mainFrame.setTitle("Waiting for player...");
+            mainFrame.setTitle("Väntar på spelare...");
             newGame.setEnabled(false);
-
         } else if (e.getSource() == quitGame) {
             System.exit(0);
-
-        }
-        if (colorChoose.getSelectedIndex() == 0) {
+        } else if (colorChoose.getSelectedIndex() == 0) {
             examplePanel.setBackground(Color.white);
             setBgColor(Color.white);
         } else if (colorChoose.getSelectedIndex() == 1) {
@@ -148,8 +142,7 @@ public class Client implements ActionListener {
         } else if (colorChoose.getSelectedIndex() == 4) {
             examplePanel.setBackground(Color.CYAN);
             setBgColor(Color.CYAN);
-        }
-        if (fontColorChoose.getSelectedIndex() == 0) {
+        } else if (fontColorChoose.getSelectedIndex() == 0) {
             exampleText.setForeground(Color.BLACK);
             setFontColor(Color.BLACK);
         } else if (fontColorChoose.getSelectedIndex() == 1) {
@@ -166,6 +159,7 @@ public class Client implements ActionListener {
             setFontColor(Color.CYAN);
         }
     }
+
     private void ColorBox(JComboBox<String> colorChoose) {
         colorInsideColorPanel.add(colorChoose);
         colorChoose.addItem("Vit(default)");
@@ -177,6 +171,7 @@ public class Client implements ActionListener {
         colorChoose.setPreferredSize(new Dimension(100, 30));
         colorChoose.addActionListener(this);
     }
+
     private void FontColorBox(JComboBox<String> colorChoose) {
         colorInsideColorPanel.add(colorChoose);
         colorChoose.addItem("Svart(default)");
@@ -194,56 +189,21 @@ public class Client implements ActionListener {
 
     }
 
-    private void resetMainFrame(){
-        mainFrame.getContentPane().removeAll();
-        mainFrame.repaint();
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(640, 480);
-        mainFrame.setVisible(true);
-        mainFrame.setResizable(true);
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setLayout(new BorderLayout());
-        mainFrame.add(titlePanel, BorderLayout.NORTH);
-        mainFrame.add(howManyPanel, BorderLayout.CENTER); //Varför hamnar den inte i mitten?
-        mainFrame.add(bottomPanel, BorderLayout.SOUTH);
-        howManyPanel.setLayout(new GridLayout(2, 1));
-        titlePanel.add(gameTitle);
-
-        propertiesClass.loadProperties();
-        int amountOfRounds = propertiesClass.getAmountOfRounds();
-        int amountOfQuestions = propertiesClass.getAmountOfQuestions();
-        howManyRounds.setText("Antal ronder: " + amountOfRounds);
-        howManyQuestions.setText("Antal frågor/rond: " + amountOfQuestions);
-
-        howManyPanel.add(howManyRounds);
-        howManyPanel.add(howManyQuestions);
-
-        bottomPanel.add(newGame);
-        bottomPanel.add(quitGame);
-
-        newGame.addActionListener(this);
-        quitGame.addActionListener(this);
-        mainFrame.revalidate();
-    }
-
     public String getScoreStr1(String message) {
         String[] parts = message.split("\\|");
-        System.out.println(parts[0]);
         return parts[0];
     }
 
     public String getScoreStr2(String message) {
         String[] parts = message.split("\\|");
-        System.out.println(parts[1]);
         return parts[1];
     }
 
-    public String getCurrentRound(String message){
+    public String getCurrentRound(String message) {
         String[] parts = message.split("\\|");
-        System.out.println(parts[1]);
         return parts[1];
-//
     }
+
     public void startGame() {
         new Thread(() -> {
             try {
@@ -253,7 +213,6 @@ public class Client implements ActionListener {
 
 
                 while ((fromServer = in.readLine()) != null) {
-                    System.out.println(fromServer);
 
                     if (fromServer.contains("START")) {
 
@@ -280,7 +239,7 @@ public class Client implements ActionListener {
 
 
                     } else if (fromServer.contains("OPEN_RESULT")) {
-                        System.out.println(fromServer + " received in Client from ServerThr");
+
 
                         scoreStr1 = getScoreStr1(fromServer);
                         scoreStr2 = getScoreStr2(fromServer);
@@ -292,12 +251,10 @@ public class Client implements ActionListener {
 
                         ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
                         resultGUI.disablePlayButton();
-                }else if (fromServer.startsWith("OPPONENT_GAVE_UP")) {
+                    } else if (fromServer.startsWith("OPPONENT_GAVE_UP")) {
                         SwingUtilities.invokeLater(() -> {
                             mainFrame.dispose();
-                            JOptionPane.showMessageDialog(mainFrame, "Your opponent gave up. You win!");
-                            resetMainFrame();
-                            mainFrame.setVisible(true);
+                            JOptionPane.showMessageDialog(mainFrame, "Din motståndare gav upp, du vann!");
                         });
                         break;
                     } else if (fromServer.startsWith("OPPONENT_DONE")) {
@@ -305,20 +262,18 @@ public class Client implements ActionListener {
                         currentRound = getCurrentRound(fromServer);
                         QuestionGUI questionGUI = new QuestionGUI(in, out, player, currentRound, backgroundColor, fontColor);
 
-                        //När spelare 1 är klar m sista rundan vore det bättre att personen hamnar i ett
-                        //väntrum, då behöver resultatet inte uppdateras när spelare 2 är klar.
                     } else if (fromServer.startsWith("GAME_PLAYERONE_FINISHED")) {
                         mainFrame.dispose();
                         currentRound = getCurrentRound(fromServer);
                         QuestionGUI questionGUI = new QuestionGUI(in, out, player, currentRound, backgroundColor, fontColor);
 
-                } else if (fromServer.contains("GAME_FINISHED")) {
+                    } else if (fromServer.contains("GAME_FINISHED")) {
                         scoreStr1 = getScoreStr1(fromServer);
                         scoreStr2 = getScoreStr2(fromServer);
 
-                     ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
-                     resultGUI.showFinalResult();
-                     resultGUI.disablePlayButton();
+                        ResultGUI resultGUI = new ResultGUI(out, player, scoreStr1, scoreStr2);
+                        resultGUI.showFinalResult();
+                        resultGUI.disablePlayButton();
                     }
                 }
 
@@ -327,4 +282,4 @@ public class Client implements ActionListener {
             }
         }).start();
     }
-    }
+}

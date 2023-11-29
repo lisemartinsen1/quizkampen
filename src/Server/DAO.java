@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class DAO {
-    private Database database = new Database();
+    private final Database database = new Database();
     private List<QuestionAndAnswers> questionAndAnswersList;
-    private List<QuestionAndAnswers> alreadyUsedQuestionsList;
+    private final List<QuestionAndAnswers> alreadyUsedQuestionsList;
     PropertiesClass propertiesClass = new PropertiesClass();
     private int counter = 0;
 
@@ -19,7 +15,7 @@ public class DAO {
         this.alreadyUsedQuestionsList = new ArrayList<>();
     }
 
-    public QuestionAndAnswers getRandomQuestionAndAnswers(String category) {
+    public String getRandomQuestionAndAnswers(String category) {
         propertiesClass.loadProperties();
         int amountOfQ = propertiesClass.getAmountOfQuestions();
 
@@ -27,7 +23,7 @@ public class DAO {
             questionAndAnswersList = database.readQuestionsAndAnswersFromFile(category);
 
             if (questionAndAnswersList == null || questionAndAnswersList.isEmpty()) {
-                return new QuestionAndAnswers("No questions available. Call readQuestionsAndAnswersFromFile() first.", "");
+                return "No questions available. Call readQuestionsAndAnswersFromFile() first.";
             }
 
             counter = 0;
@@ -48,15 +44,17 @@ public class DAO {
 
 
             counter++;
-
-            return randomQuestion;
+            String question = randomQuestion.getQuestion();
+            String answers = randomQuestion.getAnswers();
+            return question + "|" + answers;
+            //return randomQuestion;
         } else {
 
             questionAndAnswersList.clear();
 
             counter = 0;
 
-            return new QuestionAndAnswers("No questions available. List cleared.", "");
+            return "No questions available. List cleared.";
         }
     }
 }

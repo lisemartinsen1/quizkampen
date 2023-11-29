@@ -10,7 +10,7 @@ QUESTION Vem är känd som "The King of Clay" inom tennis?
 ANSWERS RIGHT_ANSWER Rafael Nadal, Novak Djokovic, Roger Federer, Andy Murray
 QUESTION Vem är känd som "The Black Mamba" inom basket?
 ANSWERS RIGHT_ANSWER Kobe Bryant, LeBron James, Stephen Curry, Kevin Durant
-QUESTION Vilket skidområde är känt för att vara ett av världens bästa och är hem till den berömda "Streif" - en av de mest utmanande utförslöporna i alpin skidåkning?
+QUESTION Vilket skidområde är känt för att vara ett av världens bästa och är hem till den berömda "Streif"?
 ANSWERS RIGHT_ANSWER Kitzbühel - Österrike, Aspen - Colorado, St.Moritz - Schweiz, Kitzbühel - Österrike
 QUESTION Vilken alpin skidåkare har vunnit världscupen flest gånger?
 ANSWERS RIGHT_ANSWER Mikaela Shiffrin, Ingemar Stenmark, Lindsey Vonn, Marcel Hirscher
@@ -19,7 +19,7 @@ ANSWERS RIGHT_ANSWER Frankrike, Kroatien, England, Belgien
 QUESTION Vilket lag har flest UEFA Champions League-titlar genom historien?
 ANSWERS RIGHT_ANSWER Real Madrid, AC Milan, Bayern München, Liverpool
 QUESTION Vad är "sepak takraw"?
-ANSWERS RIGHT_ANSWER En bollsport liknande volleyboll som spelas med fötterna, En form av bågskytte, En form av vattenpolo, En dansform från Brasilien
+ANSWERS RIGHT_ANSWER Volleyboll som spelas med fötterna, En form av bågskytte, En form av vattenpolo, En dansform från Brasilien
 QUESTION Vilket evenemang är känt som "The Fastest Two Minutes in Sports" och anses vara en av de mest prestigefyllda hästkapplöpningarna?
 ANSWERS RIGHT_ANSWER Kentucky Derby, Grand National, Prix de l'Arc de Triomphe, Melbourne Cup
 QUESTION Vilken stad är känd för att vara värd för den årliga "Wimbledon Championships" i tennis?

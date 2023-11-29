@@ -7,24 +7,19 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 public class ServerThreaded implements Runnable {
 
     Socket socket1;
     Socket socket2;
-    private PrintWriter out1;
-    private PrintWriter out2;
-    private BufferedReader in1;
-    private BufferedReader in2;
-    Protocol protocol = new Protocol();
-    private String player1Message;
-    private String player2Message;
-    private List<String> listOfSentQuestions = new ArrayList<>();
+    private final PrintWriter out1;
+    private final PrintWriter out2;
+    private final BufferedReader in1;
+    private final BufferedReader in2;
+    DAO dao = new DAO();
+    private final List<String> listOfSentQuestions = new ArrayList<>();
     private String listWithPlayer1Points = "";
     private String listWithPlayer2Points = "";
-    private String pointsThisRoundPlayer1;
-    private String pointsThisRoundPlayer2;
     private int currentRound = 1;
 
     public ServerThreaded(Socket socket1, Socket socket2) {
@@ -55,13 +50,14 @@ public class ServerThreaded implements Runnable {
             loop:
             while (true) {
                 try {
+                    String player1Message;
                     while ((player1Message = in1.readLine()) != null) {
                         if (player1Message.contains("CATEGORY")) {
                             out1.println("QUESTIONS" + "|" + currentRound);
                             sendNextQuestion(player1Message, out1);
 
                         } else if (player1Message.startsWith("GIVE_UP"))  {
-                            handleGiveUp(player1Message, out1, out2);
+                            handleGiveUp(out2);
                             break;
 
                         }  else if (player1Message.contains("NEXT_QUESTION")) {
@@ -95,6 +91,7 @@ public class ServerThreaded implements Runnable {
                 }
 
                 try {
+                    String player2Message;
                     while ((player2Message = in2.readLine()) != null) {
 
                         if (player2Message.contains("NEXT_QUESTION")) {
@@ -105,7 +102,7 @@ public class ServerThreaded implements Runnable {
                             sendNextQuestion(player2Message, out2);
 
                         } else if (player2Message.startsWith("GIVE_UP")) {
-                            handleGiveUp(player2Message, out2, out1);
+                            handleGiveUp(out1);
                             break;
 
                         }else if (player2Message.contains("OPEN_RESULT")) {
@@ -120,11 +117,10 @@ public class ServerThreaded implements Runnable {
                             sendResponse(listWithPlayer1Points + "|" + listWithPlayer2Points + "|" + "GAME_FINISHED", out2);
 
                         } else if (player2Message.contains("ALL_Q_ANSWERED")) {
-                            pointsThisRoundPlayer1 = getScoreForCurrentRound(listWithPlayer1Points);
-                            pointsThisRoundPlayer2 = getScoreForCurrentRound(listWithPlayer2Points);
+                            String pointsThisRoundPlayer1 = getScoreForCurrentRound(listWithPlayer1Points);
+                            String pointsThisRoundPlayer2 = getScoreForCurrentRound(listWithPlayer2Points);
                             currentRound++;
                             out1.println(pointsThisRoundPlayer1 +"|"+ pointsThisRoundPlayer2 +"|" + "START");
-                            System.out.println(pointsThisRoundPlayer2 + pointsThisRoundPlayer1);
                             continue loop;
 
                         }
@@ -145,14 +141,12 @@ public class ServerThreaded implements Runnable {
     }
 
     public String getScore(String message) {
-        String[] parts = message.split("\\#");
-        System.out.println(parts[0]);
+        String[] parts = message.split("#");
         return parts[0];
     }
 
     private void sendNextQuestion(String category, PrintWriter out) {
-        System.out.println(category + " i ServerThreaded(Sendnextq) metoden");
-        String response = protocol.getOutput(category);
+        String response = dao.getRandomQuestionAndAnswers(category);
         out.println(response);
         addSentQuestionToList(response);
 
@@ -170,7 +164,7 @@ public class ServerThreaded implements Runnable {
         listOfSentQuestions.remove(0);
 
     }
-    private void handleGiveUp(String message, PrintWriter playerOut, PrintWriter opponentOut) {
+    private void handleGiveUp(PrintWriter opponentOut) {
         opponentOut.println("OPPONENT_GAVE_UP");
     }
 }

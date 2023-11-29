@@ -11,19 +11,19 @@ import java.io.PrintWriter;
 
 public class CategoryGUI extends JFrame implements ActionListener {
 
-    private JFrame categoryFrame = new JFrame();
-    private JPanel categoryTopPanel = new JPanel();
-    private JLabel categoryTitle = new JLabel("Välj en kategori", SwingConstants.CENTER);
-    private JPanel categoryPanel = new JPanel();
-    private JButton category1Button = new JButton("Kategori 1");
-    private JButton category2Button = new JButton("Teknik & Vetenskap");
-    private JButton category3Button = new JButton("Sport");
-    private JButton category4Button = new JButton("Historia");
-    private JPanel categoryBottomPanel = new JPanel();
-    private JButton goBackButton = new JButton("Gå Tillbaka");
-    private JButton quitGame = new JButton("Avsluta");
+    private final JFrame categoryFrame = new JFrame();
+    private final JPanel categoryTopPanel = new JPanel();
+    private final JLabel categoryTitle = new JLabel("Välj Kategori", SwingConstants.CENTER);
+    private final JPanel categoryPanel = new JPanel();
+    private final JButton category1Button = new JButton("Film & Serier");
+    private final JButton category2Button = new JButton("Teknik & Vetenskap");
+    private final JButton category3Button = new JButton("Sport");
+    private final JButton category4Button = new JButton("Historia");
+    private final JPanel categoryBottomPanel = new JPanel();
+    private final JButton goBackButton = new JButton("Gå Tillbaka");
+    private final JButton quitGame = new JButton("Avsluta");
     PrintWriter out;
-    private JPanel scorePanel = new JPanel();
+    private final JPanel scorePanel = new JPanel();
 
 
     public CategoryGUI(PrintWriter out, String playerNr, String scorePlayer1, String scorePlayer2) {

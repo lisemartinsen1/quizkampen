@@ -13,16 +13,14 @@ import java.util.Map;
 import Server.PropertiesClass;
 
 public class ResultGUI extends JFrame {
-    private JPanel resultBottomPanel = new JPanel();
-    private JButton playButton = new JButton("Klar");
-    private PrintWriter out;
-    private String playerNr;
-    private String[] listWithPlayer1Points;
-    private String[] listWithPlayer2Points;
-    private String strWithPlayer1Points;
-    private String strWithPlayer2Points;
-    private JLabel resultLabel = new JLabel("RESULT", SwingConstants.CENTER);
-    private JButton close = new JButton("Stäng");
+    private final JPanel resultBottomPanel = new JPanel();
+    private final JButton playButton = new JButton("Klar");
+    private final PrintWriter out;
+    private final String playerNr;
+    private final String strWithPlayer1Points;
+    private final String strWithPlayer2Points;
+    private final JLabel resultLabel = new JLabel("RESULTAT", SwingConstants.CENTER);
+    private final JButton close = new JButton("Stäng");
 
 
 
@@ -49,8 +47,6 @@ public class ResultGUI extends JFrame {
 
         resultLabel.setFont(new Font("Arial", Font.BOLD, 24));
         resultFrame.add(resultLabel, BorderLayout.CENTER);
-
-        // För att skapa lite mer space mellan komponenter
         resultFrame.add(new JLabel());
 
         JPanel playerNamesPanel = new JPanel(new GridLayout(1, 2));
@@ -62,13 +58,12 @@ public class ResultGUI extends JFrame {
         resultFrame.add(new JLabel());
         playerNamesPanel.setBackground(new Color(255, 182, 193));
 
-        listWithPlayer1Points = getArray(strWithPlayer1Points);
-        listWithPlayer2Points = getArray(strWithPlayer2Points);
+        String[] listWithPlayer1Points = getArray(strWithPlayer1Points);
+        String[] listWithPlayer2Points = getArray(strWithPlayer2Points);
 
-        // Iterera genom rundor
         for (int i = 0; i < Math.max(listWithPlayer1Points.length, listWithPlayer2Points.length); i++) {
             JPanel panel = new JPanel(new GridLayout(2, 1));
-            JLabel roundLabel = new JLabel("Round " + (i + 1), SwingConstants.CENTER);
+            JLabel roundLabel = new JLabel("Runda " + (i + 1), SwingConstants.CENTER);
             panel.add(roundLabel);
 
             JPanel scorePanel = new JPanel(new GridLayout(1, 3));
@@ -138,26 +133,26 @@ public class ResultGUI extends JFrame {
         }
         if (sumPlayer1 > sumPlayer2) {
             if (playerNr.equals("PLAYER1")) {
-                resultLabel.setText("YOU WIN");
+                resultLabel.setText("DU VANN!");
                 resultLabel.setForeground(new Color(0, 128, 0));
 
             } else {
-                resultLabel.setText("YOU LOSE");
+                resultLabel.setText("DU FÖRLORA :(");
                 resultLabel.setForeground(new Color(128, 0, 0));
 
             }
         } else if (sumPlayer1 < sumPlayer2) {
             if (playerNr.equals("PLAYER2")) {
-                resultLabel.setText("YOU WIN");
+                resultLabel.setText("DU VANN!");
                 resultLabel.setForeground(new Color(0, 128, 0));
 
             } else {
-                resultLabel.setText("YOU LOSE");
+                resultLabel.setText("DU FÖRLORA :(");
                 resultLabel.setForeground(new Color(128, 0, 0));
 
             }
         } else {
-            resultLabel.setText("DRAW");
+            resultLabel.setText("OAVGJORT");
         }
     }
 

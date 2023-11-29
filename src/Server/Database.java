@@ -30,9 +30,8 @@ public class Database {
         try (BufferedReader in = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
             while ((line = in.readLine()) != null) {
-                String question = line;
                 String answersLine = in.readLine();
-                questionAndAnswersList.add(new QuestionAndAnswers(question, answersLine));
+                questionAndAnswersList.add(new QuestionAndAnswers(line, answersLine));
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -42,11 +41,11 @@ public class Database {
 
         return questionAndAnswersList;
     }
-   }
+}
 
 class QuestionAndAnswers {
-    private String question;
-    private String answers;
+    private final String question;
+    private final String answers;
 
     public QuestionAndAnswers(String question, String answers) {
         this.question = question;

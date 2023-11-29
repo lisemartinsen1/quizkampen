@@ -1,6 +1,18 @@
-QUESTION Vem är författaren till boken "Män som hatar kvinnor"?
-ANSWERS RIGHT_ANSWER Stieg Larsson, Henning Mankell, Jo Nesbø, Camilla Läckberg
-QUESTION Vilket element har kemiskt tecken "O"?
-ANSWERS RIGHT_ANSWER Syre, Silver, Kisel, Guld
-QUESTION Vilket år grundades OpenAI?
-ANSWERS RIGHT_ANSWER 2015, 2012, 2018, 2020
+QUESTION Vad är namnet på huvudkaraktären i TV-serien "Breaking Bad"?
+ANSWERS RIGHT_ANSWER Walter White, Jesse Pinkman, Saul Goodman, Mike Ehrmantraut
+QUESTION Vem spelar rollen som Tony Stark i Marvel Cinematic Universe (MCU)?
+ANSWERS RIGHT_ANSWER Robert Downey Jr., Chris Hemsworth, Chris Evans, Mark Ruffalo
+QUESTION Vilken film regisserades av Christopher Nolan och handlar om drömmar och verklighet?
+ANSWERS RIGHT_ANSWER Inception, Interstellar, Dunkirk, The Dark Knight
+QUESTION Vilken skådespelare spelar huvudrollen som Sherlock Holmes i TV-serien "Sherlock"?
+ANSWERS RIGHT_ANSWER Benedict Cumberbatch, Martin Freeman, Andrew Scott, Rupert Graves
+QUESTION Vilken film vann "Bästa film" vid Oscarsgalan 2020?
+ANSWERS RIGHT_ANSWER Parasite, Once Upon a Time in Hollywood, Le Mans '66, 1917
+QUESTION Vilken skådespelare spelar rollen som James Bond i filmen "Skyfall"?
+ANSWERS RIGHT_ANSWER Daniel Craig, Pierce Brosnan, Sean Connery, Roger Moore
+QUESTION Vilken karaktär spelade Heath Ledger i filmen "The Dark Knight"?
+ANSWERS RIGHT_ANSWER The Joker, Batman, Two-Face, Scarecrow
+QUESTION Vad heter huvudkaraktären i TV-serien "The Mandalorian"?
+ANSWERS RIGHT_ANSWER Din Djarin, Cara Dune, Yoda, Boba Fett
+QUESTION Vilken skådespelare spelar huvudrollen som Tony Montana i filmen "Scarface"?
+ANSWERS RIGHT_ANSWER Al Pacino, Robert De Niro, Joe Pesci, Marlon Brando

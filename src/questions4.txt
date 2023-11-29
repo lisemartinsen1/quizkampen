@@ -10,7 +10,7 @@ QUESTION Vilken amerikansk president utfärdade Emancipation Proclamation som av
 ANSWERS RIGHT_ANSWER Abraham Lincoln, Andrew Johnson, Ulysses S. Grant, Theodore Roosevelt
 QUESTION Vilken var den sista dynastin i Kina?
 ANSWERS RIGHT_ANSWER Qing-dynastin, Han-dynastin, Tang-dynastin, Ming-dynastin
-QUESTION Vad kallas den period i Europas historia som följde efter medeltiden och anses vara en återfödelse av konst, kultur och vetenskap?
+QUESTION Period i Europas historia som följde efter medeltiden och anses vara en återfödelse av konst, kultur och vetenskap?
 ANSWERS RIGHT_ANSWER Renässansen, Upplysningen, Barocken, Reformationen
 QUESTION Vilken krigshändelse kallas "D-dagen"?
 ANSWERS RIGHT_ANSWER Landstigningen i Normandie, Slaget vid Stalingrad, Slaget vid Dunkerque, Slaget om Storbritannien
