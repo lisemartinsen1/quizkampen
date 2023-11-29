@@ -144,7 +144,7 @@ public class Client implements ActionListener {
         String[] parts = message.split("\\|");
         System.out.println(parts[1]);
         return parts[1];
-
+//
     }
     public void startGame() {
         new Thread(() -> {
