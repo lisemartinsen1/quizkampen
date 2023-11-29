@@ -67,6 +67,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryPanel.add(category2Button);
             categoryPanel.add(category3Button);
             categoryPanel.add(category4Button);
+            //categoryPanel.setSize(400, 300);
 
             EmptyBorder emptyBorder1 = new EmptyBorder(60, 60, 60, 60);
             categoryPanel.setBorder(emptyBorder1);
