@@ -22,6 +22,7 @@ public class CategoryGUI extends JFrame implements ActionListener {
     private final JPanel categoryBottomPanel = new JPanel();
     private final JButton goBackButton = new JButton("Gå Tillbaka");
     private final JButton quitGame = new JButton("Avsluta");
+    private final Font font = new Font("Arial", Font.BOLD, 16);
     PrintWriter out;
     private final JPanel scorePanel = new JPanel();
 
@@ -39,6 +40,12 @@ public class CategoryGUI extends JFrame implements ActionListener {
             categoryFrame.add(categoryPanel, BorderLayout.CENTER);
             categoryFrame.add(categoryBottomPanel, BorderLayout.SOUTH);
             categoryFrame.setTitle(playerNr);
+
+            categoryTitle.setFont(new Font("Arial", Font.BOLD, 24));
+            category1Button.setFont(font);
+            category2Button.setFont(font);
+            category3Button.setFont(font);
+            category4Button.setFont(font);
 
             if (!scorePlayer1.isEmpty() || !scorePlayer2.isEmpty()) {
 
@@ -98,12 +105,10 @@ public class CategoryGUI extends JFrame implements ActionListener {
 
         } else if (e.getSource() == goBackButton) {
             categoryFrame.dispose();
-            //mainUI();
 
         } else if (e.getSource() == category1Button) {
             out.println("CATEGORY1");
             categoryFrame.dispose();
-
 
         } else if (e.getSource() == category2Button) {
             out.println("CATEGORY2");

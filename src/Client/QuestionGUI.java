@@ -43,7 +43,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
     Color background;
     Color font;
 
-    Font fontOp = new Font(Font.SANS_SERIF, Font.BOLD, 12);
+    Font fontOp = new Font("Arial", Font.BOLD, 16);
 
     public QuestionGUI(BufferedReader in, PrintWriter out, String playerNr, String currentRound, Color background, Color font) {
         this.in = in;
@@ -55,7 +55,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
 
         SwingUtilities.invokeLater(() -> {
             questionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            questionsFrame.setSize(800, 480);
+            questionsFrame.setSize(900, 480);
             questionsFrame.setVisible(true);
             questionsFrame.setResizable(true);
             questionsFrame.setLocationRelativeTo(null);
@@ -114,7 +114,7 @@ public class QuestionGUI extends JFrame implements ActionListener {
                         String questionTextfromServerToLabel = questionParts[1].trim();
                         SwingUtilities.invokeLater(() -> {
                             questionText.setText(questionTextfromServerToLabel);
-                            questionText.setFont(fontOp);
+                            questionText.setFont(new Font("Arial", Font.BOLD, 14));
 
                         });
                     }

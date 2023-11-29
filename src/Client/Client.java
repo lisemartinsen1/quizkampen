@@ -142,7 +142,8 @@ public class Client implements ActionListener {
         } else if (colorChoose.getSelectedIndex() == 4) {
             examplePanel.setBackground(Color.CYAN);
             setBgColor(Color.CYAN);
-        } else if (fontColorChoose.getSelectedIndex() == 0) {
+
+        }  if (fontColorChoose.getSelectedIndex() == 0) {
             exampleText.setForeground(Color.BLACK);
             setFontColor(Color.BLACK);
         } else if (fontColorChoose.getSelectedIndex() == 1) {
@@ -227,7 +228,7 @@ public class Client implements ActionListener {
                         }
 
                     } else if (fromServer.startsWith("WAIT")) {
-                        mainFrame.setTitle("PLAYER 2\tWaiting for player to complete round...");
+                        mainFrame.setTitle("PLAYER 2\tVäntar på att motståndare ska slutföra runda...");
 
                     } else if (fromServer.startsWith("PLAYER")) {
                         player = fromServer;

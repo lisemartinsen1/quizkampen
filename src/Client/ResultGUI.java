@@ -21,6 +21,7 @@ public class ResultGUI extends JFrame {
     private final String strWithPlayer2Points;
     private final JLabel resultLabel = new JLabel("RESULTAT", SwingConstants.CENTER);
     private final JButton close = new JButton("Stäng");
+    private final Font font = new Font("Arial", Font.PLAIN, 16);
 
 
 
